@@ -1,0 +1,29 @@
+@import 'vars';
+@import 'mixins';
+
+body {
+  @include background-size(cover);
+
+  background-color: $off-white;
+  background-size: cover;
+  text-align: center;
+  width: 100%;
+}
+
+// -------------------------------------------------------------------------------------------------
+// PARALLAX IMAGE SCROLLING
+// -------------------------------------------------------------------------------------------------
+.parallax {
+  background-attachment: fixed;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+// -------------------------------------------------------------------------------------------------
+// LANDING PAGE STYLING
+// -------------------------------------------------------------------------------------------------
+.landing-page {
+  margin: 5vw auto;
+  width: 80%;
+}
