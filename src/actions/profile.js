@@ -7,7 +7,7 @@ const setProfile = profile => ({
 
 const profileFetchRequest = () => (store) => {
   const { token } = store.getState();
-  return superagent.get(`${API_URL}/profiles/me`)
+  return superagent.get(`${process.env.API_URL}/profiles/me`)
     .set('Authorization', `Bearer ${token}`)
     .set('Content-Type', 'application/json')
     .then((response) => {
@@ -17,7 +17,7 @@ const profileFetchRequest = () => (store) => {
 
 const profileUpdateRequest = profile => (store) => {
   const { token } = store.getState();
-  return superagent.put(`${API_URL}/profile`)
+  return superagent.put(`${process.env.API_URL}/profile`)
     .set('Authorization', `Bearer ${token}`)
     .set('Content-Type', 'application/json')
     .send(profile)
