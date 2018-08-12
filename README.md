@@ -3,7 +3,7 @@ Front end for Timeboxed
 
 ## Getting Started
 
-In order to run locally, create a ```.env``` file that will be gitignored. This file will need to look like the following:
+In order to run locally, clone repo, and enter ```npm i``` in your terminal at the project's root level to install dependencies. Create a ```.env``` file that will be gitignored. This file will need to look like the following:
 
 ```
 API_URL=http://localhost:3000
