@@ -8,7 +8,7 @@ const styles = theme => ({
   fab: {
     display: 'none',
 
-    [theme.breakpoints.up('sm')]: {
+    [theme.breakpoints.down('xs')]: {
       display: 'block',
       position: 'absolute',
       bottom: '1rem',
@@ -25,7 +25,7 @@ class AddFAB extends React.Component {
   render() {
     const { classes } = this.props;
     return (
-      <Button variant="fab" color="primary" aria-label="add" className={classes.fab}>
+      <Button variant="fab" color="secondary" aria-label="add" className={classes.fab}>
         <AddIcon />
       </Button>
     );
