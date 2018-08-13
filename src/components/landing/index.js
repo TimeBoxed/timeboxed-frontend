@@ -23,8 +23,8 @@ class Landing extends React.Component {
   render() {
     return (
       <div className='landing-page'>
-        // TODO: task action to create new task to pass as prop
-        <TaskForm onComplete={}/>
+        {/* // TODO: task action to create new task to pass as prop     onComplete={} */}
+        <TaskForm />
       </div>
     );
   }

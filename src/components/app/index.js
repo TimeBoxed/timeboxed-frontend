@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { BrowserRouter, Route } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
-import Favicon from 'react-favicon';
+// import Favicon from 'react-favicon';
 
 // -------------------------------------------------------------------------------------------------
 // COMPONENT IMPORTS
