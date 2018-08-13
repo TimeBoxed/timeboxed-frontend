@@ -1,16 +1,16 @@
 import React, { Component } from 'react';
 import { BrowserRouter, Route } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
-import Favicon from 'react-favicon';
+// import Favicon from 'react-favicon';
 
 // -------------------------------------------------------------------------------------------------
 // COMPONENT IMPORTS
 // -------------------------------------------------------------------------------------------------
-import ScrollToTop from '../scroll-to-top';
-import AuthRedirect from '../auth-redirect';
-import Header from '../header';
-import Landing from '../landing';
-import Footer from '../footer';
+import ScrollToTop from '../scroll-to-top/scroll-to-top';
+import AuthRedirect from '../auth-redirect/auth-redirect';
+import Header from '../header/header';
+import Landing from '../landing/landing';
+import Footer from '../footer/footer';
 import Preferences from '../preferences/preferences';
 
 import ROUTES from '../../routes';
