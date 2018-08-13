@@ -27,3 +27,17 @@ body {
   margin: 5vw auto;
   width: 80%;
 }
+
+#sign-in-button {
+  background-color: #FFFFFF;
+  font: $Roboto-Medium;
+  font-size: 14px;
+  color: 0 0 0 54%;
+  padding: auto 8dp;
+  height: 40dp;
+  line-height: 100%;
+
+  #googleLogo {
+    width: 18dp;
+  }
+}

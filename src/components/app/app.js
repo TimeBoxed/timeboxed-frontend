@@ -11,7 +11,7 @@ import deepOrange from '@material-ui/core/colors/deepOrange';
 // -------------------------------------------------------------------------------------------------
 import ScrollToTop from '../scroll-to-top/scroll-to-top';
 import AuthRedirect from '../auth-redirect/auth-redirect';
-import Header from '../header/header';
+import MenuAppBar from '../material-ui/menu-app-bar';
 import Landing from '../landing/landing';
 import Footer from '../footer/footer';
 import Preferences from '../preferences/preferences';
@@ -40,7 +40,7 @@ export default class App extends Component {
               {/* <meta property="og:url" content="" /> */}
               {/* <meta property="og:image" content="../../assets/site-preview.png" /> */}
             </Helmet>
-            <Header/>
+            <MenuAppBar/>
             <Route path='*' component={AuthRedirect}/>
             <Route exact path={ROUTES.LANDING} component={Landing}/>
             <Route exact path={ROUTES.SETUP} component={Preferences}/>
