@@ -2,7 +2,9 @@ import React, { Component } from 'react';
 import { Redirect } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+
 import ROUTES from '../../routes';
+import GoogleLogo from '../../assets/google_signin_buttons/web/vector/btn_google_light_normal_ios.svg';
 
 let redirect = false;
 let destinationRoute = null;
@@ -19,7 +21,7 @@ class AuthRedirect extends Component {
   render() {
     const toLoginView = (
       <a href="https://accounts.google.com/o/oauth2/v2/auth?redirect_uri=http://localhost:3000/welcome&scope=profile%20email%20https://www.googleapis.com/auth/calendar&prompt=consent&response_type=code&client_id=30945685942-2peaeakg0megqic4lp8d4ffu79p520lm.apps.googleusercontent.com">
-      <button id='sign-in-button'>SIGN IN WITH GOOGLE</button>
+      <button id='sign-in-button'><GoogleLogo id='googleLogo'/>SIGN IN WITH GOOGLE</button>
       </a>
     );
     return (

@@ -5,6 +5,11 @@ import * as profileActions from '../../actions/profile';
 import TaskForm from '../task-form/task-form';
 import autobind from '../../utils/auto-bind';
 
+// -------------------------------------------------------------------------------------------------
+// MATERIAL UI COMPONENTS
+// -------------------------------------------------------------------------------------------------
+import AddFAB from '../material-ui/floating-action-button';
+
 class Landing extends React.Component {
   constructor(props) {
     super(props);
@@ -24,7 +29,9 @@ class Landing extends React.Component {
     return (
       // TODO: task action to create new task to pass as prop
       <div className='landing-page'>
+        {/* // TODO: task action to create new task to pass as prop     onComplete={} */}
         <TaskForm />
+        <AddFAB/>
       </div>
     );
   }
