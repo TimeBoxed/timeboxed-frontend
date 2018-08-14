@@ -1,5 +1,8 @@
 import superagent from 'superagent';
 
+// Carl -- Hard coding this because I was not able to access the process environment variable.
+const TEMP_API_URL = 'http://localhost:3000';
+
 const setProfile = profile => ({
   type: 'CLIENT_PROFILE_SET',
   payload: profile,
@@ -7,7 +10,7 @@ const setProfile = profile => ({
 
 const profileFetchRequest = () => (store) => {
   const { token } = store.getState();
-  return superagent.get(`${process.env.API_URL}/profiles/me`)
+  return superagent.get(`${TEMP_API_URL}/profiles/me`)
     .set('Authorization', `Bearer ${token}`)
     .set('Content-Type', 'application/json')
     .then((response) => {
@@ -17,7 +20,7 @@ const profileFetchRequest = () => (store) => {
 
 const profileUpdateRequest = profile => (store) => {
   const { token } = store.getState();
-  return superagent.put(`${process.env.API_URL}/profile`)
+  return superagent.put(`${TEMP_API_URL}/profile`)
     .set('Authorization', `Bearer ${token}`)
     .set('Content-Type', 'application/json')
     .send(profile)
