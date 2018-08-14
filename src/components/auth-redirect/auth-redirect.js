@@ -4,41 +4,52 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 import ROUTES from '../../routes';
-import GoogleLogo from '../../assets/google_signin_buttons/web/vector/btn_google_light_normal_ios.svg';
 
-let redirect = false;
-let destinationRoute = null;
+// let redirect = false;
+// let destinationRoute = null;
 
 class AuthRedirect extends Component {
-  componentDidMount() {
-    if (this.props.loggedIn) {
-      redirect = true;
-      destinationRoute = '/';
-      this.props.history.push(ROUTES.LANDING);
-    }
-  }
+  // componentDidMount() {
+  //   if (this.props.loggedIn) {
+  //     console.log('logged in on auth redirect');
+  //     redirect = true;
+  //     destinationRoute = '/';
+  //     this.props.history.push(ROUTES.LANDING);
+  //   }
+  // }
 
   render() {
-    const toLoginView = (
-      <a href="https://accounts.google.com/o/oauth2/v2/auth?redirect_uri=http://localhost:3000/welcome&scope=profile%20email%20https://www.googleapis.com/auth/calendar&prompt=consent&response_type=code&client_id=30945685942-2peaeakg0megqic4lp8d4ffu79p520lm.apps.googleusercontent.com">
-      <button id='sign-in-button'><GoogleLogo id='googleLogo'/>SIGN IN WITH GOOGLE</button>
-      </a>
-    );
+    const { location, token } = this.props;
+    const { pathname } = location;
+
+    let destinationRoute = null;
+
+    switch (pathname) {
+      case ROUTES.LANDING:
+        if (token) destinationRoute = ROUTES.LANDING;
+        break;
+      case ROUTES.SETUP:
+        if (token) destinationRoute = ROUTES.SETUP;
+        break;
+      default:
+        if (!token) destinationRoute = ROUTES.LANDING;
+        break;
+    }
     return (
       <div>
-        { redirect ? <Redirect to={destinationRoute}/> : toLoginView }
+        { destinationRoute ? <Redirect to={destinationRoute}/> : undefined }
       </div>
     );
   }
 }
 
 AuthRedirect.propTypes = {
-  loggedIn: PropTypes.bool,
-  history: PropTypes.object,
+  token: PropTypes.bool,
+  location: PropTypes.object,
 };
 
 const mapStateToProps = state => ({
-  loggedIn: !!state.token,
+  token: !!state.token,
 });
 
 

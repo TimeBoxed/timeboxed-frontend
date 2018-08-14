@@ -52,7 +52,7 @@ class ListForm extends React.Component {
   }
 
   render() {
-    const buttonText = this.props.list ? 'Update List' : 'Create New List';
+    const buttonText = this.props.list ? 'Update Task' : 'Create New Task';
     const { classes } = this.props;
 
     return (
