@@ -1,4 +1,6 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
@@ -9,6 +11,8 @@ import MenuIcon from '@material-ui/icons/Menu';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
+import * as authActions from '../../actions/auth';
+import ROUTES from '../../routes';
 
 const styles = {
   root: {
@@ -25,7 +29,7 @@ const styles = {
 
 class MenuAppBar extends React.Component {
   state = {
-    auth: true,
+    auth: this.props.loggedIn,
     anchorEl: null,
   };
 
@@ -39,6 +43,11 @@ class MenuAppBar extends React.Component {
 
   handleClose = () => {
     this.setState({ anchorEl: null });
+  };
+
+  handleLogout = () => {
+    this.setState({ auth: false, anchorEl: null });
+    this.props.logout();
   };
 
   render() {
@@ -82,6 +91,9 @@ class MenuAppBar extends React.Component {
                 >
                   <MenuItem onClick={this.handleClose}>Profile</MenuItem>
                   <MenuItem onClick={this.handleClose}>My account</MenuItem>
+                  <MenuItem onClick={this.handleLogout}>
+                    <Link to={ROUTES.LANDING}>logout</Link>
+                  </MenuItem>
                 </Menu>
               </div>
             )}
@@ -94,6 +106,17 @@ class MenuAppBar extends React.Component {
 
 MenuAppBar.propTypes = {
   classes: PropTypes.object.isRequired,
+  loggedIn: PropTypes.bool,
+  logout: PropTypes.func,
 };
 
-export default withStyles(styles)(MenuAppBar);
+const mapStateToProps = state => ({
+  profile: state.profile,
+  loggedIn: !!state.token,
+});
+
+const mapDispatchToProps = dispatch => ({
+  logout: () => dispatch(authActions.logout()),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(MenuAppBar));
