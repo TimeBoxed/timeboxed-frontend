@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -9,6 +10,7 @@ import MenuIcon from '@material-ui/icons/Menu';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
+import ROUTES from '../../routes';
 
 const styles = {
   root: {
@@ -80,8 +82,12 @@ class MenuAppBar extends React.Component {
                   open={open}
                   onClose={this.handleClose}
                 >
-                  <MenuItem onClick={this.handleClose}>Profile</MenuItem>
-                  <MenuItem onClick={this.handleClose}>My account</MenuItem>
+                  <MenuItem onClick={this.handleClose}>
+                    <Link to={ROUTES.DASHBOARD} styles={{ 'text-decoration': 'none' }}>Dashboard</Link>
+                  </MenuItem>
+                  <MenuItem onClick={this.handleClose}>
+                    <Link to={ROUTES.SETUP}>My account</Link>
+                  </MenuItem>
                 </Menu>
               </div>
             )}
@@ -94,6 +100,7 @@ class MenuAppBar extends React.Component {
 
 MenuAppBar.propTypes = {
   classes: PropTypes.object.isRequired,
+  history: PropTypes.object,
 };
 
 export default withStyles(styles)(MenuAppBar);

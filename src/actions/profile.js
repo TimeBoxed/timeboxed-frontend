@@ -1,6 +1,5 @@
 import superagent from 'superagent';
 
-// Carl -- Hard coding this because I was not able to access the process environment variable.
 const TEMP_API_URL = 'http://localhost:3000';
 
 const setProfile = profile => ({
