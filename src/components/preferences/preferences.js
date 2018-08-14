@@ -13,7 +13,6 @@ class Preferences extends React.Component {
 
   componentDidMount() {
     if (this.props.loggedIn) {
-      console.log('looged in on preferences');
       return this.props.pFetchUserProfile()
         .then(() => {
           const updatedCalendars = [];
