@@ -1,0 +1,1 @@
+export const TOKEN_COOKIE_KEY = 'GT1234567890'; // eslint-disable-line

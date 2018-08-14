@@ -1,6 +1,7 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -10,6 +11,7 @@ import MenuIcon from '@material-ui/icons/Menu';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
+import * as authActions from '../../actions/auth';
 import ROUTES from '../../routes';
 
 const styles = {
@@ -27,7 +29,7 @@ const styles = {
 
 class MenuAppBar extends React.Component {
   state = {
-    auth: true,
+    auth: this.props.loggedIn,
     anchorEl: null,
   };
 
@@ -41,6 +43,11 @@ class MenuAppBar extends React.Component {
 
   handleClose = () => {
     this.setState({ anchorEl: null });
+  };
+
+  handleLogout = () => {
+    this.setState({ auth: false, anchorEl: null });
+    this.props.logout();
   };
 
   render() {
@@ -82,11 +89,15 @@ class MenuAppBar extends React.Component {
                   open={open}
                   onClose={this.handleClose}
                 >
+                  <MenuItem onClick={this.handleClose}>Profile</MenuItem>
                   <MenuItem onClick={this.handleClose}>
-                    <Link to={ROUTES.DASHBOARD} styles={{ 'text-decoration': 'none' }}>Dashboard</Link>
+                    <Link to={ROUTES.DASHBOARD}>Dashboard</Link>
                   </MenuItem>
                   <MenuItem onClick={this.handleClose}>
                     <Link to={ROUTES.SETUP}>My account</Link>
+                  </MenuItem>
+                  <MenuItem onClick={this.handleLogout}>
+                    <Link to={ROUTES.LANDING}>logout</Link>
                   </MenuItem>
                 </Menu>
               </div>
@@ -100,7 +111,18 @@ class MenuAppBar extends React.Component {
 
 MenuAppBar.propTypes = {
   classes: PropTypes.object.isRequired,
+  loggedIn: PropTypes.bool,
+  logout: PropTypes.func,
   history: PropTypes.object,
 };
 
-export default withStyles(styles)(MenuAppBar);
+const mapStateToProps = state => ({
+  profile: state.profile,
+  loggedIn: !!state.token,
+});
+
+const mapDispatchToProps = dispatch => ({
+  logout: () => dispatch(authActions.logout()),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(MenuAppBar));
