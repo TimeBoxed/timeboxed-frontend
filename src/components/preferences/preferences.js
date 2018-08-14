@@ -1,5 +1,7 @@
 import React from 'react';
-import superagent from 'superagent';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+import * as profileActions from '../../actions/profile';
 
 class Preferences extends React.Component {
   constructor(props) {
@@ -10,12 +12,16 @@ class Preferences extends React.Component {
   }
 
   componentDidMount() {
-    return superagent.get('http://localhost:3000/calendars')
-      .then((response) => {
-        const updatedCalendars = [];
-        response.body.forEach(cal => updatedCalendars.push({ name: cal.name, id: cal.id }));
-        this.setState({ calendars: updatedCalendars });
-      });
+    if (this.props.loggedIn) {
+      return this.props.pFetchUserProfile()
+        .then(() => {
+          const updatedCalendars = [];
+          this.props.profile.calendars.forEach(cal => (
+            updatedCalendars.push({ name: cal.name, id: cal.id })));
+          this.setState({ calendars: updatedCalendars });
+        });
+    }
+    return undefined;
   }
 
   render() {
@@ -39,4 +45,19 @@ class Preferences extends React.Component {
   }
 }
 
-export default Preferences;
+Preferences.propTypes = {
+  profile: PropTypes.object,
+  loggedIn: PropTypes.bool,
+  pFetchUserProfile: PropTypes.func,
+};
+
+const mapStateToProps = state => ({
+  profile: state.profile,
+  loggedIn: !!state.token,
+});
+
+const mapDispatchToProps = dispatch => ({
+  pFetchUserProfile: () => dispatch(profileActions.profileFetchRequest()),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Preferences);

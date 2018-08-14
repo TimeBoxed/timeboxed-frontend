@@ -1,5 +1,5 @@
 const ROUTES = {
-  LANDING: '/',
+  LANDING: '/landing',
   SETUP: '/setup',
 };
 
