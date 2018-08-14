@@ -1,10 +1,15 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import * as profileActions from '../../actions/profile';
+import ROUTES from '../../routes';
 
 class ScrollDialog extends React.Component {
   state = {
@@ -16,13 +21,17 @@ class ScrollDialog extends React.Component {
     this.setState({ open: true });
   }
 
-  componentWillUnmount() {
-    this.setState({ open: false });
-  }
-
   handleClickOpen = scroll => () => {
     this.setState({ open: true, scroll });
   };
+
+  handleAgree = () => {
+    this.props.pUpdateUserProfile({ ...this.props.profile, privacySigned: true });
+
+    this.setState({
+      open: false,
+    });
+  }
 
   handleClose = () => {
     this.setState({ open: false });
@@ -36,6 +45,10 @@ class ScrollDialog extends React.Component {
           onClose={this.handleClose}
           scroll={this.state.scroll}
           aria-labelledby="scroll-dialog-title"
+          disableBackdropClick={true}
+          disableEscapeKeyDown={true}
+          fullWidth={true}
+          maxWidth='sm'
         >
           <DialogTitle id="scroll-dialog-title">Notice of Privacy</DialogTitle>
           <DialogContent>
@@ -80,10 +93,10 @@ class ScrollDialog extends React.Component {
           </DialogContent>
           <DialogActions>
             <Button onClick={this.handleClose} color="primary">
-              Cancel
+              <Link to={ROUTES.LANDING}>Cancel</Link>
             </Button>
-            <Button onClick={this.handleClose} color="primary">
-              Agree
+            <Button onClick={this.handleAgree} color="primary">
+              <Link to={ROUTES.LANDING}>Agree</Link>
             </Button>
           </DialogActions>
         </Dialog>
@@ -92,4 +105,17 @@ class ScrollDialog extends React.Component {
   }
 }
 
-export default ScrollDialog;
+ScrollDialog.propTypes = {
+  profile: PropTypes.object,
+  pUpdateUserProfile: PropTypes.func,
+};
+
+const mapStateToProps = state => ({
+  profile: state.profile,
+});
+
+const mapDispatchToProps = dispatch => ({
+  pUpdateUserProfile: profile => dispatch(profileActions.profileUpdateRequest(profile)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(ScrollDialog);

@@ -15,7 +15,7 @@ import MenuAppBar from '../material-ui/menu-app-bar';
 import Landing from '../landing/landing';
 import Footer from '../footer/footer';
 import Preferences from '../preferences/preferences';
-import PrivacyPolicy from '../privacy-policy/privacy-policy';
+import PrivacyPolicy from '../material-ui/privacy-dialog';
 
 import ROUTES from '../../routes';
 import '../../style/main.scss';
