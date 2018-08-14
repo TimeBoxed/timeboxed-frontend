@@ -15,6 +15,7 @@ import MenuAppBar from '../material-ui/menu-app-bar';
 import Landing from '../landing/landing';
 import Footer from '../footer/footer';
 import Preferences from '../preferences/preferences';
+import PrivacyPolicy from '../material-ui/privacy-dialog';
 
 import ROUTES from '../../routes';
 import '../../style/main.scss';
@@ -43,6 +44,7 @@ export default class App extends Component {
             <MenuAppBar/>
             <Route path='*' component={AuthRedirect}/>
             <Route exact path={ROUTES.LANDING} component={Landing}/>
+            <Route exact path={ROUTES.PRIVACY} component={PrivacyPolicy}/>
             <Route exact path={ROUTES.SETUP} component={Preferences}/>
             <Footer/>
           </ScrollToTop>
