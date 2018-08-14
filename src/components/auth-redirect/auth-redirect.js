@@ -14,7 +14,7 @@ class AuthRedirect extends Component {
   //     console.log('logged in on auth redirect');
   //     redirect = true;
   //     destinationRoute = '/';
-  //     this.props.history.push(ROUTES.LANDING);
+  //     this.props.history.push(ROUTES.DASHBOARD);
   //   }
   // }
 
@@ -26,10 +26,7 @@ class AuthRedirect extends Component {
 
     switch (pathname) {
       case ROUTES.LANDING:
-        if (token) destinationRoute = ROUTES.LANDING;
-        break;
-      case ROUTES.SETUP:
-        if (token) destinationRoute = ROUTES.SETUP;
+        if (token) destinationRoute = ROUTES.DASHBOARD;
         break;
       default:
         if (!token) destinationRoute = ROUTES.LANDING;
