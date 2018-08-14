@@ -1,7 +1,7 @@
 import React from 'react';
-import { connect } from 'react-redux';
+// import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import * as profileActions from '../../actions/profile';
+// import * as profileActions from '../../actions/profile';
 
 // -------------------------------------------------------------------------
 // MATERIAL UI IMPORTS
@@ -15,7 +15,7 @@ class PrivacyPolicy extends React.Component {
       privacyPolicySigned: false,
     };
   }
-  
+
   render() {
     return (
       <div>
@@ -31,9 +31,9 @@ PrivacyPolicy.propTypes = {
   pFetchUserProfile: PropTypes.func,
 };
 
-const mapStateToProps = state => ({
-  profile: state.profile,
-  loggedIn: !!state.token,
-});
+// const mapStateToProps = state => ({
+//   profile: state.profile,
+//   loggedIn: !!state.token,
+// });
 
 export default PrivacyPolicy;
