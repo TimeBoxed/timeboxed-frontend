@@ -1,5 +1,6 @@
 const ROUTES = {
   LANDING: '/',
+  PRIVACY: '/privacy',
   SETUP: '/setup',
 };
 
