@@ -21,9 +21,9 @@ body {
 }
 
 // -------------------------------------------------------------------------------------------------
-// LANDING PAGE STYLING
+// DASHBOARD PAGE STYLING
 // -------------------------------------------------------------------------------------------------
-.landing-page {
+.dashboard-page {
   margin: 5vw auto;
   width: 80%;
 }
@@ -39,5 +39,20 @@ body {
 
   #googleLogo {
     width: 18dp;
+  }
+}
+
+// ----------------------------------------------
+// LINKS
+// ----------------------------------------------
+a {
+  &,
+  &:visited,
+  &:hover,
+  &:active,
+  &:focus,
+  &:active:hover {
+    color: inherit;
+    text-decoration: none;
   }
 }

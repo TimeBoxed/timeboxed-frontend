@@ -90,7 +90,12 @@ class MenuAppBar extends React.Component {
                   onClose={this.handleClose}
                 >
                   <MenuItem onClick={this.handleClose}>Profile</MenuItem>
-                  <MenuItem onClick={this.handleClose}>My account</MenuItem>
+                  <MenuItem onClick={this.handleClose}>
+                    <Link to={ROUTES.DASHBOARD}>Dashboard</Link>
+                  </MenuItem>
+                  <MenuItem onClick={this.handleClose}>
+                    <Link to={ROUTES.SETUP}>My account</Link>
+                  </MenuItem>
                   <MenuItem onClick={this.handleLogout}>
                     <Link to={ROUTES.LANDING}>logout</Link>
                   </MenuItem>
@@ -108,6 +113,7 @@ MenuAppBar.propTypes = {
   classes: PropTypes.object.isRequired,
   loggedIn: PropTypes.bool,
   logout: PropTypes.func,
+  history: PropTypes.object,
 };
 
 const mapStateToProps = state => ({

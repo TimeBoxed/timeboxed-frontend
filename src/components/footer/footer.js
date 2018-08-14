@@ -9,7 +9,7 @@ export default class Footer extends Component {
   render() {
     return (
       <footer>
-        <Link to={ROUTES.LANDING} >Home</Link>
+        <Link to={ROUTES.DASHBOARD} >Home</Link>
       </footer>
     );
   }

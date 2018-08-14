@@ -34,11 +34,11 @@ const styles = theme => ({
   },
 });
 
-class ListForm extends React.Component {
+class TaskForm extends React.Component {
   constructor(props) {
     super(props);
     this.state = defaultState;
-    autoBind.call(this, ListForm);
+    autoBind.call(this, TaskForm);
   }
 
   handleChange(event) {
@@ -48,15 +48,16 @@ class ListForm extends React.Component {
 
   handleSubmit(event) {
     event.preventDefault();
-    return this.props.onComplete(this.state);
+    this.props.onComplete(this.state);
+    this.setState(defaultState);
   }
 
   render() {
-    const buttonText = this.props.list ? 'Update Task' : 'Create New Task';
+    const buttonText = this.props.task ? 'Update Task' : 'Create New Task';
     const { classes } = this.props;
 
     return (
-      <div className='list-form-container'>
+      <div className='task-form-container'>
       <form className={classes.container} noValidate autoComplete="off" onSubmit={this.handleSubmit}>
       
         <TextField
@@ -74,7 +75,7 @@ class ListForm extends React.Component {
             ),
           }}
         />
-        <Button size="small" variant="outlined" className={classes.button}>
+        <Button type='submit' size="small" variant="outlined" className={classes.button}>
           {buttonText}
         </Button>      
       </form>
@@ -83,10 +84,10 @@ class ListForm extends React.Component {
   }
 }
 
-ListForm.propTypes = {
-  list: PropTypes.object,
+TaskForm.propTypes = {
+  task: PropTypes.object,
   onComplete: PropTypes.func,
   classes: PropTypes.object,
 };
 
-export default withStyles(styles)(ListForm);
+export default withStyles(styles)(TaskForm);
