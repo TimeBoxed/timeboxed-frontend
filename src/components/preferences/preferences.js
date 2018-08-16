@@ -2,6 +2,7 @@ import React from 'react';
 import compose from 'recompose/compose';
 import { connect } from 'react-redux';
 import { withStyles } from '@material-ui/core/styles';
+import { Redirect } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -18,6 +19,7 @@ import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 import * as profileActions from '../../actions/profile';
 import * as preferencesActions from '../../actions/preferences';
+import ROUTES from '../../routes';
 // import autobind from '../../utils/auto-bind';
 
 import './preferences.scss';
@@ -45,6 +47,7 @@ class Preferences extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      fireRedirect: false,
       opentaskLengthDefault: false,
       openbreatherTime: false,
       taskLengthDefault: '',
@@ -82,6 +85,11 @@ class Preferences extends React.Component {
     const toOpen = `open${value}`;
     this.setState({ [toOpen]: false });
   };
+
+  handleSubmit = () => {
+    this.props.pUpdateUserPreferences(this.state);
+    this.setState({ fireRedirect: true });
+  }
 
 
   render() {
@@ -181,6 +189,9 @@ class Preferences extends React.Component {
         </List>
         }
       </div>
+        <div>
+          { this.state.fireRedirect ? <Redirect to={ROUTES.DASHBOARD}/> : undefined }
+        </div>
       </div>
     );
   }
@@ -192,7 +203,9 @@ Preferences.propTypes = {
   pFetchUserProfile: PropTypes.func,
   preferences: PropTypes.object,
   pFetchUserPreferences: PropTypes.func,
+  pUpdateUserPreferences: PropTypes.func,
   classes: PropTypes.object,
+  history: PropTypes.object,
 };
 
 const mapStateToProps = state => ({
@@ -204,6 +217,7 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   pFetchUserProfile: () => dispatch(profileActions.profileFetchRequest()),
   pFetchUserPreferences: () => dispatch(preferencesActions.preferencesFetchRequest()),
+  pUpdateUserPreferences: prefs => dispatch(preferencesActions.preferencesUpdateRequest(prefs)),
 });
 
 export default compose(
