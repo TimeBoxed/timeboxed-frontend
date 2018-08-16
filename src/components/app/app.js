@@ -14,7 +14,7 @@ import AuthRedirect from '../auth-redirect/auth-redirect';
 import MenuAppBar from '../material-ui/menu-app-bar';
 import Dashboard from '../dashboard/dashboard';
 import Landing from '../landing/landing';
-import Footer from '../footer/footer';
+// import Footer from '../footer/footer';
 import Preferences from '../preferences/preferences';
 import PrivacyPolicy from '../material-ui/privacy-dialog';
 
@@ -48,7 +48,7 @@ export default class App extends Component {
             <Route exact path={ROUTES.DASHBOARD} component={Dashboard}/>
             <Route exact path={ROUTES.PRIVACY} component={PrivacyPolicy}/>
             <Route exact path={ROUTES.SETUP} component={Preferences}/>
-            <Footer/>
+            {/* <Footer/> */}
           </ScrollToTop>
         </BrowserRouter>
       </MuiThemeProvider>

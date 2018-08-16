@@ -89,16 +89,21 @@ class MenuAppBar extends React.Component {
                   open={open}
                   onClose={this.handleClose}
                 >
-                  <MenuItem onClick={this.handleClose}>Profile</MenuItem>
-                  <MenuItem onClick={this.handleClose}>
-                    <Link to={ROUTES.DASHBOARD}>Dashboard</Link>
-                  </MenuItem>
-                  <MenuItem onClick={this.handleClose}>
-                    <Link to={ROUTES.SETUP}>My account</Link>
-                  </MenuItem>
-                  <MenuItem onClick={this.handleLogout}>
-                    <Link to={ROUTES.LANDING}>logout</Link>
-                  </MenuItem>
+                  <Link to={ROUTES.DASHBOARD}>
+                    <MenuItem onClick={this.handleClose}>
+                      Dashboard
+                    </MenuItem>
+                  </Link>
+                  <Link to={ROUTES.SETUP}>
+                    <MenuItem onClick={this.handleClose}>
+                      Settings
+                    </MenuItem>
+                  </Link>
+                  <Link to={ROUTES.LANDING}>
+                    <MenuItem onClick={this.handleLogout}>
+                      Logout
+                    </MenuItem>
+                  </Link>
                 </Menu>
               </div>
             )}
