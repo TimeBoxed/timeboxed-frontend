@@ -9,8 +9,9 @@ const setPreferences = preferences => ({
 
 const preferencesFetchRequest = () => (store) => {
   const { token, profile } = store.getState();
+  console.log(profile);
   const preferencesId = profile.preferences;
-  return superagent.get(`${TEMP_API_URL}/preferencess/${preferencesId}`)
+  return superagent.get(`${TEMP_API_URL}/preferences/${preferencesId}`)
     .set('Authorization', `Bearer ${token}`)
     .set('Content-Type', 'application/json')
     .then((response) => {
@@ -21,7 +22,7 @@ const preferencesFetchRequest = () => (store) => {
 const preferencesUpdateRequest = preferences => (store) => {
   const { token, profile } = store.getState();
   const preferencesId = profile.preferences;
-  return superagent.put(`${TEMP_API_URL}/preferencess/${preferencesId}`)
+  return superagent.put(`${TEMP_API_URL}/preferences/${preferencesId}`)
     .set('Authorization', `Bearer ${token}`)
     .set('Content-Type', 'application/json')
     .send(preferences)
