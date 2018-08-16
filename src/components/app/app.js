@@ -16,7 +16,8 @@ import Dashboard from '../dashboard/dashboard';
 import Landing from '../landing/landing';
 import Footer from '../footer/footer';
 import Preferences from '../preferences/preferences';
-import PrivacyPolicy from '../material-ui/privacy-dialog';
+import PrivacyDialog from '../material-ui/privacy-dialog';
+import PrivacyRejectionAlert from '../material-ui/privacy-rejection-alert';
 
 import ROUTES from '../../routes';
 import '../../style/main.scss';
@@ -46,7 +47,8 @@ export default class App extends Component {
             <Route path='*' component={AuthRedirect}/>
             <Route exact path={ROUTES.LANDING} component={Landing}/>
             <Route exact path={ROUTES.DASHBOARD} component={Dashboard}/>
-            <Route exact path={ROUTES.PRIVACY} component={PrivacyPolicy}/>
+            <Route exact path={ROUTES.PRIVACY} component={PrivacyDialog}/>
+            <Route exact path={ROUTES.PRIVACY_REJECTED} component={PrivacyRejectionAlert}/>
             <Route exact path={ROUTES.SETUP} component={Preferences}/>
             <Footer/>
           </ScrollToTop>

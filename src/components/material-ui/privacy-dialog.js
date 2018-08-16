@@ -93,10 +93,10 @@ class ScrollDialog extends React.Component {
           </DialogContent>
           <DialogActions>
             <Button onClick={this.handleClose} color="primary">
-              <Link to={ROUTES.LANDING}>Cancel</Link>
+              <Link to={ROUTES.PRIVACY_REJECTED}>Disagree</Link>
             </Button>
             <Button onClick={this.handleAgree} color="primary">
-              <Link to={ROUTES.LANDING}>Agree</Link>
+              <Link to={ROUTES.DASHBOARD}>Agree</Link>
             </Button>
           </DialogActions>
         </Dialog>
