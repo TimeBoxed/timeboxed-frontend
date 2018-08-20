@@ -50,9 +50,11 @@ class Preferences extends React.Component {
       fireRedirect: false,
       opentaskLengthDefault: false,
       openbreatherTime: false,
+      openselectedCalendar: false,
       taskLengthDefault: '',
       agendaReceiveTime: '',
       breatherTime: '',
+      selectedCalendar: '',
     };
     // autobind.call(this, Preferences);
   }
@@ -64,8 +66,18 @@ class Preferences extends React.Component {
           this.props.pFetchUserPreferences()
             .then((preferences) => {
               const { payload } = preferences;
-              const { breatherTime, agendaReceiveTime, taskLengthDefault } = payload;
-              this.setState({ breatherTime, agendaReceiveTime, taskLengthDefault });
+              const { 
+                breatherTime, 
+                agendaReceiveTime, 
+                taskLengthDefault, 
+                selectedCalendar, 
+              } = payload;
+              this.setState({ 
+                breatherTime, 
+                agendaReceiveTime, 
+                taskLengthDefault, 
+                selectedCalendar, 
+              });
             });
         });
     }
@@ -75,6 +87,13 @@ class Preferences extends React.Component {
   handleChange = name => (event) => {
     this.setState({ [name]: Number(event.target.value) });
   };
+
+  handleCalendarSelection = name => (event) => {
+    const targetCalendar = this.props.profile.calendars.filter((calendar) => {
+      return calendar.name === event.target.value;
+    });
+    this.setState({ [name]: targetCalendar[0] });
+  }
 
   handleClickOpen = (value) => {
     const toOpen = `open${value}`;
@@ -104,7 +123,45 @@ class Preferences extends React.Component {
         && <List
           component="div"
         >
-        {/* Tast Length Default */}
+          <ListItem style={{ borderBottom: '1px solid gray' }}>
+            <ListItemText primary={'Calendar'}/>
+            <Button style={{ border: '1px solid gray' }} onClick={() => this.handleClickOpen('selectedCalendar')}>
+              {this.state.selectedCalendar && this.state.selectedCalendar.name}</Button>
+            <Dialog
+              disableBackdropClick
+              disableEscapeKeyDown
+              open={this.state.openselectedCalendar}
+              onClose={() => this.handleClose('selectedCalendar')}
+            >
+              <DialogTitle>Update calendar to use</DialogTitle>
+              <DialogContent>
+                <form className={classes.container}>
+                  <FormControl className={classes.formControl}>
+                    <InputLabel htmlFor="selected-calendar-simple">Select Calendar</InputLabel>
+                    <Select
+                      value={this.state.selectedCalendar.name}
+                      onChange={this.handleCalendarSelection('selectedCalendar')}
+                      input={<Input id="selected-calendar-simple" />}
+                    >
+                      {profile.calendars.map(calendar => (
+                        <MenuItem value={calendar.name} key={calendar.id}>{calendar.name}</MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+                </form>
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={() => this.handleClose('selectedCalendar')} color="primary">
+                  Cancel
+                </Button>
+                <Button onClick={() => this.handleClose('selectedCalendar')} color="primary">
+                  Ok
+                </Button>
+              </DialogActions>
+            </Dialog>
+          </ListItem>
+
+          {/* Tast Length Default */}
           <ListItem style={{ borderBottom: '1px solid gray' }}>
             <ListItemText primary={'Default task time'}/>
             <Button style={{ border: '1px solid gray' }} onClick={() => this.handleClickOpen('taskLengthDefault')}>
@@ -115,7 +172,7 @@ class Preferences extends React.Component {
               open={this.state.opentaskLengthDefault}
               onClose={() => this.handleClose('taskLengthDefault')}
             >
-              <DialogTitle>Update task time</DialogTitle>
+              <DialogTitle>Update default task time</DialogTitle>
               <DialogContent>
                 <form className={classes.container}>
                   <FormControl className={classes.formControl}>
@@ -162,7 +219,7 @@ class Preferences extends React.Component {
                   <FormControl className={classes.formControl}>
                     <InputLabel htmlFor="breather-time-simple">Breather time</InputLabel>
                     <Select
-                      value={this.state.taskLengthDefault}
+                      value={this.state.breatherTime}
                       onChange={this.handleChange('breatherTime')}
                       input={<Input id="breather-time-simple" />}
                     >
