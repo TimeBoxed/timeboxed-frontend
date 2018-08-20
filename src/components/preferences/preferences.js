@@ -51,6 +51,7 @@ class Preferences extends React.Component {
       opentaskLengthDefault: false,
       openbreatherTime: false,
       openselectedCalendar: false,
+      openagendaReceiveTime: false,
       taskLengthDefault: '',
       agendaReceiveTime: '',
       breatherTime: '',
@@ -85,7 +86,9 @@ class Preferences extends React.Component {
   }
 
   handleChange = name => (event) => {
-    this.setState({ [name]: Number(event.target.value) });
+    if (name === 'agendaReceiveTime') {
+      this.setState({ [name]: event.target.value });
+    }
   };
 
   handleCalendarSelection = name => (event) => {
@@ -123,6 +126,7 @@ class Preferences extends React.Component {
         && <List
           component="div"
         >
+          {/* Calendar Selection */}
           <ListItem style={{ borderBottom: '1px solid gray' }}>
             <ListItemText primary={'Calendar'}/>
             <Button style={{ border: '1px solid gray' }} onClick={() => this.handleClickOpen('selectedCalendar')}>
@@ -160,6 +164,52 @@ class Preferences extends React.Component {
               </DialogActions>
             </Dialog>
           </ListItem>
+
+          {/* Receive Agenda Time */}
+          <ListItem style={{ borderBottom: '1px solid gray' }}>
+            <ListItemText primary={'Daily agenda time'}/>
+            <Button style={{ border: '1px solid gray' }} onClick={() => this.handleClickOpen('agendaReceiveTime')}>
+              {this.state.agendaReceiveTime && this.state.agendaReceiveTime[0] === '0' ? this.state.agendaReceiveTime.slice(1) : this.state.agendaReceiveTime} AM</Button>
+            <Dialog
+              disableBackdropClick
+              disableEscapeKeyDown
+              open={this.state.openagendaReceiveTime}
+              onClose={() => this.handleClose('agendaReceiveTime')}
+            >
+              <DialogTitle>Update time to receive agenda</DialogTitle>
+              <DialogContent>
+                <form className={classes.container}>
+                  <FormControl className={classes.formControl}>
+                    <InputLabel htmlFor="agenda-receive-time-simple">Time</InputLabel>
+                    <Select
+                      value={this.state.agendaReceiveTime}
+                      onChange={this.handleChange('agendaReceiveTime')}
+                      input={<Input id="agenda-receive-time-simple" />}
+                    >
+                      <MenuItem value={'05:00'}>5:00 AM</MenuItem>
+                      <MenuItem value={'05:30'}>5:30 AM</MenuItem>
+                      <MenuItem value={'06:00'}>6:00 AM</MenuItem>
+                      <MenuItem value={'06:30'}>6:30 AM</MenuItem>
+                      <MenuItem value={'07:00'}>7:00 AM</MenuItem>
+                      <MenuItem value={'07:30'}>7:30 AM</MenuItem>
+                      <MenuItem value={'08:00'}>8:00 AM</MenuItem>
+                      <MenuItem value={'08:30'}>8:30 AM</MenuItem>
+                      <MenuItem value={'09:00'}>9:00 AM</MenuItem>
+                    </Select>
+                  </FormControl>
+                </form>
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={() => this.handleClose('agendaReceiveTime')} color="primary">
+                  Cancel
+                </Button>
+                <Button onClick={() => this.handleClose('agendaReceiveTime')} color="primary">
+                  Ok
+                </Button>
+              </DialogActions>
+            </Dialog>
+          </ListItem>
+
 
           {/* Tast Length Default */}
           <ListItem style={{ borderBottom: '1px solid gray' }}>

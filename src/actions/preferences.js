@@ -9,7 +9,6 @@ const setPreferences = preferences => ({
 
 const preferencesFetchRequest = () => (store) => {
   const { token, profile } = store.getState();
-  console.log(profile);
   const preferencesId = profile.preferences;
   return superagent.get(`${TEMP_API_URL}/preferences/${preferencesId}`)
     .set('Authorization', `Bearer ${token}`)
