@@ -7,6 +7,11 @@ const setProfile = profile => ({
   payload: profile,
 });
 
+const removeProfile = profile => ({
+  type: 'REQUEST_PROFILE_REMOVE',
+  payload: profile,
+});
+
 const profileFetchRequest = () => (store) => {
   const { token } = store.getState();
   return superagent.get(`${TEMP_API_URL}/profiles/me`)
@@ -28,4 +33,15 @@ const profileUpdateRequest = profile => (store) => {
     });
 };
 
-export { profileUpdateRequest, profileFetchRequest };
+const profileDeleteRequest = profile => (store) => {
+  const { token } = store.getState();
+  return superagent.delete(`${TEMP_API_URL}/profile/${profile._id}`)
+    .set('Authorization', `Bearer ${token}`)
+    .set('Content-Type', 'application/json')
+    .send(profile)
+    .then(() => {
+      return store.dispatch(removeProfile(profile));
+    });
+};
+
+export { profileUpdateRequest, profileFetchRequest, profileDeleteRequest };

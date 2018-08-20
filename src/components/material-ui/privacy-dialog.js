@@ -2,20 +2,35 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+
+// ===============================
+// ===== MATERIAL UI IMPORTS =====
+// ===============================
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
+
+// ===============================
+// ====== INTERNAL IMPORTS =======
+// ===============================
 import * as profileActions from '../../actions/profile';
+import autobind from '../../utils/auto-bind';
 import ROUTES from '../../routes';
 
 class ScrollDialog extends React.Component {
-  state = {
-    open: false,
-    scroll: 'paper',
-  };
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      open: false,
+      scroll: 'paper',
+    };
+
+    autobind.call(this, ScrollDialog);
+  }
 
   componentDidMount() {
     this.setState({ open: true });
@@ -27,13 +42,13 @@ class ScrollDialog extends React.Component {
 
   handleAgree = () => {
     this.props.pUpdateUserProfile({ ...this.props.profile, privacySigned: true });
-
     this.setState({
       open: false,
     });
   }
 
   handleClose = () => {
+    this.props.pUpdateUserProfile({ ...this.props.profile });
     this.setState({ open: false });
   };
 
