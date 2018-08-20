@@ -1,21 +1,39 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import compose from 'recompose/compose';
+import { withStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
+import List from '@material-ui/core/List';
+import TaskItem from '../material-ui/task-item';
 import * as profileActions from '../../actions/profile';
 import * as taskActions from '../../actions/task';
 import TaskForm from '../task-form/task-form';
-import autobind from '../../utils/auto-bind';
+// import autobind from '../../utils/auto-bind';
 
 // -------------------------------------------------------------------------------------------------
 // MATERIAL UI COMPONENTS
 // -------------------------------------------------------------------------------------------------
 import AddFAB from '../material-ui/floating-action-button';
 
+import './dashboard.scss';
+
+const styles = theme => ({
+  root: {
+    width: '100%',
+    maxWidth: '360',
+    backgroundColor: theme.palette.background.paper,
+  },
+  container: {
+    maxWidth: 360,
+  },
+});
+
 class Dashboard extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {};
-    autobind.call(this, Dashboard);
+    this.state = {
+      openForm: false,
+    };
   }
 
   componentDidMount() {
@@ -27,19 +45,27 @@ class Dashboard extends React.Component {
     }
   }
 
+  handleTaskComplete = () => {
+    this.props.pCreateTask();
+    this.setState({ openForm: false });
+  }
+
+  handleFormOpen = () => {
+    this.setState(prevState => ({ openForm: !prevState.openForm }));
+  }
+
   render() {
-    const { tasks } = this.props;
+    const { tasks, classes } = this.props;
     return (
       <div className='dashboard-page'>
-          <div>
-          <TaskForm onComplete={this.props.pCreateTask}/>
+        <TaskForm show={this.state.openForm} onComplete={this.props.pCreateTask}/>
+        <List className={classes.container} component='div'>
           {tasks.length > 0 
           && tasks.sort((a, b) => new Date(b.createdOn) - new Date(a.createdOn)).map(task => (
-              <p key={task._id}>{task.title}</p>
-          ))
-          }
-          <AddFAB/>
-        </div>
+            <TaskItem key={task._id} task={task} onComplete={this.props.pUpdateTask} />
+          ))}
+        </List>
+        <AddFAB activate={this.handleFormOpen}/>
       </div>
     );
   }
@@ -52,6 +78,7 @@ Dashboard.propTypes = {
   pCreateTask: PropTypes.func,
   pFetchAllTasks: PropTypes.func,
   tasks: PropTypes.array,
+  classes: PropTypes.object,
 };
 
 const mapStateToProps = state => ({
@@ -66,4 +93,7 @@ const mapDispatchToProps = dispatch => ({
   pFetchAllTasks: profile => dispatch(taskActions.fetchAllTasks(profile)),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(Dashboard);
+export default compose(
+  withStyles(styles, { name: 'Dashboard' }),
+  connect(mapStateToProps, mapDispatchToProps),
+)(Dashboard);
