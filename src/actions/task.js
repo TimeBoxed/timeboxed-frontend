@@ -39,7 +39,6 @@ const fetchAllTasks = () => (store) => {
 };
 
 const taskUpdateStatus = (task, completed) => (store) => {
-  console.log(task, completed);
   const { token } = store.getState();
   return superagent.put(`${TEMP_API_URL}/tasks/${task}`)
     .set('Authorization', `Bearer ${token}`)
