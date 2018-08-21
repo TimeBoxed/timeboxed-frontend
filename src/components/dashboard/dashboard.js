@@ -20,11 +20,17 @@ import './dashboard.scss';
 const styles = theme => ({
   root: {
     width: '100%',
-    maxWidth: '360',
     backgroundColor: theme.palette.background.paper,
   },
   container: {
-    maxWidth: 360,
+    width: '100%',
+  },
+  dashboardPage: {
+    display: 'flex',
+    justifyContent: 'center',
+  },
+  listHolder: {
+    width: '600px',
   },
 });
 
@@ -57,15 +63,17 @@ class Dashboard extends React.Component {
   render() {
     const { tasks, classes } = this.props;
     return (
-      <div className='dashboard-page'>
-        <TaskForm show={this.state.openForm} onComplete={this.props.pCreateTask}/>
-        <List className={classes.container} component='div'>
-          {tasks.length > 0 
-          && tasks.sort((a, b) => new Date(b.createdOn) - new Date(a.createdOn)).map(task => (
-            <TaskItem key={task._id} task={task} onComplete={this.props.pUpdateTask} />
-          ))}
-        </List>
-        <AddFAB activate={this.handleFormOpen}/>
+      <div className={classes.dashboardPage}>
+        <div className={classes.listHolder}>
+          <TaskForm show={this.state.openForm} onComplete={this.props.pCreateTask}/>
+          <List className={classes.container} component='div'>
+            {tasks.length > 0 
+            && tasks.sort((a, b) => new Date(b.createdOn) - new Date(a.createdOn)).map(task => (
+              <TaskItem key={task._id} task={task} onComplete={this.props.pUpdateTask} />
+            ))}
+          </List>
+          <AddFAB activate={this.handleFormOpen}/>
+        </div>
       </div>
     );
   }

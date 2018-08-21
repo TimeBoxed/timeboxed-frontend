@@ -13,8 +13,10 @@ const styles = theme => ({
   root: {
     display: 'block',
     width: '100%',
-    maxWidth: 360,
     backgroundColor: theme.palette.background.paper,
+  },
+  mainItem: {
+    borderBottom: '1px solid #E4E4E4',
   },
   time: {
     textAlign: 'right',
@@ -58,6 +60,7 @@ class TaskItem extends React.Component {
           <ListItem 
             button 
             onClick={() => this.handleToggle(task._id)}
+            className={classes.mainItem}
           >
             <ListItemIcon>
             <Checkbox
