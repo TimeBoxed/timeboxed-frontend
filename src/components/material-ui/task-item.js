@@ -27,7 +27,7 @@ class TaskItem extends React.Component {
   constructor(props) {
     super(props);
     this.state = { 
-      checked: [0],
+      checked: this.props.task.completed ? [this.props.task._id] : [0],
     };
   }
 
@@ -53,20 +53,19 @@ class TaskItem extends React.Component {
 
   render() {
     const { task, classes } = this.props;
-    console.log(task);
     return (
       <div className={classes.taskItem}>
         {/* <List key={task._id} component="div" disablePadding> */}
           <ListItem 
             button 
-            onClick={() => this.handleToggle(task._id)}
+            disableRipple
             className={classes.mainItem}
           >
             <ListItemIcon>
             <Checkbox
+              onClick={() => this.handleToggle(task._id)}
               checked={this.state.checked.indexOf(task._id) !== -1}
               tabIndex={-1}
-              disableRipple
             />
             </ListItemIcon>
             <ListItemText inset primary={task.title} />

@@ -4,6 +4,7 @@ import compose from 'recompose/compose';
 import { withStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 import List from '@material-ui/core/List';
+import Typography from '@material-ui/core/Typography';
 import TaskItem from '../material-ui/task-item';
 import * as profileActions from '../../actions/profile';
 import * as taskActions from '../../actions/task';
@@ -25,6 +26,18 @@ const styles = theme => ({
   container: {
     width: '100%',
   },
+  completedContainer: {
+    width: '100%',
+    textDecoration: 'line-through',
+    opacity: '.5',
+    padding: 0,
+  },
+  showCompleted: {
+    display: 'block',
+  },
+  hideCompleted: {
+    display: 'none',
+  },
   dashboardPage: {
     display: 'flex',
     justifyContent: 'center',
@@ -39,6 +52,7 @@ class Dashboard extends React.Component {
     super(props);
     this.state = {
       openForm: false,
+      completedTasksShow: false,
     };
   }
 
@@ -60,18 +74,44 @@ class Dashboard extends React.Component {
     this.setState(prevState => ({ openForm: !prevState.openForm }));
   }
 
+  handleShowHideTasks = () => {
+    this.setState(prevState => ({ completedTasksShow: !prevState.completedTasksShow }));
+  }
+
+  handleStatusChange = (task, completed) => {
+    this.props.pUpdateTaskStatus(task, completed);
+  }
+
   render() {
     const { tasks, classes } = this.props;
+    const completedTasks = this.state.completedTasksShow ? 'Hide' : 'Show'; 
+    const completedTasksClass = this.state.completedTasksShow ? 'show-completed' : 'hide-completed';
+
     return (
       <div className={classes.dashboardPage}>
         <div className={classes.listHolder}>
           <TaskForm show={this.state.openForm} onComplete={this.props.pCreateTask}/>
           <List className={classes.container} component='div'>
             {tasks.length > 0 
-            && tasks.sort((a, b) => new Date(b.createdOn) - new Date(a.createdOn)).map(task => (
-              <TaskItem key={task._id} task={task} onComplete={this.props.pUpdateTask} />
-            ))}
+            && tasks.sort((a, b) => new Date(b.createdOn) - new Date(a.createdOn))
+              .filter(taskToDo => (taskToDo.completed === false))
+              .map(task => (
+              <TaskItem key={task._id} task={task} onComplete={this.props.pUpdateTaskStatus} />
+              ))}
           </List>
+          <div className='show-hide-tasks'>
+            <Typography gutterBottom variant='subheading' onClick={this.handleShowHideTasks}>{completedTasks} Completed Tasks</Typography>
+          </div>
+          <div className={completedTasksClass}>
+            <List className={classes.completedContainer} component='div'>
+              {tasks.length > 0 
+              && tasks.sort((a, b) => new Date(b.createdOn) - new Date(a.createdOn))
+                .filter(taskToDo => (taskToDo.completed === true))
+                .map(task => (
+                <TaskItem key={task._id} task={task} onComplete={this.handleStatusChange} />
+                ))}
+            </List>
+          </div>
           <AddFAB activate={this.handleFormOpen}/>
         </div>
       </div>
@@ -85,6 +125,7 @@ Dashboard.propTypes = {
   pFetchUserProfile: PropTypes.func,
   pCreateTask: PropTypes.func,
   pFetchAllTasks: PropTypes.func,
+  pUpdateTaskStatus: PropTypes.func,
   tasks: PropTypes.array,
   classes: PropTypes.object,
 };
@@ -99,6 +140,7 @@ const mapDispatchToProps = dispatch => ({
   pFetchUserProfile: () => dispatch(profileActions.profileFetchRequest()),
   pCreateTask: task => dispatch(taskActions.taskCreateRequest(task)),
   pFetchAllTasks: profile => dispatch(taskActions.fetchAllTasks(profile)),
+  pUpdateTaskStatus: (task, completed) => dispatch(taskActions.taskUpdateStatus(task, completed)),
 });
 
 export default compose(

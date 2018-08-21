@@ -1,1 +1,17 @@
 @import '../../style/vars';
+
+.show-completed {
+  display: block;
+}
+
+.hide-completed {
+  display: none;
+}
+
+.show-hide-tasks {
+  margin: 10px 0;
+}
+
+.show-hide-tasks:hover {
+  cursor: pointer;
+}
