@@ -8,6 +8,8 @@ import Button from '@material-ui/core/Button';
 
 import autoBind from '../../utils/auto-bind';
 
+import './task-form.scss';
+
 
 const defaultState = {
   title: '',
@@ -17,6 +19,7 @@ const styles = theme => ({
   container: {
     display: 'flex',
     flexWrap: 'wrap',
+    justifyContent: 'center',
   },
   textField: {
     marginLeft: theme.spacing.unit,
@@ -54,10 +57,11 @@ class TaskForm extends React.Component {
 
   render() {
     const buttonText = this.props.task ? 'Update Task' : 'Create New Task';
-    const { classes } = this.props;
+    const { classes, show } = this.props;
+    const taskFormDisplay = show ? 'task-form-show' : 'task-form-hide';
 
     return (
-      <div className='task-form-container'>
+      <div className={taskFormDisplay}>
       <form className={classes.container} noValidate autoComplete="off" onSubmit={this.handleSubmit}>
       
         <TextField
@@ -88,6 +92,7 @@ TaskForm.propTypes = {
   task: PropTypes.object,
   onComplete: PropTypes.func,
   classes: PropTypes.object,
+  show: PropTypes.bool,
 };
 
 export default withStyles(styles)(TaskForm);
