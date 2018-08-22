@@ -13,7 +13,6 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
 import * as authActions from '../../actions/auth';
 import ROUTES from '../../routes';
-import Logo from '../../assets/logo/logo-white.svg';
 
 const styles = {
   root: {
@@ -21,24 +20,10 @@ const styles = {
   },
   flex: {
     flexGrow: 1,
-    maxWidth: '100px',
   },
   menuButton: {
     marginLeft: -12,
     marginRight: 20,
-  },
-  logo: {
-    maxHeight: '3em',
-    maxWidth: '3em',
-  },
-  logoContainer: {
-    width: '100%',
-    verticalAlign: 'middle',
-
-  },
-  logoText: {
-    display: 'inline-block',
-    height: '100%',
   },
 };
 
@@ -77,14 +62,9 @@ class MenuAppBar extends React.Component {
             <IconButton className={classes.menuButton} color="inherit" aria-label="Menu">
               <MenuIcon />
             </IconButton>
-            <div className={classes.logoContainer}>
-              <Logo className={classes.logo} style={{ display: 'inline-block' }}/>
-              <div className={classes.logoText}>
-                <Typography variant="title" color="inherit" className={classes.flex}>
-                  TimeBoxed
-                </Typography>
-              </div>
-            </div>
+            <Typography variant="title" color="inherit" className={classes.flex}>
+              TimeBoxed
+            </Typography>
             {auth && (
               <div>
                 <IconButton
