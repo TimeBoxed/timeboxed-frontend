@@ -49,7 +49,7 @@ export default class App extends Component {
             <Route exact path={ROUTES.DASHBOARD} component={Dashboard}/>
             <Route exact path={ROUTES.PRIVACY} component={PrivacyDialog}/>
             <Route exact path={ROUTES.PRIVACY_REJECTED} component={PrivacyRejectionAlert}/>
-            <Route exact path={ROUTES.SETUP} component={Preferences}/>
+            <Route exact path={ROUTES.PREFERENCES} component={Preferences}/>
             {/* <Footer/> */}
           </ScrollToTop>
         </BrowserRouter>

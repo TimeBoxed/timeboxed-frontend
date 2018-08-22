@@ -33,10 +33,6 @@ class MenuAppBar extends React.Component {
     anchorEl: null,
   };
 
-  handleChange = (event, checked) => {
-    this.setState({ auth: checked });
-  };
-
   handleMenu = (event) => {
     this.setState({ anchorEl: event.currentTarget });
   };
@@ -63,7 +59,9 @@ class MenuAppBar extends React.Component {
               <MenuIcon />
             </IconButton>
             <Typography variant="title" color="inherit" className={classes.flex}>
-              TimeBoxed
+              {
+                window.location.pathname.replace(/\//, '').toUpperCase()
+              }
             </Typography>
             {auth && (
               <div>
@@ -94,9 +92,9 @@ class MenuAppBar extends React.Component {
                       Dashboard
                     </MenuItem>
                   </Link>
-                  <Link to={ROUTES.SETUP}>
+                  <Link to={ROUTES.PREFERENCES}>
                     <MenuItem onClick={this.handleClose}>
-                      Settings
+                      Preferences
                     </MenuItem>
                   </Link>
                   <Link to={ROUTES.LANDING}>
@@ -119,6 +117,7 @@ MenuAppBar.propTypes = {
   loggedIn: PropTypes.bool,
   logout: PropTypes.func,
   history: PropTypes.object,
+  location: PropTypes.object,
 };
 
 const mapStateToProps = state => ({
