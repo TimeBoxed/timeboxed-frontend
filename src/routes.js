@@ -3,7 +3,7 @@ const ROUTES = {
   DASHBOARD: '/dashboard',
   PRIVACY: '/privacy',
   PRIVACY_REJECTED: '/privacy-notice-rejected',
-  SETUP: '/setup',
+  PREFERENCES: '/preferences',
 };
 
 export default ROUTES;

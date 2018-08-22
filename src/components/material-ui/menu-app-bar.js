@@ -31,11 +31,12 @@ class MenuAppBar extends React.Component {
   state = {
     auth: this.props.loggedIn,
     anchorEl: null,
+    // title: this.props.title,
   };
 
-  handleChange = (event, checked) => {
-    this.setState({ auth: checked });
-  };
+  // handleChange = (event, checked) => {
+  //   this.setState({ auth: checked, title: window.location.pathname });
+  // };
 
   handleMenu = (event) => {
     this.setState({ anchorEl: event.currentTarget });
@@ -44,6 +45,14 @@ class MenuAppBar extends React.Component {
   handleClose = () => {
     this.setState({ anchorEl: null });
   };
+
+  // shouldComponentUpdate() {
+  //   this.setState({ title: window.location.pathname });
+  // }
+
+  // componentDidUpdate() {
+  //   this.setState({ title: window.location.pathname });
+  // }
 
   handleLogout = () => {
     this.setState({ auth: false, anchorEl: null });
@@ -63,7 +72,9 @@ class MenuAppBar extends React.Component {
               <MenuIcon />
             </IconButton>
             <Typography variant="title" color="inherit" className={classes.flex}>
-              TimeBoxed
+              {
+                window.location.pathname.replace(/\//, '').toUpperCase()
+              }
             </Typography>
             {auth && (
               <div>
@@ -94,9 +105,9 @@ class MenuAppBar extends React.Component {
                       Dashboard
                     </MenuItem>
                   </Link>
-                  <Link to={ROUTES.SETUP}>
+                  <Link to={ROUTES.PREFERENCES}>
                     <MenuItem onClick={this.handleClose}>
-                      Settings
+                      Preferences
                     </MenuItem>
                   </Link>
                   <Link to={ROUTES.LANDING}>
@@ -119,6 +130,8 @@ MenuAppBar.propTypes = {
   loggedIn: PropTypes.bool,
   logout: PropTypes.func,
   history: PropTypes.object,
+  location: PropTypes.object,
+  // title: PropTypes.string,
 };
 
 const mapStateToProps = state => ({
