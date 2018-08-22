@@ -31,12 +31,7 @@ class MenuAppBar extends React.Component {
   state = {
     auth: this.props.loggedIn,
     anchorEl: null,
-    // title: this.props.title,
   };
-
-  // handleChange = (event, checked) => {
-  //   this.setState({ auth: checked, title: window.location.pathname });
-  // };
 
   handleMenu = (event) => {
     this.setState({ anchorEl: event.currentTarget });
@@ -45,14 +40,6 @@ class MenuAppBar extends React.Component {
   handleClose = () => {
     this.setState({ anchorEl: null });
   };
-
-  // shouldComponentUpdate() {
-  //   this.setState({ title: window.location.pathname });
-  // }
-
-  // componentDidUpdate() {
-  //   this.setState({ title: window.location.pathname });
-  // }
 
   handleLogout = () => {
     this.setState({ auth: false, anchorEl: null });
@@ -131,7 +118,6 @@ MenuAppBar.propTypes = {
   logout: PropTypes.func,
   history: PropTypes.object,
   location: PropTypes.object,
-  // title: PropTypes.string,
 };
 
 const mapStateToProps = state => ({
