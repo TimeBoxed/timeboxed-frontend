@@ -107,7 +107,7 @@ class MenuAppBar extends React.Component {
               </div>
             )}
             <div id = 'header-image'>
-              <Logo id = 'tb-logo'/> TimeBoxed
+              <Logo id = 'tb-logo'/>  <p>TimeBoxed</p>
             </div>
           </Toolbar>          
         </AppBar>        
