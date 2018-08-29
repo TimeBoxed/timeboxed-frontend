@@ -86,9 +86,7 @@ class Preferences extends React.Component {
   }
 
   handleChange = name => (event) => {
-    if (name === 'agendaReceiveTime') {
-      this.setState({ [name]: event.target.value });
-    }
+    this.setState({ [name]: event.target.value });
   };
 
   handleCalendarSelection = name => (event) => {

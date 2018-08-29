@@ -22,9 +22,9 @@ class AuthRedirect extends Component {
   render() {
     const { location, token } = this.props;
     const { pathname } = location;
-
+    
     const destinationRoute = (!token) ? ROUTES.LANDING : pathCheck(pathname);
-
+    
     return (
       <div>
         { destinationRoute ? <Redirect to={destinationRoute}/> : undefined }
@@ -41,6 +41,5 @@ AuthRedirect.propTypes = {
 const mapStateToProps = state => ({
   token: !!state.token,
 });
-
 
 export default connect(mapStateToProps)(AuthRedirect);

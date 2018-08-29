@@ -3,8 +3,8 @@ const ROUTES = {
   DASHBOARD: '/dashboard',
   PRIVACY: '/privacy',
   PRIVACY_REJECTED: '/privacy-notice-rejected',
-  SETUP: '/setup',
   NOTFOUND: '/not-found',
+  PREFERENCES: '/preferences',
 };
 
 export default ROUTES;

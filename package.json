@@ -7,7 +7,7 @@
     "test": "jest --coverage --forceExit --runInBand --watchAll",
     "watch": "webpack-dev-server --config webpack.dev.js",
     "pack": "webpack --config webpack.prod.js",
-    "postbuild": "webpack --progress --config webpack.prod.js",
+    "heroku-postbuild": "webpack --progress --config webpack.prod.js",
     "start": "node index.js"
   },
   "repository": {

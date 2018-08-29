@@ -11,6 +11,7 @@ import MenuIcon from '@material-ui/icons/Menu';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
+import Logo from '../../assets/logo/logo-white.svg';
 import * as authActions from '../../actions/auth';
 import ROUTES from '../../routes';
 
@@ -31,10 +32,6 @@ class MenuAppBar extends React.Component {
   state = {
     auth: this.props.loggedIn,
     anchorEl: null,
-  };
-
-  handleChange = (event, checked) => {
-    this.setState({ auth: checked });
   };
 
   handleMenu = (event) => {
@@ -61,9 +58,11 @@ class MenuAppBar extends React.Component {
           <Toolbar>
             <IconButton className={classes.menuButton} color="inherit" aria-label="Menu">
               <MenuIcon />
-            </IconButton>
+            </IconButton>           
             <Typography variant="title" color="inherit" className={classes.flex}>
-              TimeBoxed
+              {
+                window.location.pathname.replace(/\//, '').toUpperCase()
+              }
             </Typography>
             {auth && (
               <div>
@@ -94,9 +93,9 @@ class MenuAppBar extends React.Component {
                       Dashboard
                     </MenuItem>
                   </Link>
-                  <Link to={ROUTES.SETUP}>
+                  <Link to={ROUTES.PREFERENCES}>
                     <MenuItem onClick={this.handleClose}>
-                      Settings
+                      Preferences
                     </MenuItem>
                   </Link>
                   <Link to={ROUTES.LANDING}>
@@ -107,8 +106,11 @@ class MenuAppBar extends React.Component {
                 </Menu>
               </div>
             )}
-          </Toolbar>
-        </AppBar>
+            <div id = 'header-image'>
+              <Logo id = 'tb-logo'/>  <p>TimeBoxed</p>
+            </div>
+          </Toolbar>          
+        </AppBar>        
       </div>
     );
   }
@@ -119,6 +121,7 @@ MenuAppBar.propTypes = {
   loggedIn: PropTypes.bool,
   logout: PropTypes.func,
   history: PropTypes.object,
+  location: PropTypes.object,
 };
 
 const mapStateToProps = state => ({
