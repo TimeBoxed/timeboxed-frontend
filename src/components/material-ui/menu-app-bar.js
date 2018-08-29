@@ -33,10 +33,6 @@ class MenuAppBar extends React.Component {
     anchorEl: null,
   };
 
-  handleChange = (event, checked) => {
-    this.setState({ auth: checked });
-  };
-
   handleMenu = (event) => {
     this.setState({ anchorEl: event.currentTarget });
   };
@@ -63,7 +59,9 @@ class MenuAppBar extends React.Component {
               <MenuIcon />
             </IconButton>
             <Typography variant="title" color="inherit" className={classes.flex}>
-              TimeBoxed
+              {
+                window.location.pathname.replace(/\//, '').toUpperCase()
+              }
             </Typography>
             {auth && (
               <div>
@@ -89,16 +87,21 @@ class MenuAppBar extends React.Component {
                   open={open}
                   onClose={this.handleClose}
                 >
-                  <MenuItem onClick={this.handleClose}>Profile</MenuItem>
-                  <MenuItem onClick={this.handleClose}>
-                    <Link to={ROUTES.DASHBOARD}>Dashboard</Link>
-                  </MenuItem>
-                  <MenuItem onClick={this.handleClose}>
-                    <Link to={ROUTES.SETUP}>My account</Link>
-                  </MenuItem>
-                  <MenuItem onClick={this.handleLogout}>
-                    <Link to={ROUTES.LANDING}>logout</Link>
-                  </MenuItem>
+                  <Link to={ROUTES.DASHBOARD}>
+                    <MenuItem onClick={this.handleClose}>
+                      Dashboard
+                    </MenuItem>
+                  </Link>
+                  <Link to={ROUTES.PREFERENCES}>
+                    <MenuItem onClick={this.handleClose}>
+                      Preferences
+                    </MenuItem>
+                  </Link>
+                  <Link to={ROUTES.LANDING}>
+                    <MenuItem onClick={this.handleLogout}>
+                      Logout
+                    </MenuItem>
+                  </Link>
                 </Menu>
               </div>
             )}
@@ -114,6 +117,7 @@ MenuAppBar.propTypes = {
   loggedIn: PropTypes.bool,
   logout: PropTypes.func,
   history: PropTypes.object,
+  location: PropTypes.object,
 };
 
 const mapStateToProps = state => ({

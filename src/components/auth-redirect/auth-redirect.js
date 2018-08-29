@@ -21,7 +21,6 @@ class AuthRedirect extends Component {
   render() {
     const { location, token } = this.props;
     const { pathname } = location;
-
     let destinationRoute = null;
 
     switch (pathname) {
@@ -48,6 +47,5 @@ AuthRedirect.propTypes = {
 const mapStateToProps = state => ({
   token: !!state.token,
 });
-
 
 export default connect(mapStateToProps)(AuthRedirect);

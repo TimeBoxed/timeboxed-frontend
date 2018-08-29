@@ -1,23 +1,32 @@
 import React, { Component } from 'react';
 import { BrowserRouter, Route } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
+import Favicon from 'react-favicon';
+
+// ===============================
+// ===== MATERIAL UI IMPORTS =====
+// ===============================
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import teal from '@material-ui/core/colors/teal';
 import deepOrange from '@material-ui/core/colors/deepOrange';
-// import Favicon from 'react-favicon';
 
-// -------------------------------------------------------------------------------------------------
-// COMPONENT IMPORTS
-// -------------------------------------------------------------------------------------------------
+
+// ===============================
+// ====== COMPONENT IMPORTS ======
+// ===============================
 import ScrollToTop from '../scroll-to-top/scroll-to-top';
 import AuthRedirect from '../auth-redirect/auth-redirect';
 import MenuAppBar from '../material-ui/menu-app-bar';
 import Dashboard from '../dashboard/dashboard';
 import Landing from '../landing/landing';
-import Footer from '../footer/footer';
 import Preferences from '../preferences/preferences';
-import PrivacyPolicy from '../material-ui/privacy-dialog';
+import PrivacyDialog from '../material-ui/privacy-dialog';
+import PrivacyRejectionAlert from '../material-ui/privacy-rejection-alert';
 
+// ===============================
+// ======== OTHER IMPORTS ========
+// ===============================
+import favicon from '../../assets/logo/tb-favicon.png';
 import ROUTES from '../../routes';
 import '../../style/main.scss';
 
@@ -34,7 +43,7 @@ export default class App extends Component {
       <MuiThemeProvider theme={theme}>
         <BrowserRouter>
           <ScrollToTop>
-            {/* <Favicon url={}/> */}
+            <Favicon url={favicon}/>
             <Helmet>
               <meta name='viewport' content='width=device-width, initial-scale=1.0' />
               <meta property="og:title" content="TimeBoxed" />
@@ -46,9 +55,9 @@ export default class App extends Component {
             <Route path='*' component={AuthRedirect}/>
             <Route exact path={ROUTES.LANDING} component={Landing}/>
             <Route exact path={ROUTES.DASHBOARD} component={Dashboard}/>
-            <Route exact path={ROUTES.PRIVACY} component={PrivacyPolicy}/>
-            <Route exact path={ROUTES.SETUP} component={Preferences}/>
-            <Footer/>
+            <Route exact path={ROUTES.PRIVACY} component={PrivacyDialog}/>
+            <Route exact path={ROUTES.PRIVACY_REJECTED} component={PrivacyRejectionAlert}/>
+            <Route exact path={ROUTES.PREFERENCES} component={Preferences}/>
           </ScrollToTop>
         </BrowserRouter>
       </MuiThemeProvider>

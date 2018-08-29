@@ -7,6 +7,11 @@ const setTask = task => ({
   payload: task,
 });
 
+const updateTask = task => ({
+  type: 'TASK_UPDATE',
+  payload: task,
+});
+
 const getTasks = tasks => ({
   type: 'TASKS_GET',
   payload: tasks,
@@ -33,9 +38,22 @@ const fetchAllTasks = () => (store) => {
     });
 };
 
+const taskUpdateStatus = (task, completed) => (store) => {
+  const { token } = store.getState();
+  return superagent.put(`${TEMP_API_URL}/tasks/${task}`)
+    .set('Authorization', `Bearer ${token}`)
+    .set('Content-Type', 'application/json')
+    .send({ completed })
+    .then((response) => {
+      return store.dispatch(updateTask(response.body));
+    });
+};
+
 export { 
-  setTask, 
-  getTasks, 
-  taskCreateRequest, 
+  setTask,
+  getTasks,
+  updateTask,
+  taskCreateRequest,
   fetchAllTasks,
+  taskUpdateStatus,
 };

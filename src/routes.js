@@ -2,7 +2,8 @@ const ROUTES = {
   LANDING: '/',
   DASHBOARD: '/dashboard',
   PRIVACY: '/privacy',
-  SETUP: '/setup',
+  PRIVACY_REJECTED: '/privacy-notice-rejected',
+  PREFERENCES: '/preferences',
 };
 
 export default ROUTES;

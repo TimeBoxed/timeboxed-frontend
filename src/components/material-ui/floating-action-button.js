@@ -6,7 +6,7 @@ import AddIcon from '@material-ui/icons/Add';
 
 const styles = theme => ({
   fab: {
-    display: 'none',
+    // display: 'none',
 
     [theme.breakpoints.down('xs')]: {
       display: 'block',
@@ -22,10 +22,14 @@ const styles = theme => ({
 });
 
 class AddFAB extends React.Component {
+  handleClick = () => {
+    this.props.activate();
+  }
+
   render() {
     const { classes } = this.props;
     return (
-      <Button variant="fab" color="secondary" aria-label="add" className={classes.fab}>
+      <Button onClick={this.handleClick} variant="fab" color="secondary" aria-label="add" className={classes.fab}>
         <AddIcon />
       </Button>
     );
@@ -34,6 +38,7 @@ class AddFAB extends React.Component {
 
 AddFAB.propTypes = {
   classes: PropTypes.object.isRequired,
+  activate: PropTypes.func,
 };
 
 export default withStyles(styles)(AddFAB);

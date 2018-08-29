@@ -11,6 +11,9 @@ export default (state = null, { type, payload }) => {
       return payload;
     case 'TOKEN_REMOVE':
       return null;
+    case 'REQUEST_PROFILE_REMOVE':
+      validateProfile(payload);
+      return null;
     default:
       return state;
   }
