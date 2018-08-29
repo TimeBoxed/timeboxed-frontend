@@ -13,6 +13,12 @@
 ### Linux ###
 *~
 
+# SSL files
+server.crt
+server.csr
+server.key
+server.pass.key
+
 # temporary files which can be created if a process still has a handle open of a deleted file
 .fuse_hidden*
 

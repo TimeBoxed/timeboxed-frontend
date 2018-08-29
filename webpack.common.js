@@ -1,6 +1,8 @@
 'use strict';
 
+require('dotenv').config();
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const { DefinePlugin } = require('webpack');
 
 const webpackConfig = module.exports = {};
 
@@ -14,6 +16,9 @@ webpackConfig.output = {
 webpackConfig.plugins = [
   new HtmlWebpackPlugin({
     title: 'TimeBoxed',
+  }),
+  new DefinePlugin({
+    API_URL: JSON.stringify(process.env.API_URL),
   }),
 ];
 

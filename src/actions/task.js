@@ -1,7 +1,5 @@
 import superagent from 'superagent';
 
-const TEMP_API_URL = 'http://localhost:3000';
-
 const setTask = task => ({
   type: 'TASK_SET',
   payload: task,
@@ -19,7 +17,7 @@ const getTasks = tasks => ({
 
 const taskCreateRequest = task => (store) => {
   const { token, profile } = store.getState();
-  return superagent.post(`${TEMP_API_URL}/tasks`)
+  return superagent.post(`${API_URL}/tasks`)
     .set('Authorization', `Bearer ${token}`)
     .set('Content-Type', 'application/json')
     .send({ ...task, profile: profile._id })
@@ -30,7 +28,7 @@ const taskCreateRequest = task => (store) => {
 
 const fetchAllTasks = () => (store) => {
   const { token, profile } = store.getState();
-  return superagent.get(`${TEMP_API_URL}/tasks/${profile._id}`)
+  return superagent.get(`${API_URL}/tasks/${profile._id}`)
     .set('Authorization', `Bearer ${token}`)
     .set('Content-Type', 'application/json')
     .then((response) => {
@@ -40,7 +38,7 @@ const fetchAllTasks = () => (store) => {
 
 const taskUpdateStatus = (task, completed) => (store) => {
   const { token } = store.getState();
-  return superagent.put(`${TEMP_API_URL}/tasks/${task}`)
+  return superagent.put(`${API_URL}/tasks/${task}`)
     .set('Authorization', `Bearer ${token}`)
     .set('Content-Type', 'application/json')
     .send({ completed })
