@@ -75,7 +75,7 @@ class FormDialog extends React.Component {
               autoFocus
               margin="dense"
               id="title"
-              label="Title"
+              label="Summary"
               type="text"
               value={this.state.title}
               onChange={this.handleChange}
@@ -85,7 +85,7 @@ class FormDialog extends React.Component {
               autoFocus
               margin="dense"
               id="timeEstimate"
-              label="Time Estimate"
+              label="Duration"
               type="text"
               onChange={this.handleChange}
               value={this.state.timeEstimate}
@@ -105,7 +105,7 @@ class FormDialog extends React.Component {
                 margin="dense"
                 id="dueDate"
                 value={this.state.dueDate}
-                label="Due By"
+                label="Due Date"
                 type="date"
                 onChange={this.handleChange}
                 fullWidth
