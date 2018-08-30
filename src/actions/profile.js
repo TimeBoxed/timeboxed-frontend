@@ -1,7 +1,5 @@
 import superagent from 'superagent';
 
-const TEMP_API_URL = 'http://localhost:3000';
-
 const setProfile = profile => ({
   type: 'CLIENT_PROFILE_SET',
   payload: profile,
@@ -14,7 +12,7 @@ const removeProfile = profile => ({
 
 const profileFetchRequest = () => (store) => {
   const { token } = store.getState();
-  return superagent.get(`${TEMP_API_URL}/profiles/me`)
+  return superagent.get(`${API_URL}/profiles/me`)
     .set('Authorization', `Bearer ${token}`)
     .set('Content-Type', 'application/json')
     .then((response) => {
@@ -24,7 +22,7 @@ const profileFetchRequest = () => (store) => {
 
 const profileUpdateRequest = profile => (store) => {
   const { token } = store.getState();
-  return superagent.put(`${TEMP_API_URL}/profile`)
+  return superagent.put(`${API_URL}/profile`)
     .set('Authorization', `Bearer ${token}`)
     .set('Content-Type', 'application/json')
     .send(profile)
@@ -35,7 +33,7 @@ const profileUpdateRequest = profile => (store) => {
 
 const profileDeleteRequest = profile => (store) => {
   const { token } = store.getState();
-  return superagent.delete(`${TEMP_API_URL}/profile/${profile._id}`)
+  return superagent.delete(`${API_URL}/profile/${profile._id}`)
     .set('Authorization', `Bearer ${token}`)
     .set('Content-Type', 'application/json')
     .send(profile)

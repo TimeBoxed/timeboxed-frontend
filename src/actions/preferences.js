@@ -1,7 +1,5 @@
 import superagent from 'superagent';
 
-const TEMP_API_URL = 'http://localhost:3000';
-
 const setPreferences = preferences => ({
   type: 'PREFERENCES_SET',
   payload: preferences,
@@ -10,7 +8,7 @@ const setPreferences = preferences => ({
 const preferencesFetchRequest = () => (store) => {
   const { token, profile } = store.getState();
   const preferencesId = profile.preferences;
-  return superagent.get(`${TEMP_API_URL}/preferences/${preferencesId}`)
+  return superagent.get(`${API_URL}/preferences/${preferencesId}`)
     .set('Authorization', `Bearer ${token}`)
     .set('Content-Type', 'application/json')
     .then((response) => {
@@ -21,7 +19,7 @@ const preferencesFetchRequest = () => (store) => {
 const preferencesUpdateRequest = preferences => (store) => {
   const { token, profile } = store.getState();
   const preferencesId = profile.preferences;
-  return superagent.put(`${TEMP_API_URL}/preferences/${preferencesId}`)
+  return superagent.put(`${API_URL}/preferences/${preferencesId}`)
     .set('Authorization', `Bearer ${token}`)
     .set('Content-Type', 'application/json')
     .send(preferences)
