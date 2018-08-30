@@ -7,9 +7,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import Switch from '@material-ui/core/Switch';
 import FormControlLabel from '@material-ui/core/FormControlLabel'
-// import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import PropTypes from 'prop-types';
 import * as taskActions from '../../actions/task';
 
 const handleDateSet = () => {
@@ -21,24 +19,20 @@ const handleDateSet = () => {
 class FormDialog extends React.Component {
   state = {
     open: false,
-    title: '',
-    timeEstimate: 30,
+    title: this.props.task.title,
+    timeEstimate: this.props.task.timeEstimate,
     dateSelect: false,
-    dueDate: '',
+    dueDate: null,
   };
 
   handleClickOpen = () => {
-    this.setState({
-      open: true,
-      timeEstimate: this.props.preferences.taskLengthDefault,
-      title: this.props.task.title,
-    });
+    this.setState({ open: true });
   };
 
   handleDateToggle = () => {
     this.setState(prevState => ({
       dateSelect: !prevState.dateSelect,
-      dueDate: prevState.dueDate === '' ? handleDateSet() : '',
+      dueDate: !prevState.dueDate ? handleDateSet() : '',
     }));
   };
 
@@ -57,8 +51,6 @@ class FormDialog extends React.Component {
   };
 
   render() {
-    // TODO: dynamic button text
-    // const openButtonText = ...
     return (
       <div>
         <div onClick={this.handleClickOpen}>
@@ -126,16 +118,8 @@ class FormDialog extends React.Component {
   }
 }
 
-FormDialog.propTypes = {
-  preferences: PropTypes.object,
-};
-
-const mapStateToProps = state => ({
-  preferences: state.preferences,
-});
-
 const mapDispatchToProps = dispatch => ({
   taskUpdateRequest: task => dispatch(taskActions.taskUpdateRequest(task)),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(FormDialog);
+export default connect(null, mapDispatchToProps)(FormDialog);
