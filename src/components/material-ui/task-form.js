@@ -5,6 +5,8 @@ import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
+import Switch from '@material-ui/core/Switch';
+import FormControlLabel from '@material-ui/core/FormControlLabel'
 // import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import PropTypes from 'prop-types';
@@ -21,7 +23,8 @@ class FormDialog extends React.Component {
     open: false,
     title: '',
     timeEstimate: 30,
-    dueDate: handleDateSet(),
+    dateSelect: false,
+    dueDate: '',
   };
 
   handleClickOpen = () => {
@@ -30,6 +33,13 @@ class FormDialog extends React.Component {
       timeEstimate: this.props.preferences.taskLengthDefault,
       title: this.props.task.title,
     });
+  };
+
+  handleDateToggle = () => {
+    this.setState(prevState => ({
+      dateSelect: !prevState.dateSelect,
+      dueDate: prevState.dueDate === '' ? handleDateSet() : '',
+    }));
   };
 
   handleChange = (e) => {
@@ -81,16 +91,26 @@ class FormDialog extends React.Component {
               value={this.state.timeEstimate}
               fullWidth
             />
-            <TextField
-              autoFocus
-              margin="dense"
-              id="dueDate"
-              value={this.state.dueDate}
-              label="Due By"
-              type="date"
-              onChange={this.handleChange}
-              fullWidth
-            />
+            <FormControlLabel control={
+              <Switch
+                onChange={this.handleDateToggle}
+                // value={this.state.dateSelect}
+                checked={this.state.dateSelect}
+              />
+            } label='Add Due Date'/>
+
+            { this.state.dateSelect &&
+              <TextField
+                autoFocus
+                margin="dense"
+                id="dueDate"
+                value={this.state.dueDate}
+                label="Due By"
+                type="date"
+                onChange={this.handleChange}
+                fullWidth
+              />
+            }
           </DialogContent>
           <DialogActions>
             <Button onClick={this.handleClose} color="primary">
