@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { BrowserRouter, Route } from 'react-router-dom';
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import Favicon from 'react-favicon';
 
@@ -22,6 +22,7 @@ import Landing from '../landing/landing';
 import Preferences from '../preferences/preferences';
 import PrivacyDialog from '../material-ui/privacy-dialog';
 import PrivacyRejectionAlert from '../material-ui/privacy-rejection-alert';
+import NotFound from '../not-found/not-found';
 
 // ===============================
 // ======== OTHER IMPORTS ========
@@ -51,12 +52,13 @@ export default class App extends Component {
               {/* <meta property="og:url" content="" /> */}
               {/* <meta property="og:image" content="../../assets/site-preview.png" /> */}
             </Helmet>
-            <MenuAppBar/>
+            <MenuAppBar/>            
             <Route path='*' component={AuthRedirect}/>
             <Route exact path={ROUTES.LANDING} component={Landing}/>
             <Route exact path={ROUTES.DASHBOARD} component={Dashboard}/>
             <Route exact path={ROUTES.PRIVACY} component={PrivacyDialog}/>
             <Route exact path={ROUTES.PRIVACY_REJECTED} component={PrivacyRejectionAlert}/>
+            <Route exact path={ROUTES.NOTFOUND} component={NotFound}/>          
             <Route exact path={ROUTES.PREFERENCES} component={Preferences}/>
           </ScrollToTop>
         </BrowserRouter>

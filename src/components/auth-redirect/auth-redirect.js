@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Redirect } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import pathCheck from '../../utils/path-check';
 
 import ROUTES from '../../routes';
 
@@ -21,16 +22,9 @@ class AuthRedirect extends Component {
   render() {
     const { location, token } = this.props;
     const { pathname } = location;
-    let destinationRoute = null;
-
-    switch (pathname) {
-      case ROUTES.LANDING:
-        if (token) destinationRoute = ROUTES.DASHBOARD;
-        break;
-      default:
-        if (!token) destinationRoute = ROUTES.LANDING;
-        break;
-    }
+    
+    const destinationRoute = (!token) ? ROUTES.LANDING : pathCheck(pathname);
+    
     return (
       <div>
         { destinationRoute ? <Redirect to={destinationRoute}/> : undefined }
