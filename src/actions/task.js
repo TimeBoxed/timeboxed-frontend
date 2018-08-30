@@ -49,6 +49,17 @@ const taskUpdateStatus = (task, completed) => (store) => {
     });
 };
 
+const taskUpdateRequest = task => (store) => {
+  const { token } = store.getState();
+  return superagent.put(`${TEMP_API_URL}/tasks/${task._id}`)
+    .set('Authorization', `Bearer ${token}`)
+    .set('Content-Type', 'application/json')
+    .send(task)
+    .then((response) => {
+      return store.dispatch(updateTask(response.body));
+    });
+};
+
 export { 
   setTask,
   getTasks,
@@ -56,4 +67,5 @@ export {
   taskCreateRequest,
   fetchAllTasks,
   taskUpdateStatus,
+  taskUpdateRequest,
 };

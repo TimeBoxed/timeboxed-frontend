@@ -8,6 +8,7 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import Checkbox from '@material-ui/core/Checkbox';
+import MaterialUITaskForm from '../material-ui/task-form';
 
 const styles = theme => ({
   root: {
@@ -69,8 +70,10 @@ class TaskItem extends React.Component {
             />
             </ListItemIcon>
             <ListItemText inset primary={task.title} />
-    <ListItemText inset secondary={<span> {task.timeEstimate} min</span>} className={classes.time}/>
+            <ListItemText inset secondary={<span> {task.timeEstimate} min</span>} className={classes.time}/>
+            { this.props.children }
           </ListItem>
+          <MaterialUITaskForm task={this.props.task}/>
         {/* </List> */}
       </div>
     );
