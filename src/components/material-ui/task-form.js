@@ -51,7 +51,9 @@ class FormDialog extends React.Component {
     // const openButtonText = ...
     return (
       <div>
-        <Button onClick={this.handleClickOpen}>Edit Task</Button>
+        <div onClick={this.handleClickOpen}>
+          { this.props.children }
+        </div>
         <Dialog
           open={this.state.open}
           onClose={this.handleClose}

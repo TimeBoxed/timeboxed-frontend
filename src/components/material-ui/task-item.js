@@ -57,6 +57,7 @@ class TaskItem extends React.Component {
     return (
       <div className={classes.taskItem}>
         {/* <List key={task._id} component="div" disablePadding> */}
+        <MaterialUITaskForm task={this.props.task}>
           <ListItem 
             button 
             disableRipple
@@ -73,7 +74,7 @@ class TaskItem extends React.Component {
             <ListItemText inset secondary={<span> {task.timeEstimate} min</span>} className={classes.time}/>
             { this.props.children }
           </ListItem>
-          <MaterialUITaskForm task={this.props.task}/>
+        </MaterialUITaskForm>
         {/* </List> */}
       </div>
     );
