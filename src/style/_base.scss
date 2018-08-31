@@ -48,20 +48,20 @@ body {
 }
 
 #header-image{
-  margin-right: 45%;
   font-size: 25px;
-  height: 50px;
 
   #tb-logo {
     height: 50px;
     width: 50px;
     margin-right: 10px;
+    display: inline-block;
   }
 
   p {
-    float: right;
     line-height: 50px;
     margin: 0;
+    display: inline;
+    vertical-align: middle;
   }
 }
 
