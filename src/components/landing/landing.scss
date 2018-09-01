@@ -8,11 +8,28 @@
   left: 0;
   right: 0;
   padding-top: 150px;
+
+  h2 {
+    color: $color-two;
+    font-family: $Roboto-Medium;
+    font-weight: 100;
+    font-size: 30px;
+    margin: 20px 10px;
+  }
+
+  .landing-page-logo-div {
+    padding-bottom: 25px;
+    
+    * {
+      display: inline-block;
+      vertical-align: middle;
+    }
+  }
 }
 
 .new-account-link {
   margin-top: 25px;
-  
+
   h4 {
     display: inline;
     color: $color-two;
