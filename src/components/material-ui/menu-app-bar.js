@@ -23,9 +23,7 @@ const styles = {
     flexGrow: 1,
   },
   menuButton: {
-    // marginLeft: -12,
-    // marginRight: 20,
-    // float: 'left',
+    float: 'left',
   },
   placeholder: {
     height: 48,
