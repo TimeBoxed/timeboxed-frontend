@@ -23,8 +23,13 @@ const styles = {
     flexGrow: 1,
   },
   menuButton: {
-    marginLeft: -12,
-    marginRight: 20,
+    // marginLeft: -12,
+    // marginRight: 20,
+    // float: 'left',
+  },
+  placeholder: {
+    height: 48,
+    width: 48,
   },
 };
 
@@ -65,7 +70,7 @@ class MenuAppBar extends React.Component {
                 window.location.pathname !== ROUTES.LANDING ? window.location.pathname.replace(/\//, '').toUpperCase() : <Logo />
               }
             </Typography>
-            {auth && (
+            {auth ? (
               <div>
                 <IconButton
                   aria-owns={open ? 'menu-appbar' : null}
@@ -106,7 +111,9 @@ class MenuAppBar extends React.Component {
                   </Link>
                 </Menu>
               </div>
-            )}
+            ) 
+              : <div className={classes.placeholder}></div>
+            }
          
           </Toolbar>          
         </AppBar>        
