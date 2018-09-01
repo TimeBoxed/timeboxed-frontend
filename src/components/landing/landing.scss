@@ -9,3 +9,20 @@
   right: 0;
   padding-top: 150px;
 }
+
+.new-account-link {
+  margin-top: 25px;
+  
+  h4 {
+    display: inline;
+    color: $color-two;
+    font-family: $Roboto-Medium;
+    font-weight: 100;
+    font-size: 18px;
+  }
+  
+  h4:hover {
+    color: rgb(201, 201, 201);
+  }
+}
+
