@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
@@ -6,7 +7,7 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import Switch from '@material-ui/core/Switch';
-import FormControlLabel from '@material-ui/core/FormControlLabel'
+import FormControlLabel from '@material-ui/core/FormControlLabel';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import * as taskActions from '../../actions/task';
 
@@ -16,11 +17,19 @@ const handleDateSet = () => {
   return result.toISOString().substring(0, 10);
 };
 
+const defaultState = {
+  open: false,
+  title: '',
+  timeEstimate: '',
+  dateSelect: false,
+  dueDate: null,
+};
+
 class FormDialog extends React.Component {
   state = {
     open: false,
-    title: this.props.task.title,
-    timeEstimate: this.props.task.timeEstimate,
+    title: this.props.task ? this.props.task.title : '',
+    timeEstimate: this.props.task && this.props.task.timeEstimate ? this.props.task.timeEstimate : '',
     dateSelect: false,
     dueDate: null,
   };
@@ -47,17 +56,25 @@ class FormDialog extends React.Component {
 
   handleSave = () => {
     this.handleClose();
-    return this.props.taskUpdateRequest({...this.state, _id: this.props.task._id });
+    return this.props.onComplete({ ...this.state, _id: this.props.task._id });
+  };
+
+  handleCreateTask = (event) => {
+    console.log(this.state, 'state about to make a task');
+    event.preventDefault();
+    this.props.onComplete(this.state);
+    this.setState(defaultState);
   };
 
   render() {
     return (
       <div>
-        <div onClick={this.handleClickOpen}>
+        {/* <div onClick={this.handleClickOpen}>
           { this.props.children }
-        </div>
+          {console.log(this.props.children, 'in task form')}
+        </div> */}
         <Dialog
-          open={this.state.open}
+          open={this.props.show ? this.props.show : this.state.open}
           onClose={this.handleClose}
           aria-labelledby="form-dialog-title"
         >
@@ -105,10 +122,10 @@ class FormDialog extends React.Component {
             }
           </DialogContent>
           <DialogActions>
-            <Button onClick={this.handleClose} color="primary">
+            <Button onClick={this.props.task ? this.props.handleOpen : this.props.handleFormOpen} color="primary">
               Cancel
             </Button>
-            <Button onClick={this.handleSave} color="primary">
+            <Button onClick={this.props.task ? this.handleSave : this.handleCreateTask} color="primary">
               Save
             </Button>
           </DialogActions>
@@ -118,8 +135,18 @@ class FormDialog extends React.Component {
   }
 }
 
+FormDialog.propTypes = {
+  onComplete: PropTypes.func,
+  handleFormOpen: PropTypes.func,
+  handleOpen: PropTypes.func,
+  taskUpdateRequest: PropTypes.func,
+  task: PropTypes.object,
+  show: PropTypes.bool,
+};
+
 const mapDispatchToProps = dispatch => ({
   taskUpdateRequest: task => dispatch(taskActions.taskUpdateRequest(task)),
+  taskCreateRequest: task => dispatch(taskActions.taskCreateRequest(task)),
 });
 
 export default connect(null, mapDispatchToProps)(FormDialog);

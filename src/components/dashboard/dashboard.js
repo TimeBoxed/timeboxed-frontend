@@ -8,7 +8,7 @@ import Typography from '@material-ui/core/Typography';
 import TaskItem from '../material-ui/task-item';
 import * as profileActions from '../../actions/profile';
 import * as taskActions from '../../actions/task';
-import TaskForm from '../task-form/task-form';
+import MaterialUITaskForm from '../material-ui/task-form';
 // import autobind from '../../utils/auto-bind';
 
 // -------------------------------------------------------------------------------------------------
@@ -69,8 +69,8 @@ class Dashboard extends React.Component {
     }
   }
 
-  handleTaskComplete = () => {
-    this.props.pCreateTask();
+  handleTaskComplete = (task) => {
+    this.props.pCreateTask(task);
     this.setState({ openForm: false });
   };
 
@@ -94,7 +94,7 @@ class Dashboard extends React.Component {
     return (
       <div className={classes.dashboardPage}>
         <div className={classes.listHolder}>
-          <TaskForm show={this.state.openForm} onComplete={this.props.pCreateTask}/>
+          <MaterialUITaskForm show={this.state.openForm} onComplete={this.handleTaskComplete} handleFormOpen={this.handleFormOpen} task={null}/>
           <List className={classes.container} component='div'>
             {tasks.length > 0 
             && tasks.sort((a, b) => new Date(b.createdOn) - new Date(a.createdOn))
