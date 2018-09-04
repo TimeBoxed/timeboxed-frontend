@@ -8,7 +8,7 @@ import Typography from '@material-ui/core/Typography';
 import TaskItem from '../material-ui/task-item';
 import * as profileActions from '../../actions/profile';
 import * as taskActions from '../../actions/task';
-import TaskForm from '../task-form/task-form';
+import MaterialUITaskForm from '../material-ui/task-form';
 // import autobind from '../../utils/auto-bind';
 
 // -------------------------------------------------------------------------------------------------
@@ -61,16 +61,16 @@ class Dashboard extends React.Component {
     if (this.props.loggedIn) {
       this.props.pFetchUserProfile()
         .then(() => {
-          return this.props.pFetchAllTasks();
+          return this.props.pFetchUserPreferences();
         })
         .then(() => {
-          return this.props.pFetchUserPreferences();
+          return this.props.pFetchAllTasks();
         });
     }
   }
 
-  handleTaskComplete = () => {
-    this.props.pCreateTask();
+  handleTaskComplete = (task) => {
+    this.props.pCreateTask(task);
     this.setState({ openForm: false });
   };
 
@@ -87,20 +87,29 @@ class Dashboard extends React.Component {
   };
 
   render() {
-    const { tasks, classes } = this.props;
+    const { tasks, classes, preferences } = this.props;
     const completedTasks = this.state.completedTasksShow ? 'Hide' : 'Show'; 
     const completedTasksClass = this.state.completedTasksShow ? 'show-completed' : 'hide-completed';
 
     return (
       <div className={classes.dashboardPage}>
         <div className={classes.listHolder}>
-          <TaskForm show={this.state.openForm} onComplete={this.props.pCreateTask}/>
+        <div>
+          {preferences 
+            && <MaterialUITaskForm 
+            show={this.state.openForm} 
+            onComplete={this.handleTaskComplete} 
+            handleFormOpen={this.handleFormOpen} 
+            task={null}
+            timeEstimateProp={preferences.taskLengthDefault}
+          />}
+          </div>
           <List className={classes.container} component='div'>
             {tasks.length > 0 
             && tasks.sort((a, b) => new Date(b.createdOn) - new Date(a.createdOn))
               .filter(taskToDo => (taskToDo.completed === false))
               .map(task => (
-              <TaskItem key={task._id} task={task} onComplete={this.props.pUpdateTaskStatus} />
+              <TaskItem key={task._id} task={task} onComplete={this.handleStatusChange} />
               ))}
           </List>
           <div className='show-hide-tasks'>
@@ -127,10 +136,12 @@ Dashboard.propTypes = {
   profile: PropTypes.object,
   loggedIn: PropTypes.bool,
   pFetchUserProfile: PropTypes.func,
+  pFetchUserPreferences: PropTypes.func,
   pCreateTask: PropTypes.func,
   pFetchAllTasks: PropTypes.func,
   pUpdateTaskStatus: PropTypes.func,
   tasks: PropTypes.array,
+  preferences: PropTypes.object,
   classes: PropTypes.object,
 };
 
@@ -138,12 +149,13 @@ const mapStateToProps = state => ({
   profile: state.profile,
   loggedIn: !!state.token,
   tasks: state.tasks,
+  preferences: state.preferences,
 });
 
 const mapDispatchToProps = dispatch => ({
   pFetchUserProfile: () => dispatch(profileActions.profileFetchRequest()),
   pCreateTask: task => dispatch(taskActions.taskCreateRequest(task)),
-  pFetchAllTasks: profile => dispatch(taskActions.fetchAllTasks(profile)),
+  pFetchAllTasks: () => dispatch(taskActions.fetchAllTasks()),
   pFetchUserPreferences: () => dispatch(preferencesActions.preferencesFetchRequest()),
   pUpdateTaskStatus: (task, completed) => dispatch(taskActions.taskUpdateStatus(task, completed)),
 });

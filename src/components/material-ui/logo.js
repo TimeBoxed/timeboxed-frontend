@@ -6,7 +6,6 @@ class Logo extends React.Component {
     return (
       <div id = 'header-image'>
         <TBLogo id = 'tb-logo' />    
-             {/* <p>TimeBoxed</p> */}
       </div>
     );
   }
