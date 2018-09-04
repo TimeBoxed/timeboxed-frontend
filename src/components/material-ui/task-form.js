@@ -115,11 +115,11 @@ class FormDialog extends React.Component {
             /> */}
 
             <FormControl className={classes.formControl}>
-              <InputLabel htmlFor="task-time-simple">Task time</InputLabel>
+              <InputLabel htmlFor="task-time">Task time</InputLabel>
               <Select
                 value={this.state.timeEstimate}
                 onChange={this.handleChangeTimeEstimate}
-                input={<Input id="task-time-simple" />}
+                input={<Input id="task-time" />}
               >
                 <MenuItem value={15}>15 minutes</MenuItem>
                 <MenuItem value={30}>30 minutes</MenuItem>
