@@ -20,7 +20,6 @@ import MenuItem from '@material-ui/core/MenuItem';
 import * as profileActions from '../../actions/profile';
 import * as preferencesActions from '../../actions/preferences';
 import ROUTES from '../../routes';
-// import autobind from '../../utils/auto-bind';
 
 import './preferences.scss';
 
@@ -57,7 +56,6 @@ class Preferences extends React.Component {
       breatherTime: '',
       selectedCalendar: '',
     };
-    // autobind.call(this, Preferences);
   }
 
   componentDidMount() {
@@ -107,8 +105,10 @@ class Preferences extends React.Component {
   };
 
   handleSubmit = () => {
-    this.props.pUpdateUserPreferences(this.state);
-    this.setState({ fireRedirect: true });
+    this.props.pUpdateUserPreferences(this.state)
+      .then(() => {
+        return this.setState({ fireRedirect: true });
+      });
   }
 
 
