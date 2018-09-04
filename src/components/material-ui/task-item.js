@@ -38,7 +38,7 @@ class TaskItem extends React.Component {
     this.setState(prevState => ({ showModal: !prevState.showModal }));
   }
 
-  handleToggle(value) {
+  handleToggle = value => () => {
     const { checked } = this.state;
     const currentIndex = checked.indexOf(value);
     const newChecked = [...checked];
@@ -66,7 +66,6 @@ class TaskItem extends React.Component {
     const { task, classes } = this.props;
     return (
       <div className={classes.taskItem}>
-        {/* <List key={task._id} component="div" disablePadding> */}
         <MaterialUITaskForm 
           show={this.state.showModal} 
           task={this.props.task} 
@@ -82,7 +81,7 @@ class TaskItem extends React.Component {
         >
           <ListItemIcon>
           <Checkbox
-            onClick={() => this.handleToggle(task._id)}
+            onClick={this.handleToggle(task._id)}
             checked={this.state.checked.indexOf(task._id) !== -1}
             tabIndex={-1}
           />
