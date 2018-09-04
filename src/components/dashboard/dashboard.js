@@ -61,10 +61,10 @@ class Dashboard extends React.Component {
     if (this.props.loggedIn) {
       this.props.pFetchUserProfile()
         .then(() => {
-          return this.props.pFetchAllTasks();
+          return this.props.pFetchUserPreferences();
         })
         .then(() => {
-          return this.props.pFetchUserPreferences();
+          return this.props.pFetchAllTasks();
         });
     }
   }
@@ -87,7 +87,8 @@ class Dashboard extends React.Component {
   };
 
   render() {
-    const { tasks, classes } = this.props;
+    const { tasks, classes, preferences } = this.props;
+    const defaultTaskLength = preferences && preferences.taskLengthDefault;
     const completedTasks = this.state.completedTasksShow ? 'Hide' : 'Show'; 
     const completedTasksClass = this.state.completedTasksShow ? 'show-completed' : 'hide-completed';
 
@@ -99,6 +100,7 @@ class Dashboard extends React.Component {
             onComplete={this.handleTaskComplete} 
             handleFormOpen={this.handleFormOpen} 
             task={null}
+            timeEstimateProp={defaultTaskLength}
           />
           <List className={classes.container} component='div'>
             {tasks.length > 0 
@@ -137,6 +139,7 @@ Dashboard.propTypes = {
   pFetchAllTasks: PropTypes.func,
   pUpdateTaskStatus: PropTypes.func,
   tasks: PropTypes.array,
+  preferences: PropTypes.object,
   classes: PropTypes.object,
 };
 
@@ -144,6 +147,7 @@ const mapStateToProps = state => ({
   profile: state.profile,
   loggedIn: !!state.token,
   tasks: state.tasks,
+  preferences: state.preferences,
 });
 
 const mapDispatchToProps = dispatch => ({

@@ -72,6 +72,7 @@ class TaskItem extends React.Component {
           task={this.props.task} 
           onComplete={this.handleTaskUpdate} 
           handleOpen={this.handleOpen}
+          timeEstimateProp={this.props.task.timeEstimate}
         />
         <ListItem 
           button 
