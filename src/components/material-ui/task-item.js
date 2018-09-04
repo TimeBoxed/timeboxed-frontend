@@ -34,8 +34,10 @@ class TaskItem extends React.Component {
     };
   }
 
-  handleOpen = () => {
-    this.setState(prevState => ({ showModal: !prevState.showModal }));
+  handleOpen = (event) => {
+    if (event.target.id !== 'task-complete-checkbox') {
+      this.setState(prevState => ({ showModal: !prevState.showModal }));
+    }
   }
 
   handleToggle = value => () => {
@@ -81,6 +83,7 @@ class TaskItem extends React.Component {
         >
           <ListItemIcon>
           <Checkbox
+            id='task-complete-checkbox'
             onClick={this.handleToggle(task._id)}
             checked={this.state.checked.indexOf(task._id) !== -1}
             tabIndex={-1}
