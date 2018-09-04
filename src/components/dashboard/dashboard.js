@@ -45,6 +45,7 @@ const styles = theme => ({
   },
   listHolder: {
     width: '600px',
+    paddingTop: '80px',
   },
 });
 
