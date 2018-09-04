@@ -88,20 +88,22 @@ class Dashboard extends React.Component {
 
   render() {
     const { tasks, classes, preferences } = this.props;
-    const defaultTaskLength = preferences && preferences.taskLengthDefault;
     const completedTasks = this.state.completedTasksShow ? 'Hide' : 'Show'; 
     const completedTasksClass = this.state.completedTasksShow ? 'show-completed' : 'hide-completed';
 
     return (
       <div className={classes.dashboardPage}>
         <div className={classes.listHolder}>
-          <MaterialUITaskForm 
+        <div>
+          {preferences 
+            && <MaterialUITaskForm 
             show={this.state.openForm} 
             onComplete={this.handleTaskComplete} 
             handleFormOpen={this.handleFormOpen} 
             task={null}
-            timeEstimateProp={defaultTaskLength}
-          />
+            timeEstimateProp={preferences.taskLengthDefault}
+          />}
+          </div>
           <List className={classes.container} component='div'>
             {tasks.length > 0 
             && tasks.sort((a, b) => new Date(b.createdOn) - new Date(a.createdOn))
@@ -153,7 +155,7 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   pFetchUserProfile: () => dispatch(profileActions.profileFetchRequest()),
   pCreateTask: task => dispatch(taskActions.taskCreateRequest(task)),
-  pFetchAllTasks: profile => dispatch(taskActions.fetchAllTasks(profile)),
+  pFetchAllTasks: () => dispatch(taskActions.fetchAllTasks()),
   pFetchUserPreferences: () => dispatch(preferencesActions.preferencesFetchRequest()),
   pUpdateTaskStatus: (task, completed) => dispatch(taskActions.taskUpdateStatus(task, completed)),
 });
