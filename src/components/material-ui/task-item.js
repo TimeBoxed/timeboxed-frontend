@@ -67,26 +67,31 @@ class TaskItem extends React.Component {
     return (
       <div className={classes.taskItem}>
         {/* <List key={task._id} component="div" disablePadding> */}
-        <MaterialUITaskForm show={this.state.showModal} task={this.props.task} onComplete={this.handleTaskUpdate} handleOpen={this.handleOpen}/>
-          <ListItem 
-            button 
-            disableRipple
-            className={classes.mainItem}
-            onClick={this.handleOpen}
-          >
-            <ListItemIcon>
-            <Checkbox
-              onClick={() => this.handleToggle(task._id)}
-              checked={this.state.checked.indexOf(task._id) !== -1}
-              tabIndex={-1}
-            />
-            </ListItemIcon>
-            <ListItemText inset primary={task.title} />
-            <ListItemText inset secondary={<span> {task.timeEstimate} min</span>} className={classes.time}/>
-            {/* { this.props.children } */}
-          </ListItem>
-        {/* </MaterialUITaskForm> */}
-        {/* </List> */}
+        <MaterialUITaskForm 
+          show={this.state.showModal} 
+          task={this.props.task} 
+          onComplete={this.handleTaskUpdate} 
+          handleOpen={this.handleOpen}
+        />
+        <ListItem 
+          button 
+          disableRipple
+          className={classes.mainItem}
+          onClick={this.handleOpen}
+        >
+          <ListItemIcon>
+          <Checkbox
+            onClick={() => this.handleToggle(task._id)}
+            checked={this.state.checked.indexOf(task._id) !== -1}
+            tabIndex={-1}
+          />
+          </ListItemIcon>
+          <ListItemText inset primary={task.title} />
+          <ListItemText 
+            inset secondary={<span> {task.timeEstimate} min</span>} 
+            className={classes.time}
+          />
+        </ListItem>
       </div>
     );
   }

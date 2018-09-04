@@ -94,7 +94,12 @@ class Dashboard extends React.Component {
     return (
       <div className={classes.dashboardPage}>
         <div className={classes.listHolder}>
-          <MaterialUITaskForm show={this.state.openForm} onComplete={this.handleTaskComplete} handleFormOpen={this.handleFormOpen} task={null}/>
+          <MaterialUITaskForm 
+            show={this.state.openForm} 
+            onComplete={this.handleTaskComplete} 
+            handleFormOpen={this.handleFormOpen} 
+            task={null}
+          />
           <List className={classes.container} component='div'>
             {tasks.length > 0 
             && tasks.sort((a, b) => new Date(b.createdOn) - new Date(a.createdOn))
@@ -127,6 +132,7 @@ Dashboard.propTypes = {
   profile: PropTypes.object,
   loggedIn: PropTypes.bool,
   pFetchUserProfile: PropTypes.func,
+  pFetchUserPreferences: PropTypes.func,
   pCreateTask: PropTypes.func,
   pFetchAllTasks: PropTypes.func,
   pUpdateTaskStatus: PropTypes.func,

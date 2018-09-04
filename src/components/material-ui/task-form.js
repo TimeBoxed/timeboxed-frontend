@@ -60,7 +60,6 @@ class FormDialog extends React.Component {
   };
 
   handleCreateTask = (event) => {
-    console.log(this.state, 'state about to make a task');
     event.preventDefault();
     this.props.onComplete(this.state);
     this.setState(defaultState);
@@ -69,10 +68,6 @@ class FormDialog extends React.Component {
   render() {
     return (
       <div>
-        {/* <div onClick={this.handleClickOpen}>
-          { this.props.children }
-          {console.log(this.props.children, 'in task form')}
-        </div> */}
         <Dialog
           open={this.props.show ? this.props.show : this.state.open}
           onClose={this.handleClose}
@@ -108,8 +103,8 @@ class FormDialog extends React.Component {
               />
             } label='Add Due Date'/>
 
-            { this.state.dateSelect &&
-              <TextField
+            { this.state.dateSelect 
+              && <TextField
                 autoFocus
                 margin="dense"
                 id="dueDate"
@@ -117,8 +112,8 @@ class FormDialog extends React.Component {
                 label="Due Date"
                 type="date"
                 onChange={this.handleChange}
-                fullWidth
-              />
+                fullWidth 
+                />
             }
           </DialogContent>
           <DialogActions>
