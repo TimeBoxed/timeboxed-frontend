@@ -126,7 +126,7 @@ class Dashboard extends React.Component {
                 ))}
             </List>
           </div>
-            <AddFAB activate={this.handleFormOpen}/>
+          <AddFAB activate={this.handleFormOpen}/>
         </div>
       </div>
     );
