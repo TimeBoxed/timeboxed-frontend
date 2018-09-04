@@ -109,7 +109,7 @@ class Dashboard extends React.Component {
             && tasks.sort((a, b) => new Date(b.createdOn) - new Date(a.createdOn))
               .filter(taskToDo => (taskToDo.completed === false))
               .map(task => (
-              <TaskItem key={task._id} task={task} onComplete={this.props.pUpdateTaskStatus} />
+              <TaskItem key={task._id} task={task} onComplete={this.handleStatusChange} />
               ))}
           </List>
           <div className='show-hide-tasks'>
