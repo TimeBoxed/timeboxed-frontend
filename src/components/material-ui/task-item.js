@@ -8,6 +8,7 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import Checkbox from '@material-ui/core/Checkbox';
+import MaterialUITaskForm from '../material-ui/task-form';
 
 const styles = theme => ({
   root: {
@@ -56,6 +57,7 @@ class TaskItem extends React.Component {
     return (
       <div className={classes.taskItem}>
         {/* <List key={task._id} component="div" disablePadding> */}
+        <MaterialUITaskForm task={this.props.task}>
           <ListItem 
             button 
             disableRipple
@@ -69,8 +71,10 @@ class TaskItem extends React.Component {
             />
             </ListItemIcon>
             <ListItemText inset primary={task.title} />
-    <ListItemText inset secondary={<span> {task.timeEstimate} min</span>} className={classes.time}/>
+            <ListItemText inset secondary={<span> {task.timeEstimate} min</span>} className={classes.time}/>
+            { this.props.children }
           </ListItem>
+        </MaterialUITaskForm>
         {/* </List> */}
       </div>
     );

@@ -17,6 +17,7 @@ import TaskForm from '../task-form/task-form';
 import AddFAB from '../material-ui/floating-action-button';
 
 import './dashboard.scss';
+import * as preferencesActions from '../../actions/preferences';
 
 const styles = theme => ({
   root: {
@@ -61,6 +62,9 @@ class Dashboard extends React.Component {
       this.props.pFetchUserProfile()
         .then(() => {
           return this.props.pFetchAllTasks();
+        })
+        .then(() => {
+          return this.props.pFetchUserPreferences();
         });
     }
   }
@@ -68,19 +72,19 @@ class Dashboard extends React.Component {
   handleTaskComplete = () => {
     this.props.pCreateTask();
     this.setState({ openForm: false });
-  }
+  };
 
   handleFormOpen = () => {
     this.setState(prevState => ({ openForm: !prevState.openForm }));
-  }
+  };
 
   handleShowHideTasks = () => {
     this.setState(prevState => ({ completedTasksShow: !prevState.completedTasksShow }));
-  }
+  };
 
   handleStatusChange = (task, completed) => {
     this.props.pUpdateTaskStatus(task, completed);
-  }
+  };
 
   render() {
     const { tasks, classes } = this.props;
@@ -108,7 +112,7 @@ class Dashboard extends React.Component {
               && tasks.sort((a, b) => new Date(b.createdOn) - new Date(a.createdOn))
                 .filter(taskToDo => (taskToDo.completed === true))
                 .map(task => (
-                <TaskItem key={task._id} task={task} onComplete={this.handleStatusChange} />
+                <TaskItem key={task._id} task={task} onComplete={this.handleStatusChange}/>
                 ))}
             </List>
           </div>
@@ -128,6 +132,7 @@ Dashboard.propTypes = {
   pUpdateTaskStatus: PropTypes.func,
   tasks: PropTypes.array,
   classes: PropTypes.object,
+  pFetchUserPreferences: PropTypes.func,
 };
 
 const mapStateToProps = state => ({
@@ -140,6 +145,7 @@ const mapDispatchToProps = dispatch => ({
   pFetchUserProfile: () => dispatch(profileActions.profileFetchRequest()),
   pCreateTask: task => dispatch(taskActions.taskCreateRequest(task)),
   pFetchAllTasks: profile => dispatch(taskActions.fetchAllTasks(profile)),
+  pFetchUserPreferences: () => dispatch(preferencesActions.preferencesFetchRequest()),
   pUpdateTaskStatus: (task, completed) => dispatch(taskActions.taskUpdateStatus(task, completed)),
 });
 
