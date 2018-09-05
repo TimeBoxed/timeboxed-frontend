@@ -10,7 +10,7 @@ const styles = theme => ({
 
     [theme.breakpoints.down('xs')]: {
       display: 'block',
-      position: 'sticky',
+      position: 'fixed',
       bottom: '1rem',
       right: '1rem',
       float: 'right',
