@@ -1,14 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-// import compose from 'recompose/compose';
-// import { connect } from 'react-redux';
+import compose from 'recompose/compose';
+import { connect } from 'react-redux';
 import { withStyles } from '@material-ui/core/styles';
-import List from '@material-ui/core/List';
+// import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import Checkbox from '@material-ui/core/Checkbox';
-import MaterialUITaskForm from '../material-ui/task-form';
+import MaterialUITaskForm from './task-form';
+import * as taskActions from '../../actions/task';
 
 const styles = theme => ({
   root: {
@@ -29,11 +30,17 @@ class TaskItem extends React.Component {
     super(props);
     this.state = { 
       checked: this.props.task.completed ? [this.props.task._id] : [0],
+      showModal: false,
     };
   }
 
+  handleOpen = (event) => {
+    if (event.target.id !== 'task-complete-checkbox') {
+      this.setState(prevState => ({ showModal: !prevState.showModal }));
+    }
+  }
 
-  handleToggle(value) {
+  handleToggle = value => () => {
     const { checked } = this.state;
     const currentIndex = checked.indexOf(value);
     const newChecked = [...checked];
@@ -52,30 +59,42 @@ class TaskItem extends React.Component {
     this.props.onComplete(value, completed);
   }
 
+  handleTaskUpdate = (task) => {
+    this.setState({ showModal: false });
+    return this.props.taskUpdateRequest(task);
+  }
+
   render() {
     const { task, classes } = this.props;
     return (
       <div className={classes.taskItem}>
-        {/* <List key={task._id} component="div" disablePadding> */}
-        <MaterialUITaskForm task={this.props.task}>
-          <ListItem 
-            button 
-            disableRipple
-            className={classes.mainItem}
-          >
-            <ListItemIcon>
-            <Checkbox
-              onClick={() => this.handleToggle(task._id)}
-              checked={this.state.checked.indexOf(task._id) !== -1}
-              tabIndex={-1}
-            />
-            </ListItemIcon>
-            <ListItemText inset primary={task.title} />
-            <ListItemText inset secondary={<span> {task.timeEstimate} min</span>} className={classes.time}/>
-            { this.props.children }
-          </ListItem>
-        </MaterialUITaskForm>
-        {/* </List> */}
+        <MaterialUITaskForm 
+          show={this.state.showModal} 
+          task={this.props.task} 
+          onComplete={this.handleTaskUpdate} 
+          handleOpen={this.handleOpen}
+          timeEstimateProp={this.props.task.timeEstimate}
+        />
+        <ListItem 
+          button 
+          disableRipple
+          className={classes.mainItem}
+          onClick={this.handleOpen}
+        >
+          <ListItemIcon>
+          <Checkbox
+            id='task-complete-checkbox'
+            onClick={this.handleToggle(task._id)}
+            checked={this.state.checked.indexOf(task._id) !== -1}
+            tabIndex={-1}
+          />
+          </ListItemIcon>
+          <ListItemText inset primary={task.title} />
+          <ListItemText 
+            inset secondary={<span> {task.timeEstimate} min</span>} 
+            className={classes.time}
+          />
+        </ListItem>
       </div>
     );
   }
@@ -85,6 +104,14 @@ TaskItem.propTypes = {
   task: PropTypes.object,
   classes: PropTypes.object,
   onComplete: PropTypes.func,
+  taskUpdateRequest: PropTypes.func,
 };
 
-export default withStyles(styles, { name: 'TaskItem' })(TaskItem);
+const mapDispatchToProps = dispatch => ({
+  taskUpdateRequest: task => dispatch(taskActions.taskUpdateRequest(task)),
+});
+
+export default compose(
+  withStyles(styles, { name: 'TaskItem' }),
+  connect(null, mapDispatchToProps),
+)(TaskItem);

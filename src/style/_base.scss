@@ -4,7 +4,7 @@
 body {
   @include background-size(cover);
 
-  background-color: $color-one;
+  background-color: $color-two;
   background-size: cover;
   text-align: center;
   width: 100%;
@@ -30,38 +30,45 @@ body {
 
 #sign-in-button {
   background-color: white;
-  font: $Roboto-Medium;
-  font-size: 14px;
+  font-family: $Roboto-Medium;
+  font-size: 18px;
   line-height: 18px;
   color: grey;
   padding: auto 8dp;
-  height: 40dp;
-  width: 240px;
+  height: 60px;
+  width: 275px;
   margin-top: 15px; 
+  border-radius: 5px;
+
 
   #googleLogo {
-    width: 18dp;
-    height: 18dp;
+    width: 40px;
+    height: 40px;
     float: left;
+    margin: 5px 3px;
   }
 
 }
 
+#sign-in-button:hover {
+  background-color: rgb(233, 233, 233);
+  color: $color-three;
+}
+
 #header-image{
-  margin-right: 45%;
   font-size: 25px;
-  height: 50px;
 
   #tb-logo {
-    height: 50px;
-    width: 50px;
-    margin-right: 10px;
+    height: 60px;
+    width: 60px;
+    display: inline-block;
   }
 
   p {
-    float: right;
     line-height: 50px;
     margin: 0;
+    display: inline;
+    vertical-align: middle;
   }
 }
 

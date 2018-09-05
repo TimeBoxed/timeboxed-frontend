@@ -11,7 +11,7 @@ import MenuIcon from '@material-ui/icons/Menu';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
-import Logo from '../../assets/logo/logo-white.svg';
+import Logo from './logo';
 import * as authActions from '../../actions/auth';
 import ROUTES from '../../routes';
 
@@ -23,8 +23,11 @@ const styles = {
     flexGrow: 1,
   },
   menuButton: {
-    marginLeft: -12,
-    marginRight: 20,
+    float: 'left',
+  },
+  placeholder: {
+    height: 48,
+    width: 48,
   },
 };
 
@@ -54,17 +57,18 @@ class MenuAppBar extends React.Component {
 
     return (
       <div className={classes.root}>
-        <AppBar position="static">
+        <AppBar position = { window.location.pathname !== ROUTES.LANDING ? 'fixed' : 'static' }>
           <Toolbar>
             <IconButton className={classes.menuButton} color="inherit" aria-label="Menu">
               <MenuIcon />
-            </IconButton>           
+            </IconButton>
+         
             <Typography variant="title" color="inherit" className={classes.flex}>
               {
-                window.location.pathname.replace(/\//, '').toUpperCase()
+                window.location.pathname !== ROUTES.LANDING ? window.location.pathname.replace(/\//, '').toUpperCase() : <Logo />
               }
             </Typography>
-            {auth && (
+            {auth ? (
               <div>
                 <IconButton
                   aria-owns={open ? 'menu-appbar' : null}
@@ -105,10 +109,10 @@ class MenuAppBar extends React.Component {
                   </Link>
                 </Menu>
               </div>
-            )}
-            <div id = 'header-image'>
-              <Logo id = 'tb-logo'/>  <p>TimeBoxed</p>
-            </div>
+            ) 
+              : <div className={classes.placeholder}></div>
+            }
+         
           </Toolbar>          
         </AppBar>        
       </div>

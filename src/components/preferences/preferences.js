@@ -20,7 +20,6 @@ import MenuItem from '@material-ui/core/MenuItem';
 import * as profileActions from '../../actions/profile';
 import * as preferencesActions from '../../actions/preferences';
 import ROUTES from '../../routes';
-// import autobind from '../../utils/auto-bind';
 
 import './preferences.scss';
 
@@ -29,6 +28,9 @@ const styles = theme => ({
     width: '100%',
     maxWidth: 360,
     backgroundColor: theme.palette.background.paper,
+  },
+  mainContainer: {
+    marginTop: 70,
   },
   container: {
     display: 'flex',
@@ -57,7 +59,6 @@ class Preferences extends React.Component {
       breatherTime: '',
       selectedCalendar: '',
     };
-    // autobind.call(this, Preferences);
   }
 
   componentDidMount() {
@@ -107,8 +108,10 @@ class Preferences extends React.Component {
   };
 
   handleSubmit = () => {
-    this.props.pUpdateUserPreferences(this.state);
-    this.setState({ fireRedirect: true });
+    this.props.pUpdateUserPreferences(this.state)
+      .then(() => {
+        return this.setState({ fireRedirect: true });
+      });
   }
 
 
@@ -117,7 +120,7 @@ class Preferences extends React.Component {
     const taskLengthInHours = this.state.taskLengthDefault / 60;
 
     return (
-      <div className='preferences-container'>
+      <div className={classes.mainContainer}>
       <Button variant="contained" color="secondary" className={classes.button} onClick={this.handleSubmit}>Save Settings</Button>
       <div className='preferences-main'>
         { profile 

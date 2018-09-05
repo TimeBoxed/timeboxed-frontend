@@ -49,7 +49,7 @@ const taskUpdateStatus = (task, completed) => (store) => {
 
 const taskUpdateRequest = task => (store) => {
   const { token } = store.getState();
-  return superagent.put(`${TEMP_API_URL}/tasks/${task._id}`)
+  return superagent.put(`${API_URL}/tasks/${task._id}`)
     .set('Authorization', `Bearer ${token}`)
     .set('Content-Type', 'application/json')
     .send(task)
