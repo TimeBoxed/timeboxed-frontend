@@ -29,6 +29,9 @@ const styles = theme => ({
     maxWidth: 360,
     backgroundColor: theme.palette.background.paper,
   },
+  mainContainer: {
+    marginTop: 70,
+  },
   container: {
     display: 'flex',
     flexWrap: 'wrap',
@@ -117,7 +120,7 @@ class Preferences extends React.Component {
     const taskLengthInHours = this.state.taskLengthDefault / 60;
 
     return (
-      <div className='preferences-container'>
+      <div className={classes.mainContainer}>
       <Button variant="contained" color="secondary" className={classes.button} onClick={this.handleSubmit}>Save Settings</Button>
       <div className='preferences-main'>
         { profile 
