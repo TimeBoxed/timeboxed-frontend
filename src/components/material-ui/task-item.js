@@ -34,13 +34,12 @@ class TaskItem extends React.Component {
     };
   }
 
-  handleOpen = (event) => {
-    if (event.target.id !== 'task-complete-checkbox') {
-      this.setState(prevState => ({ showModal: !prevState.showModal }));
-    }
+  handleOpen = () => {
+    this.setState(prevState => ({ showModal: !prevState.showModal }));
   }
 
-  handleToggle = value => () => {
+  handleToggle = value => (event) => {
+    event.stopPropagation();
     const { checked } = this.state;
     const currentIndex = checked.indexOf(value);
     const newChecked = [...checked];
