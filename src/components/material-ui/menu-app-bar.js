@@ -39,6 +39,7 @@ class MenuAppBar extends React.Component {
 
   handleMenu = (event) => {
     this.setState({ anchorEl: event.currentTarget });
+    // TODO: toggle drawer
   };
 
   handleClose = () => {
