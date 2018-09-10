@@ -8,8 +8,6 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import Checkbox from '@material-ui/core/Checkbox';
 import Radio from '@material-ui/core/Radio';
-// import RadioButtonUnchecked from '@material-ui/icons/RadioButtonUnchecked';
-// import RadioButtonChecked from '@material-ui/icons/RadioButtonChecked';
 import MaterialUITaskForm from './task-form';
 import * as taskActions from '../../actions/task';
 
@@ -127,6 +125,7 @@ TaskItem.propTypes = {
   taskUpdateRequest: PropTypes.func,
   editingTasks: PropTypes.bool,
   onSelect: PropTypes.func,
+  selected: PropTypes.bool,
 };
 
 const mapDispatchToProps = dispatch => ({

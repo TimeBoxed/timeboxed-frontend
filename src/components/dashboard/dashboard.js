@@ -51,11 +51,31 @@ const styles = theme => ({
     width: '600px',
     paddingTop: '80px',
   },
+  topButtonsDiv: {
+    width: '50%',
+    margin: '0 auto',
+    display: 'flex',
+    justifyContent: 'space-between',
+
+    [theme.breakpoints.down('xs')]: {
+      display: 'none',
+    },
+  },
+  button: {
+    width: 100,
+  },
+  blueButton: {
+    width: 100,
+    backgroundColor: '#0B5999',
+  },
   deleteButton: {
-    width: 420,
+    width: '35%',
     height: 80,
     backgroundColor: '#0B5999',
     display: 'block',
+    position: 'fixed',
+    bottom: '1%',
+    left: '33%',
     margin: '0px auto',
     [theme.breakpoints.down('xs')]: {
       display: 'block',
@@ -64,8 +84,6 @@ const styles = theme => ({
       left: '0rem',
       width: '100%',
       borderRadius: 0,
-      // float: 'left',
-      // margin: theme.spacing.unit,
     },
   },
   deleteText: {
@@ -76,7 +94,7 @@ const styles = theme => ({
     marginTop: 90,
   },
   fab: {
-    float: 'left',
+    display: 'none',
     [theme.breakpoints.down('xs')]: {
       display: 'block',
       position: 'fixed',
@@ -166,7 +184,22 @@ class Dashboard extends React.Component {
       <div className={classes.dashboardPage}>
 
         <div className={classes.listHolder}>
-        {this.state.editingTasks && <Button variant="contained" color="secondary" className={classes.button} onClick={this.handleEditing}>Cancel</Button>}
+          
+          {!this.state.editingTasks 
+            ? <div className={classes.topButtonsDiv}>
+            <Button 
+              variant="contained" 
+              color="primary" 
+              className={classes.blueButton} 
+              onClick={this.handleEditing}>Edit</Button>
+            <Button variant="contained" color="secondary" className={classes.button} onClick={this.handleFormOpen}>Add</Button>
+            </div>
+            : <Button 
+            variant="contained" 
+            color="primary" 
+            className={classes.blueButton} 
+            onClick={this.handleEditing}>Cancel</Button>
+          }
         <div>
           {preferences 
             && <MaterialUITaskForm 
