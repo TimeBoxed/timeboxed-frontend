@@ -61,10 +61,9 @@ class MenuAppBar extends React.Component {
       <div className={classes.root}>
         <AppBar position = { window.location.pathname !== ROUTES.LANDING ? 'fixed' : 'static' }>
           <Toolbar>
-            <IconButton className={classes.menuButton} color="inherit" aria-label="Menu">
-              {/* <MenuIcon /> */}
+            {/* <IconButton className={classes.menuButton} color="inherit" aria-label="Menu"> */}
               <SideDrawer />
-            </IconButton>
+            {/* </IconButton> */}
          
             <Typography variant="title" color="inherit" className={classes.flex}>
               {

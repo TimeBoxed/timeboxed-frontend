@@ -1,12 +1,15 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
 import Button from '@material-ui/core/Button';
 // import List from '@material-ui/core/List';
+// import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
+import * as authActions from '../../actions/auth';
 import ROUTES from '../../routes';
 // import Divider from '@material-ui/core/Divider';
 
@@ -24,6 +27,11 @@ class SideDrawer extends React.Component {
   handleClose = () => {
     this.setState({ anchorEl: null });
   };
+
+  handleLogout = () => {
+    this.setState({ auth: false, anchorEl: null });
+    this.props.logout();
+  }
 
   toggleDrawer = (side, open) => () => {
     this.setState({
@@ -63,7 +71,7 @@ class SideDrawer extends React.Component {
       <Drawer open = { this.state.left } onClose = { this.toggleDrawer('left', false)} >
         <div 
           tabIndex = {0}
-          role = "button"
+
           onClick = { this.toggleDrawer('left', false)}
           onKeyDown = { this.toggleDrawer('left', false)}
           >
@@ -75,8 +83,18 @@ class SideDrawer extends React.Component {
   }
 }
 
-SideDrawer.protTypes = {
+SideDrawer.propTypes = {
   classes: PropTypes.object.isRequired,
+  logout: PropTypes.func,
 };
 
-export default withStyles(styles)(SideDrawer);
+const mapStateToProps = state => ({
+  profile: state.profile,
+  loggedIn: !!state.token,
+});
+
+const mapDispatchToProps = dispatch => ({
+  logout: () => dispatch(authActions.logout()),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(SideDrawer));
