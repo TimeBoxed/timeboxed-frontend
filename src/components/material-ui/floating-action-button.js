@@ -6,11 +6,10 @@ import AddIcon from '@material-ui/icons/Add';
 
 const styles = theme => ({
   fab: {
-    // display: 'none',
-
+    float: 'right',
     [theme.breakpoints.down('xs')]: {
       display: 'block',
-      position: 'sticky',
+      position: 'fixed',
       bottom: '1rem',
       right: '1rem',
       float: 'right',

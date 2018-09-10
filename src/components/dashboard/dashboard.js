@@ -7,6 +7,7 @@ import List from '@material-ui/core/List';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import Delete from '@material-ui/icons/Delete';
+import EditIcon from '@material-ui/icons/Edit';
 import TaskItem from '../material-ui/task-item';
 import * as profileActions from '../../actions/profile';
 import * as taskActions from '../../actions/task';
@@ -42,6 +43,7 @@ const styles = theme => ({
     display: 'none',
   },
   dashboardPage: {
+    height: '100%',
     display: 'flex',
     justifyContent: 'center',
   },
@@ -55,9 +57,37 @@ const styles = theme => ({
     backgroundColor: '#0B5999',
     display: 'block',
     margin: '0px auto',
+    [theme.breakpoints.down('xs')]: {
+      display: 'block',
+      position: 'fixed',
+      bottom: '0rem',
+      left: '0rem',
+      width: '100%',
+      borderRadius: 0,
+      // float: 'left',
+      // margin: theme.spacing.unit,
+    },
   },
   deleteText: {
     color: '#FAFAFA',
+  },
+  buttonDiv: {
+    width: '100%',
+    marginTop: 90,
+  },
+  fab: {
+    float: 'left',
+    [theme.breakpoints.down('xs')]: {
+      display: 'block',
+      position: 'fixed',
+      bottom: '1rem',
+      left: '1rem',
+      float: 'left',
+      margin: theme.spacing.unit,
+    },
+  },
+  extendedIcon: {
+    marginRight: theme.spacing.unit,
   },
 });
 
@@ -136,7 +166,7 @@ class Dashboard extends React.Component {
       <div className={classes.dashboardPage}>
 
         <div className={classes.listHolder}>
-        <Button variant="contained" color="secondary" className={classes.button} onClick={this.handleEditing}>Edit</Button>
+        {this.state.editingTasks && <Button variant="contained" color="secondary" className={classes.button} onClick={this.handleEditing}>Cancel</Button>}
         <div>
           {preferences 
             && <MaterialUITaskForm 
@@ -182,14 +212,25 @@ class Dashboard extends React.Component {
                 ))}
             </List>
           </div>
-          {/* <div> */}
+          <div className={classes.buttonDiv}>
           {this.state.editingTasks 
-            ? <Button variant="contained" color="secondary" className={classes.deleteButton} onClick={this.handleDelete}>
+            ? <Button variant="contained" color="primary" className={classes.deleteButton} onClick={this.handleDelete}>
               <Delete/>
               <Typography className={classes.deleteText}>Delete</Typography>
             </Button>
-            : <AddFAB activate={this.handleFormOpen}/> }
-          {/* </div> */}
+            : <div><Button 
+                onClick={this.handleEditing} 
+                variant="fab" 
+                color="primary"  
+                aria-label="edit" 
+                className={classes.fab}
+              >
+              <EditIcon />
+            </Button>
+            <AddFAB activate={this.handleFormOpen}/> 
+            </div>
+          }
+          </div>
         </div>
       </div>
     );
