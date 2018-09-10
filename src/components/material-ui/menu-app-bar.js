@@ -19,6 +19,13 @@ const styles = {
   root: {
     flexGrow: 1,
   },
+  appBar: {
+    display: 'flex',
+    alignItems: 'center',
+  },
+  toolBar: {
+    width: 600,
+  },
   flex: {
     flexGrow: 1,
   },
@@ -35,6 +42,7 @@ class MenuAppBar extends React.Component {
   state = {
     auth: this.props.loggedIn,
     anchorEl: null,
+
   };
 
   handleMenu = (event) => {
@@ -57,8 +65,8 @@ class MenuAppBar extends React.Component {
 
     return (
       <div className={classes.root}>
-        <AppBar position = { window.location.pathname !== ROUTES.LANDING ? 'fixed' : 'static' }>
-          <Toolbar>
+        <AppBar className={classes.appBar} position = { window.location.pathname !== ROUTES.LANDING ? 'fixed' : 'static' }>
+          <Toolbar className={classes.toolBar}>
             <IconButton className={classes.menuButton} color="inherit" aria-label="Menu">
               <MenuIcon />
             </IconButton>

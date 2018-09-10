@@ -58,6 +58,18 @@ const taskUpdateRequest = task => (store) => {
     });
 };
 
+const tasksDeleteRequest = tasks => (store) => {
+  console.log(tasks, 'tasks in the delete route');
+  const { token } = store.getState();
+  return superagent.delete(`${API_URL}/tasks`)
+    .set('Authorization', `Bearer ${token}`)
+    .set('Content-Type', 'application/json')
+    .send(tasks)
+    .then((response) => {
+      return store.dispatch(updateTask(response.body));
+    });
+};
+
 export { 
   setTask,
   getTasks,
@@ -66,4 +78,5 @@ export {
   fetchAllTasks,
   taskUpdateStatus,
   taskUpdateRequest,
+  tasksDeleteRequest,
 };
