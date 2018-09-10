@@ -106,9 +106,11 @@ class Dashboard extends React.Component {
   }
 
   handleDelete = () => {
-    console.log(this.state.tasksForDeletion);
     this.setState(prevState => ({ editingTasks: !prevState.editingTasks }));
-    this.props.pTasksDeleteRequest(this.state.tasksForDeletion);
+    this.props.pTasksDeleteRequest(this.state.tasksForDeletion)
+      .then(() => {
+        return this.props.pFetchAllTasks();
+      }); 
   }
 
   handleSelect = (task) => {
