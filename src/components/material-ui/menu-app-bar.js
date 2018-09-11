@@ -1,16 +1,13 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
-import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import AccountCircle from '@material-ui/icons/AccountCircle';
-import MenuItem from '@material-ui/core/MenuItem';
-import Menu from '@material-ui/core/Menu';
+import SideDrawer from './side-drawer';
 import Logo from './logo';
 import * as authActions from '../../actions/auth';
 import ROUTES from '../../routes';
@@ -37,10 +34,6 @@ class MenuAppBar extends React.Component {
     anchorEl: null,
   };
 
-  handleMenu = (event) => {
-    this.setState({ anchorEl: event.currentTarget });
-  };
-
   handleClose = () => {
     this.setState({ anchorEl: null });
   };
@@ -52,67 +45,22 @@ class MenuAppBar extends React.Component {
 
   render() {
     const { classes } = this.props;
-    const { auth, anchorEl } = this.state;
-    const open = Boolean(anchorEl);
+    const { auth } = this.state;
 
     return (
       <div className={classes.root}>
         <AppBar position = { window.location.pathname !== ROUTES.LANDING ? 'fixed' : 'static' }>
           <Toolbar>
-            <IconButton className={classes.menuButton} color="inherit" aria-label="Menu">
-              <MenuIcon />
-            </IconButton>
-         
+            {auth ? (
+            <SideDrawer />
+            ) : <MenuIcon />
+            }
             <Typography variant="title" color="inherit" className={classes.flex}>
               {
                 window.location.pathname !== ROUTES.LANDING ? window.location.pathname.replace(/\//, '').toUpperCase() : <Logo />
               }
             </Typography>
-            {auth ? (
-              <div>
-                <IconButton
-                  aria-owns={open ? 'menu-appbar' : null}
-                  aria-haspopup="true"
-                  onClick={this.handleMenu}
-                  color="inherit"
-                >
-                  <AccountCircle />
-                </IconButton>
-                <Menu
-                  id="menu-appbar"
-                  anchorEl={anchorEl}
-                  anchorOrigin={{
-                    vertical: 'top',
-                    horizontal: 'right',
-                  }}
-                  transformOrigin={{
-                    vertical: 'top',
-                    horizontal: 'right',
-                  }}
-                  open={open}
-                  onClose={this.handleClose}
-                >
-                  <Link to={ROUTES.DASHBOARD}>
-                    <MenuItem onClick={this.handleClose}>
-                      Dashboard
-                    </MenuItem>
-                  </Link>
-                  <Link to={ROUTES.PREFERENCES}>
-                    <MenuItem onClick={this.handleClose}>
-                      Preferences
-                    </MenuItem>
-                  </Link>
-                  <Link to={ROUTES.LANDING}>
-                    <MenuItem onClick={this.handleLogout}>
-                      Logout
-                    </MenuItem>
-                  </Link>
-                </Menu>
-              </div>
-            ) 
-              : <div className={classes.placeholder}></div>
-            }
-         
+            <AccountCircle />
           </Toolbar>          
         </AppBar>        
       </div>
