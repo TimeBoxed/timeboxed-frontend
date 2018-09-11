@@ -20,7 +20,6 @@ const styles = {
     backgroundColor: 'grey',
   },
   drawerItems: {
-    // fontSize: 24,
     paddingLeft: 15,
   },
 };
