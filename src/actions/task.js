@@ -15,6 +15,11 @@ const getTasks = tasks => ({
   payload: tasks,
 });
 
+const deleteBulkTasks = tasks => ({
+  type: 'TASKS_BULK_REMOVE',
+  payload: tasks,
+});
+
 const taskCreateRequest = task => (store) => {
   const { token, profile } = store.getState();
   return superagent.post(`${API_URL}/tasks`)
@@ -58,12 +63,25 @@ const taskUpdateRequest = task => (store) => {
     });
 };
 
+const tasksDeleteRequest = tasks => (store) => {
+  const { token } = store.getState();
+  return superagent.delete(`${API_URL}/tasks`)
+    .set('Authorization', `Bearer ${token}`)
+    .set('Content-Type', 'application/json')
+    .send(tasks)
+    .then((response) => {
+      return store.dispatch(deleteBulkTasks(response.body));
+    });
+};
+
 export { 
   setTask,
   getTasks,
   updateTask,
+  deleteBulkTasks,
   taskCreateRequest,
   fetchAllTasks,
   taskUpdateStatus,
   taskUpdateRequest,
+  tasksDeleteRequest,
 };
