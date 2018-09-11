@@ -12,16 +12,16 @@ import * as authActions from '../../actions/auth';
 import ROUTES from '../../routes';
 
 const styles = {
-  sideDrawer: {
-    width: '50%',
-  },
   list: {
     width: 250,
-    // backgroundColor: 'red',
   },
   upperDrawer: {
     height: 150,
     backgroundColor: 'grey',
+  },
+  drawerItems: {
+    // fontSize: 24,
+    paddingLeft: 15,
   },
 };
 
@@ -49,23 +49,24 @@ class SideDrawer extends React.Component {
 
   render() {
     const { classes } = this.props;
-  
+    
+    
     const sideList = (
     <div className = {classes.list} >
       <div className = { classes.upperDrawer }></div>
       <Divider />
       <Link to={ROUTES.DASHBOARD}>
-        <MenuItem onClick={this.handleClose}>
+        <MenuItem onClick={this.handleClose} className = { classes.drawerItems }>
           Dashboard
         </MenuItem>
       </Link>
       <Link to={ROUTES.PREFERENCES}>
-        <MenuItem onClick={this.handleClose}>
+        <MenuItem onClick={this.handleClose} className = { classes.drawerItems }>
           Preferences
         </MenuItem>
       </Link>
       <Link to={ROUTES.LANDING}>
-        <MenuItem onClick={this.handleLogout}>
+        <MenuItem onClick={this.handleLogout} className = { classes.drawerItems }>
           Logout
         </MenuItem>
       </Link>
@@ -80,7 +81,6 @@ class SideDrawer extends React.Component {
           <Drawer open = { this.state.left } onClose = { this.toggleDrawer('left', false)} >
             <div 
               tabIndex = {0}
-
               onClick = { this.toggleDrawer('left', false)}
               onKeyDown = { this.toggleDrawer('left', false)}
               >

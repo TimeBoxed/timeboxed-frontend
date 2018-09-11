@@ -8,7 +8,7 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 // import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
-// import AccountCircle from '@material-ui/icons/AccountCircle';
+import AccountCircle from '@material-ui/icons/AccountCircle';
 // import MenuItem from '@material-ui/core/MenuItem';
 // import Menu from '@material-ui/core/Menu';
 import SideDrawer from './side-drawer';
@@ -69,51 +69,7 @@ class MenuAppBar extends React.Component {
                 window.location.pathname !== ROUTES.LANDING ? window.location.pathname.replace(/\//, '').toUpperCase() : <Logo />
               }
             </Typography>
-            {/* {auth ? (
-              <div>
-                <IconButton
-                  aria-owns={open ? 'menu-appbar' : null}
-                  aria-haspopup="true"
-                  onClick={this.handleMenu}
-                  color="inherit"
-                >
-                  <AccountCircle />
-                </IconButton>
-                <Menu
-                  id="menu-appbar"
-                  anchorEl={anchorEl}
-                  anchorOrigin={{
-                    vertical: 'top',
-                    horizontal: 'right',
-                  }}
-                  transformOrigin={{
-                    vertical: 'top',
-                    horizontal: 'right',
-                  }}
-                  open={open}
-                  onClose={this.handleClose}
-                >
-                  <Link to={ROUTES.DASHBOARD}>
-                    <MenuItem onClick={this.handleClose}>
-                      Dashboard
-                    </MenuItem>
-                  </Link>
-                  <Link to={ROUTES.PREFERENCES}>
-                    <MenuItem onClick={this.handleClose}>
-                      Preferences
-                    </MenuItem>
-                  </Link>
-                  <Link to={ROUTES.LANDING}>
-                    <MenuItem onClick={this.handleLogout}>
-                      Logout
-                    </MenuItem>
-                  </Link>
-                </Menu>
-              </div>
-            ) 
-              : <div className={classes.placeholder}></div>
-            }
-          */}
+            <AccountCircle />
           </Toolbar>          
         </AppBar>        
       </div>
