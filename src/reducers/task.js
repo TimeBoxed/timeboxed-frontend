@@ -12,7 +12,7 @@ export default (state = [], { type, payload }) => {
     case 'TASK_UPDATE':
       return state.map(task => (task._id === payload._id ? payload : task));
     case 'TOKEN_REMOVE':
-      return [];
+      return [];  
     default:
       return state;
   }
