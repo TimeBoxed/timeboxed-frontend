@@ -5,6 +5,9 @@ import { withStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 import List from '@material-ui/core/List';
 import Typography from '@material-ui/core/Typography';
+import Button from '@material-ui/core/Button';
+import Delete from '@material-ui/icons/Delete';
+import EditIcon from '@material-ui/icons/Edit';
 import TaskItem from '../material-ui/task-item';
 import * as profileActions from '../../actions/profile';
 import * as taskActions from '../../actions/task';
@@ -40,12 +43,69 @@ const styles = theme => ({
     display: 'none',
   },
   dashboardPage: {
+    height: '100%',
     display: 'flex',
     justifyContent: 'center',
   },
   listHolder: {
     width: '600px',
     paddingTop: '80px',
+  },
+  topButtonsDiv: {
+    width: '50%',
+    margin: '0 auto',
+    display: 'flex',
+    justifyContent: 'space-between',
+
+    [theme.breakpoints.down('xs')]: {
+      display: 'none',
+    },
+  },
+  button: {
+    width: 100,
+  },
+  blueButton: {
+    width: 100,
+    backgroundColor: '#0B5999',
+  },
+  deleteButton: {
+    width: '35%',
+    height: 80,
+    backgroundColor: '#0B5999',
+    display: 'block',
+    position: 'fixed',
+    bottom: '1%',
+    left: '33%',
+    margin: '0px auto',
+    [theme.breakpoints.down('xs')]: {
+      display: 'block',
+      position: 'fixed',
+      bottom: '0rem',
+      left: '0rem',
+      width: '100%',
+      borderRadius: 0,
+    },
+  },
+  deleteText: {
+    color: '#FAFAFA',
+  },
+  buttonDiv: {
+    width: '100%',
+    marginTop: 90,
+  },
+  fab: {
+    display: 'none',
+    [theme.breakpoints.down('xs')]: {
+      display: 'block',
+      position: 'fixed',
+      bottom: '1rem',
+      left: '1rem',
+      float: 'left',
+      margin: theme.spacing.unit,
+    },
+  },
+  extendedIcon: {
+    marginRight: theme.spacing.unit,
   },
 });
 
@@ -55,6 +115,8 @@ class Dashboard extends React.Component {
     this.state = {
       openForm: false,
       completedTasksShow: false,
+      editingTasks: false,
+      tasksForDeletion: [],
     };
   }
 
@@ -87,6 +149,32 @@ class Dashboard extends React.Component {
     this.props.pUpdateTaskStatus(task, completed);
   };
 
+  handleEditing = () => {
+    this.setState(prevState => ({ editingTasks: !prevState.editingTasks }));
+  }
+
+  handleDelete = () => {
+    this.setState(prevState => ({ editingTasks: !prevState.editingTasks }));
+    this.props.pTasksDeleteRequest(this.state.tasksForDeletion)
+      .then(() => {
+        return this.props.pFetchAllTasks();
+      }); 
+  }
+
+  handleSelect = (task) => {
+    const { tasksForDeletion } = this.state;
+    const taskIndex = tasksForDeletion.indexOf(task);
+    const newTasksForDeletion = [...tasksForDeletion];
+
+    if (taskIndex === -1) {
+      newTasksForDeletion.push(task);
+    } else {
+      newTasksForDeletion.splice(taskIndex, 1);
+    }
+
+    this.setState({ tasksForDeletion: newTasksForDeletion });
+  }
+
   render() {
     const { tasks, classes, preferences } = this.props;
     const completedTasks = this.state.completedTasksShow ? 'Hide' : 'Show'; 
@@ -94,7 +182,24 @@ class Dashboard extends React.Component {
 
     return (
       <div className={classes.dashboardPage}>
+
         <div className={classes.listHolder}>
+          
+          {!this.state.editingTasks 
+            ? <div className={classes.topButtonsDiv}>
+            <Button 
+              variant="contained" 
+              color="primary" 
+              className={classes.blueButton} 
+              onClick={this.handleEditing}>Edit</Button>
+            <Button variant="contained" color="secondary" className={classes.button} onClick={this.handleFormOpen}>Add</Button>
+            </div>
+            : <Button 
+            variant="contained" 
+            color="primary" 
+            className={classes.blueButton} 
+            onClick={this.handleEditing}>Cancel</Button>
+          }
         <div>
           {preferences 
             && <MaterialUITaskForm 
@@ -110,7 +215,14 @@ class Dashboard extends React.Component {
             && tasks.sort((a, b) => new Date(b.createdOn) - new Date(a.createdOn))
               .filter(taskToDo => (taskToDo.completed === false))
               .map(task => (
-              <TaskItem key={task._id} task={task} onComplete={this.handleStatusChange} />
+              <TaskItem 
+                key={task._id} 
+                task={task} 
+                onComplete={this.handleStatusChange} 
+                editingTasks={this.state.editingTasks} 
+                onSelect={this.handleSelect}
+                selected={false}
+              />
               ))}
           </List>
           <div className='show-hide-tasks'>
@@ -122,11 +234,36 @@ class Dashboard extends React.Component {
               && tasks.sort((a, b) => new Date(b.createdOn) - new Date(a.createdOn))
                 .filter(taskToDo => (taskToDo.completed === true))
                 .map(task => (
-                <TaskItem key={task._id} task={task} onComplete={this.handleStatusChange}/>
+                <TaskItem 
+                  key={task._id} 
+                  task={task} 
+                  onComplete={this.handleStatusChange}
+                  editingTasks={this.state.editingTasks} 
+                  onSelect={this.handleSelect}
+                  selected={false}
+                />
                 ))}
             </List>
           </div>
-          <AddFAB activate={this.handleFormOpen}/>
+          <div className={classes.buttonDiv}>
+          {this.state.editingTasks 
+            ? <Button variant="contained" color="primary" className={classes.deleteButton} onClick={this.handleDelete}>
+              <Delete/>
+              <Typography className={classes.deleteText}>Delete</Typography>
+            </Button>
+            : <div><Button 
+                onClick={this.handleEditing} 
+                variant="fab" 
+                color="primary"  
+                aria-label="edit" 
+                className={classes.fab}
+              >
+              <EditIcon />
+            </Button>
+            <AddFAB activate={this.handleFormOpen}/> 
+            </div>
+          }
+          </div>
         </div>
       </div>
     );
@@ -141,6 +278,7 @@ Dashboard.propTypes = {
   pCreateTask: PropTypes.func,
   pFetchAllTasks: PropTypes.func,
   pUpdateTaskStatus: PropTypes.func,
+  pTasksDeleteRequest: PropTypes.func,
   tasks: PropTypes.array,
   preferences: PropTypes.object,
   classes: PropTypes.object,
@@ -159,6 +297,7 @@ const mapDispatchToProps = dispatch => ({
   pFetchAllTasks: () => dispatch(taskActions.fetchAllTasks()),
   pFetchUserPreferences: () => dispatch(preferencesActions.preferencesFetchRequest()),
   pUpdateTaskStatus: (task, completed) => dispatch(taskActions.taskUpdateStatus(task, completed)),
+  pTasksDeleteRequest: tasks => dispatch(taskActions.tasksDeleteRequest(tasks)),
 });
 
 export default compose(

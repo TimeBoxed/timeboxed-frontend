@@ -1,6 +1,10 @@
 @import 'vars';
 @import 'mixins';
 
+html {
+  height: 100%;
+}
+
 body {
   @include background-size(cover);
 
