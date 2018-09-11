@@ -5,22 +5,29 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
 import Button from '@material-ui/core/Button';
-// import List from '@material-ui/core/List';
-// import IconButton from '@material-ui/core/IconButton';
+import Divider from '@material-ui/core/Divider';
 import MenuIcon from '@material-ui/icons/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import * as authActions from '../../actions/auth';
 import ROUTES from '../../routes';
-// import Divider from '@material-ui/core/Divider';
 
 const styles = {
+  sideDrawer: {
+    width: '50%',
+  },
   list: {
-    minWidth: 1000,
+    width: 250,
+    // backgroundColor: 'red',
+  },
+  upperDrawer: {
+    height: 150,
+    backgroundColor: 'grey',
   },
 };
 
 class SideDrawer extends React.Component {
   state = {
+    auth: this.props.loggedIn,
     left: false,
   };
 
@@ -41,11 +48,13 @@ class SideDrawer extends React.Component {
   };
 
   render() {
-    const classes = this.props;
+    const { classes } = this.props;
   
     const sideList = (
     <div className = {classes.list} >
-    <Link to={ROUTES.DASHBOARD}>
+      <div className = { classes.upperDrawer }></div>
+      <Divider />
+      <Link to={ROUTES.DASHBOARD}>
         <MenuItem onClick={this.handleClose}>
           Dashboard
         </MenuItem>
@@ -64,27 +73,28 @@ class SideDrawer extends React.Component {
     );
 
     return (
-    <div>
-      <Button onClick = {this.toggleDrawer('left', true)}>
-        <MenuIcon />
-      </Button>
-      <Drawer open = { this.state.left } onClose = { this.toggleDrawer('left', false)} >
-        <div 
-          tabIndex = {0}
+      <div className = { classes.root }>
+          <Button onClick = {this.toggleDrawer('left', true)}>
+            <MenuIcon />
+          </Button>
+          <Drawer open = { this.state.left } onClose = { this.toggleDrawer('left', false)} >
+            <div 
+              tabIndex = {0}
 
-          onClick = { this.toggleDrawer('left', false)}
-          onKeyDown = { this.toggleDrawer('left', false)}
-          >
-            {sideList}
-          </div>
-      </Drawer>
-    </div>
+              onClick = { this.toggleDrawer('left', false)}
+              onKeyDown = { this.toggleDrawer('left', false)}
+              >
+                {sideList}
+              </div>
+          </Drawer>
+        </div>
     );
   }
 }
 
 SideDrawer.propTypes = {
   classes: PropTypes.object.isRequired,
+  loggedIn: PropTypes.bool,
   logout: PropTypes.func,
 };
 
