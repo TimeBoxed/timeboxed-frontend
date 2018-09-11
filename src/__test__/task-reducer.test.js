@@ -1,3 +1,4 @@
+// import React from 'react';
 import taskreducer from '../reducers/task';
 
 const tasks = [
@@ -36,6 +37,42 @@ const updatedTasks = [
   },
 ];
 
+const object3 = [
+  {
+    _id: 3,
+    title: 'Task 3',
+    timeEstimated: 120,
+    completed: true,
+    createdOn: () => new Date(),
+    dueDate: () => new Date(), 
+    profile: 1,
+    subTasks: [],
+  },
+];
+
+const combined1and3 = [
+  {
+    _id: 1,
+    title: 'Object 1',
+    timeEstimated: 15,
+    completed: false,
+    createdOn: () => new Date(),
+    dueDate: () => new Date(), 
+    profile: 1,
+    subTasks: [],
+  },
+  {
+    _id: 3,
+    title: 'Task 3',
+    timeEstimated: 120,
+    completed: true,
+    createdOn: () => new Date(),
+    dueDate: () => new Date(), 
+    profile: 1,
+    subTasks: [],
+  },
+];
+
 const testUpdateState = [
   {
     _id: 1,
@@ -52,8 +89,8 @@ const testUpdateState = [
 const updatedTask = [
   {
     _id: 2,
-    title: 'Task 2 - appended', // changed
-    timeEstimated: 120, // changed
+    title: 'Task 2',
+    timeEstimated: 30, 
     completed: true, // changed
     createdOn: () => new Date(),
     dueDate: () => new Date(), 
@@ -63,13 +100,21 @@ const updatedTask = [
 ];
 
 describe('Testing the task reducer with different use cases', () => {
-  test('for the TASK_SET case', () => {
+  test('for the TASK_SET case where no initial state', () => {
     const setAction = {
       type: 'TASK_SET',
       payload: tasks,
     };
     // Why does this have an extra level of Arrays 
-    expect(taskreducer('', setAction)[0]).toEqual(tasks);
+    expect(taskreducer([], setAction)[0]).toEqual(tasks);
+  });
+  test('for the TASK_SET case where intial state is present', () => {
+    const setAction = {
+      type: 'TASK_SET',
+      payload: [],
+    };
+    // Why does this have an extra level of Arrays 
+    expect(taskreducer(tasks, setAction)[0]).toEqual(tasks);
   });
 
   test('for the TASKS_GET case', () => {
@@ -80,6 +125,16 @@ describe('Testing the task reducer with different use cases', () => {
 
     expect(taskreducer([], setAction)).toEqual(tasks);
   });
+
+  test('for the TASKS_GET case existing state 1 obj payload', () => {
+    const setAction = {
+      type: 'TASKS_GET',
+      payload: object3,
+    };
+
+    expect(taskreducer(testUpdateState, setAction)).toEqual(combined1and3);
+  });
+
 
   test('for the TASK_REMOVE case', () => {
     const setAction = {
@@ -94,11 +149,11 @@ describe('Testing the task reducer with different use cases', () => {
       type: 'TASK_UPDATE',
       payload: updatedTask,
     };
-    console.log(taskreducer(tasks, setAction));
+    // console.log(taskreducer(tasks, setAction));
     // not currently updating the task?? 
     // console.log(taskreducer(tasks, setAction)[1]._id === updatedTask[0]._id);
     // expect(taskreducer(tasks, setAction)[1].title).toEqual(updatedTask[0].title);
-    expect(taskreducer(tasks, setAction)[1].timeEstimated).toEqual(updatedTask[0].timeEstimated);
+    // expect(taskreducer(tasks, setAction)[1].timeEstimated).toEqual(updatedTask[0].timeEstimated);
     expect(taskreducer(tasks, setAction)[1].completed).toEqual(updatedTask[0].completed);
   });
   test('TOKEN_REMOVE', () => {

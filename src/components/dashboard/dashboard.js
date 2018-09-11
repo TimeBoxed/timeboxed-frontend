@@ -144,7 +144,6 @@ Dashboard.propTypes = {
   tasks: PropTypes.array,
   preferences: PropTypes.object,
   classes: PropTypes.object,
-  pFetchUserPreferences: PropTypes.func,
 };
 
 const mapStateToProps = state => ({
