@@ -117,6 +117,8 @@ class Dashboard extends React.Component {
       completedTasksShow: false,
       editingTasks: false,
       tasksForDeletion: [],
+      taskOrder: [],
+      completedTasks: [],
     };
   }
 
@@ -128,13 +130,29 @@ class Dashboard extends React.Component {
         })
         .then(() => {
           return this.props.pFetchAllTasks();
+        })
+        .then(() => {
+          console.log(this.props.tasks);
+          const orderedTasks = this.props.tasks.sort((a, b) => b.order - a.order);
+          const tasksToComplete = orderedTasks.filter(task => task.completed === false);
+          const completedTasks = orderedTasks.filter(task => task.completed === true);
+          return this.setState({ taskOrder: tasksToComplete, completedTasks });
         });
     }
   }
 
   handleTaskComplete = (task) => {
-    this.props.pCreateTask(task);
-    this.setState({ openForm: false });
+    task.order = this.state.taskOrder.length > 0 ? this.state.taskOrder.length : 0;
+    this.props.pCreateTask(task)
+      .then(() => {
+        return this.props.pFetchAllTasks();
+      })
+      .then(() => {
+        const orderedTasks = this.props.tasks.sort((a, b) => b.order - a.order);
+        const tasksToComplete = orderedTasks.filter(t => t.completed === false);
+        const completedTasks = orderedTasks.filter(t => t.completed === true);
+        return this.setState({ openForm: false, taskOrder: tasksToComplete, completedTasks });
+      });
   };
 
   handleFormOpen = () => {
@@ -146,7 +164,16 @@ class Dashboard extends React.Component {
   };
 
   handleStatusChange = (task, completed) => {
-    this.props.pUpdateTaskStatus(task, completed);
+    this.props.pUpdateTaskStatus(task, completed)
+      .then(() => {
+        return this.props.pFetchAllTasks();
+      })
+      .then(() => {
+        const orderedTasks = this.props.tasks.sort((a, b) => b.order - a.order);
+        const tasksToComplete = orderedTasks.filter(t => t.completed === false);
+        const completedTasks = orderedTasks.filter(t => t.completed === true);
+        return this.setState({ openForm: false, taskOrder: tasksToComplete, completedTasks });
+      });
   };
 
   handleEditing = () => {
@@ -214,8 +241,8 @@ class Dashboard extends React.Component {
           />}
           </div>
           <List className={classes.container} component='div'>
-            {tasks.length > 0 
-            && tasks.sort((a, b) => new Date(b.createdOn) - new Date(a.createdOn))
+            {this.state.taskOrder.length > 0 
+            && this.state.taskOrder.sort((a, b) => a.order - b.order)
               .filter(taskToDo => (taskToDo.completed === false))
               .map(task => (
               <TaskItem 
@@ -233,8 +260,8 @@ class Dashboard extends React.Component {
           </div>
           <div className={completedTasksClass}>
             <List className={classes.completedContainer} component='div'>
-              {tasks.length > 0 
-              && tasks.sort((a, b) => new Date(b.createdOn) - new Date(a.createdOn))
+              {this.state.completedTasks.length > 0 
+              && this.state.completedTasks.sort((a, b) => new Date(b.createdOn) - new Date(a.createdOn))
                 .filter(taskToDo => (taskToDo.completed === true))
                 .map(task => (
                 <TaskItem 
