@@ -132,7 +132,6 @@ class Dashboard extends React.Component {
           return this.props.pFetchAllTasks();
         })
         .then(() => {
-          console.log(this.props.tasks);
           const orderedTasks = this.props.tasks.sort((a, b) => b.order - a.order);
           const tasksToComplete = orderedTasks.filter(task => task.completed === false);
           const completedTasks = orderedTasks.filter(task => task.completed === true);
@@ -144,9 +143,6 @@ class Dashboard extends React.Component {
   handleTaskComplete = (task) => {
     task.order = this.state.taskOrder.length > 0 ? this.state.taskOrder.length : 0;
     this.props.pCreateTask(task)
-      .then(() => {
-        return this.props.pFetchAllTasks();
-      })
       .then(() => {
         const orderedTasks = this.props.tasks.sort((a, b) => b.order - a.order);
         const tasksToComplete = orderedTasks.filter(t => t.completed === false);
@@ -183,10 +179,14 @@ class Dashboard extends React.Component {
   handleDelete = () => {
     this.props.pTasksDeleteRequest(this.state.tasksForDeletion)
       .then(() => {
-        this.props.pFetchAllTasks();
+        const orderedTasks = this.props.tasks.sort((a, b) => b.order - a.order);
+        const tasksToComplete = orderedTasks.filter(t => t.completed === false);
+        const completedTasks = orderedTasks.filter(t => t.completed === true);
         return this.setState(prevState => ({ 
           editingTasks: !prevState.editingTasks,
           tasksForDeletion: [],
+          taskOrder: tasksToComplete,
+          completedTasks,
         }));
       }); 
   }
@@ -206,7 +206,7 @@ class Dashboard extends React.Component {
   }
 
   render() {
-    const { tasks, classes, preferences } = this.props;
+    const { classes, preferences } = this.props;
     const completedTasks = this.state.completedTasksShow ? 'Hide' : 'Show'; 
     const completedTasksClass = this.state.completedTasksShow ? 'show-completed' : 'hide-completed';
 
@@ -261,7 +261,8 @@ class Dashboard extends React.Component {
           <div className={completedTasksClass}>
             <List className={classes.completedContainer} component='div'>
               {this.state.completedTasks.length > 0 
-              && this.state.completedTasks.sort((a, b) => new Date(b.createdOn) - new Date(a.createdOn))
+              && this.state.completedTasks.sort((a, b) => (
+                new Date(b.createdOn) - new Date(a.createdOn))
                 .filter(taskToDo => (taskToDo.completed === true))
                 .map(task => (
                 <TaskItem 
@@ -272,7 +273,7 @@ class Dashboard extends React.Component {
                   onSelect={this.handleSelect}
                   selected={false}
                 />
-                ))}
+                )))}
             </List>
           </div>
           <div className={classes.buttonDiv}>
