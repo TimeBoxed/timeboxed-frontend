@@ -41,12 +41,12 @@ const fetchAllTasks = () => (store) => {
     });
 };
 
-const taskUpdateStatus = (task, completed) => (store) => {
+const taskUpdateStatus = (task, completed, order) => (store) => {
   const { token } = store.getState();
   return superagent.put(`${API_URL}/tasks/${task}`)
     .set('Authorization', `Bearer ${token}`)
     .set('Content-Type', 'application/json')
-    .send({ completed })
+    .send({ completed, order })
     .then((response) => {
       return store.dispatch(updateTask(response.body));
     });

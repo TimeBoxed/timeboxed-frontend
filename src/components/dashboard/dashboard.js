@@ -141,7 +141,10 @@ class Dashboard extends React.Component {
   }
 
   handleTaskComplete = (task) => {
-    task.order = this.state.taskOrder.length > 0 ? this.state.taskOrder.length : 0;
+    task.order = this.state.taskOrder.length > 0 
+      ? this.state.taskOrder[this.state.taskOrder.length - 1].order + 1 
+      : 1;
+
     this.props.pCreateTask(task)
       .then(() => {
         const orderedTasks = this.props.tasks.sort((a, b) => b.order - a.order);
@@ -160,10 +163,11 @@ class Dashboard extends React.Component {
   };
 
   handleStatusChange = (task, completed) => {
-    this.props.pUpdateTaskStatus(task, completed)
-      .then(() => {
-        return this.props.pFetchAllTasks();
-      })
+    let newOrder = 0;
+    if (completed === false) {
+      newOrder = this.state.taskOrder[this.state.taskOrder.length - 1].order + 1;
+    }
+    this.props.pUpdateTaskStatus(task, completed, newOrder)
       .then(() => {
         const orderedTasks = this.props.tasks.sort((a, b) => b.order - a.order);
         const tasksToComplete = orderedTasks.filter(t => t.completed === false);
@@ -261,8 +265,8 @@ class Dashboard extends React.Component {
           <div className={completedTasksClass}>
             <List className={classes.completedContainer} component='div'>
               {this.state.completedTasks.length > 0 
-              && this.state.completedTasks.sort((a, b) => (
-                new Date(b.createdOn) - new Date(a.createdOn))
+              && this.state.completedTasks
+                .sort((a, b) => b.order - a.order)
                 .filter(taskToDo => (taskToDo.completed === true))
                 .map(task => (
                 <TaskItem 
@@ -273,7 +277,7 @@ class Dashboard extends React.Component {
                   onSelect={this.handleSelect}
                   selected={false}
                 />
-                )))}
+                ))}
             </List>
           </div>
           <div className={classes.buttonDiv}>
@@ -327,7 +331,9 @@ const mapDispatchToProps = dispatch => ({
   pCreateTask: task => dispatch(taskActions.taskCreateRequest(task)),
   pFetchAllTasks: () => dispatch(taskActions.fetchAllTasks()),
   pFetchUserPreferences: () => dispatch(preferencesActions.preferencesFetchRequest()),
-  pUpdateTaskStatus: (task, completed) => dispatch(taskActions.taskUpdateStatus(task, completed)),
+  pUpdateTaskStatus: (task, completed, newOrder) => (
+    dispatch(taskActions.taskUpdateStatus(task, completed, newOrder))
+  ),
   pTasksDeleteRequest: tasks => dispatch(taskActions.tasksDeleteRequest(tasks)),
 });
 
