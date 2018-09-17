@@ -14,11 +14,18 @@ const styles = theme => ({
     width: '100%',
     backgroundColor: theme.palette.background.paper,
   },
+  taskItem: {
+    maxWidth: '100%',
+  },
   mainItem: {
     borderBottom: '1px solid #E4E4E4',
   },
   time: {
     textAlign: 'right',
+    minWidth: 50,
+  },
+  title: {
+    overflow: 'scroll',
   },
 });
 
@@ -71,6 +78,11 @@ class TaskItem extends React.Component {
 
   render() {
     const { task, classes } = this.props;
+
+    const timeShown = task.timeEstimate === 60 || task.timeEstimate === 120 
+      ? <span> {task.timeEstimate / 60} hr</span>
+      : <span> {task.timeEstimate} m</span>;
+    
     return (
       <div className={classes.taskItem}>
         <MaterialUITaskForm 
@@ -104,9 +116,9 @@ class TaskItem extends React.Component {
           }
 
           </ListItemIcon>
-          <ListItemText inset primary={task.title} />
+          <ListItemText inset primary={task.title} className={classes.title}/>
           <ListItemText 
-                inset secondary={<span> {task.timeEstimate} min</span>} 
+                inset secondary={timeShown} 
                 className={classes.time}
           />
           {this.props.dragHandle && this.props.dragHandle}
