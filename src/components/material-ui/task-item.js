@@ -118,8 +118,8 @@ class TaskItem extends React.Component {
           </ListItemIcon>
           <ListItemText inset primary={task.title} className={classes.title}/>
           <ListItemText 
-                inset secondary={timeShown} 
-                className={classes.time}
+            inset secondary={timeShown} 
+            className={classes.time}
           />
           {this.props.dragHandle && this.props.dragHandle}
           
