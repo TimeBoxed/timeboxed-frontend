@@ -58,7 +58,7 @@ const styles = theme => ({
     width: '600px',
     paddingTop: '80px',
     [theme.breakpoints.down('xs')]: {
-      width: '400px',
+      minWidth: '320px',
     },
   },
   topButtonsDiv: {
