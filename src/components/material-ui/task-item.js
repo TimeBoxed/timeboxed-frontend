@@ -106,9 +106,11 @@ class TaskItem extends React.Component {
           </ListItemIcon>
           <ListItemText inset primary={task.title} />
           <ListItemText 
-            inset secondary={<span> {task.timeEstimate} min</span>} 
-            className={classes.time}
+                inset secondary={<span> {task.timeEstimate} min</span>} 
+                className={classes.time}
           />
+          {this.props.dragHandle && this.props.dragHandle}
+          
         </ListItem>
       </div>
     );
@@ -123,6 +125,7 @@ TaskItem.propTypes = {
   editingTasks: PropTypes.bool,
   onSelect: PropTypes.func,
   selected: PropTypes.bool,
+  dragHandle: PropTypes.element,
 };
 
 export default withStyles(styles, { name: 'TaskItem' })(TaskItem);

@@ -3,12 +3,18 @@ import { connect } from 'react-redux';
 import compose from 'recompose/compose';
 import { withStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
-import { SortableContainer, SortableElement, arrayMove } from 'react-sortable-hoc';
+import { 
+  SortableContainer, 
+  SortableElement, 
+  SortableHandle, 
+  arrayMove,
+} from 'react-sortable-hoc';
 import List from '@material-ui/core/List';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import Delete from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
+import Reorder from '@material-ui/icons/Reorder';
 import TaskItem from '../material-ui/task-item';
 import * as profileActions from '../../actions/profile';
 import * as taskActions from '../../actions/task';
@@ -175,7 +181,9 @@ class Dashboard extends React.Component {
   handleStatusChange = (task, completed) => {
     let newOrder = 0;
     if (completed === false) {
-      newOrder = this.state.taskOrder[this.state.taskOrder.length - 1].order + 1;
+      newOrder = this.state.taskOrder.length > 0 
+        ? this.state.taskOrder[this.state.taskOrder.length - 1].order + 1
+        : newOrder;
     }
     this.props.pUpdateTaskStatus(task, completed, newOrder)
       .then(() => {
@@ -237,14 +245,17 @@ class Dashboard extends React.Component {
     const completedTasks = this.state.completedTasksShow ? 'Hide' : 'Show'; 
     const completedTasksClass = this.state.completedTasksShow ? 'show-completed' : 'hide-completed';
 
+    const DragHandle = SortableHandle(() => <Reorder />);
+
     const SortableItem = SortableElement(({ value }) => (
       <TaskItem 
+          dragHandle={<DragHandle />}
           task={value} 
           onComplete={this.handleStatusChange} 
           editingTasks={this.state.editingTasks} 
           onSelect={this.handleSelect}
           selected={this.state.tasksForDeletion.indexOf(value._id) !== -1}
-        />
+      />
     ));
     
     const SortableList = SortableContainer(({ items }) => (
@@ -258,7 +269,6 @@ class Dashboard extends React.Component {
 
     return (
       <div className={classes.dashboardPage}>
-
         <div className={classes.listHolder}>
           
           {!this.state.editingTasks 
@@ -274,7 +284,7 @@ class Dashboard extends React.Component {
             variant="contained" 
             color="primary" 
             className={classes.blueButton} 
-            onClick={this.handleEditing}>Cancel</Button>
+            onClick={this.handleEditing}>Done</Button>
           }
         <div>
           {preferences 
@@ -287,7 +297,11 @@ class Dashboard extends React.Component {
           />}
           </div>
           { this.state.editingTasks && this.state.taskOrder.length > 0 
-            ? <SortableList items={this.state.taskOrder} onSortEnd={this.onSortEnd} /> 
+            ? <SortableList 
+                items={this.state.taskOrder} 
+                onSortEnd={this.onSortEnd} 
+                useDragHandle={true}
+              /> 
             : undefined }
           { !this.state.editingTasks && this.state.taskOrder.length > 0 
             ? <List className={classes.container} component='div'>
@@ -322,6 +336,7 @@ class Dashboard extends React.Component {
                   editingTasks={this.state.editingTasks} 
                   onSelect={this.handleSelect}
                   selected={false}
+                  updateTask={this.handleUpdateTask}
                 />
                   )) : undefined }
             </List>
