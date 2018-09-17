@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "jest --coverage --forceExit --runInBand",
-    "watch": "webpack-dev-server --config webpack.dev.js",
+    "watch": "webpack-dev-server --host 0.0.0.0 --config webpack.dev.js",
     "pack": "webpack --config webpack.prod.js",
     "heroku-postbuild": "webpack --progress --config webpack.prod.js",
     "start": "node index.js"
@@ -69,6 +69,7 @@
     "jest": "^23.5.0",
     "react-favicon": "0.0.14",
     "react-helmet": "^5.2.0",
+    "react-sortable-hoc": "^0.8.3",
     "recompose": "^0.28.2"
   }
 }

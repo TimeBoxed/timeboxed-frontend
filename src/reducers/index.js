@@ -3,8 +3,9 @@ import { combineReducers } from 'redux';
 import token from './token';
 import profile from './profile';
 import tasks from './task';
+import completedTasks from './completedTasks';
 import preferences from './preferences';
 
 export default combineReducers({
-  token, profile, tasks, preferences,
+  token, profile, tasks, preferences, completedTasks,
 });
