@@ -1,7 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import compose from 'recompose/compose';
-import { connect } from 'react-redux';
 import { withStyles } from '@material-ui/core/styles';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
@@ -9,7 +7,6 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Checkbox from '@material-ui/core/Checkbox';
 import Radio from '@material-ui/core/Radio';
 import MaterialUITaskForm from './task-form';
-import * as taskActions from '../../actions/task';
 
 const styles = theme => ({
   root: {
@@ -69,7 +66,7 @@ class TaskItem extends React.Component {
 
   handleTaskUpdate = (task) => {
     this.setState({ showModal: false });
-    return this.props.taskUpdateRequest(task);
+    return this.props.updateTask(task);
   }
 
   render() {
@@ -122,17 +119,10 @@ TaskItem.propTypes = {
   task: PropTypes.object,
   classes: PropTypes.object,
   onComplete: PropTypes.func,
-  taskUpdateRequest: PropTypes.func,
+  updateTask: PropTypes.func,
   editingTasks: PropTypes.bool,
   onSelect: PropTypes.func,
   selected: PropTypes.bool,
 };
 
-const mapDispatchToProps = dispatch => ({
-  taskUpdateRequest: task => dispatch(taskActions.taskUpdateRequest(task)),
-});
-
-export default compose(
-  withStyles(styles, { name: 'TaskItem' }),
-  connect(null, mapDispatchToProps),
-)(TaskItem);
+export default withStyles(styles, { name: 'TaskItem' })(TaskItem);
