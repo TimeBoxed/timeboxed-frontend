@@ -37,6 +37,7 @@ class FormDialog extends React.Component {
     timeEstimate: this.props.timeEstimateProp,
     dateSelect: false,
     dueDate: null,
+    dependencies: this.props.task ? this.props.task.dependencies : [],
   };
 
   handleClickOpen = () => {
@@ -66,7 +67,7 @@ class FormDialog extends React.Component {
 
   handleSave = () => {
     this.handleClose();
-    return this.props.onComplete({ ...this.state, _id: this.props.task._id });
+    return this.props.onComplete({ ...this.state, _id: this.props.task._id, dependencies: this.state.dependencies });
   };
 
   handleCreateTask = (event) => {
@@ -80,6 +81,10 @@ class FormDialog extends React.Component {
       dueDate: null,
     });
   };
+
+  handleUpdateDependencies = (e) => {
+    this.setState({ dependencies: e.target.value });
+  }
 
   render() {
     const { classes } = this.props;
@@ -102,17 +107,6 @@ class FormDialog extends React.Component {
               onChange={this.handleChange}
               fullWidth
             />
-            
-            {/* <TextField
-              autoFocus
-              margin="dense"
-              id="timeEstimate"
-              label="Duration"
-              type="text"
-              onChange={this.handleChange}
-              value={this.state.timeEstimate}
-              fullWidth
-            /> */}
 
             <FormControl className={classes.formControl}>
               <InputLabel htmlFor="task-time">Task time</InputLabel>
@@ -129,6 +123,26 @@ class FormDialog extends React.Component {
                 <MenuItem value={120}>2 hours</MenuItem>
                 <MenuItem value={180}>3 hours</MenuItem>
                 <MenuItem value={240}>4 hours</MenuItem>
+              </Select>
+            </FormControl>
+
+            <FormControl className={classes.formControl}>
+              <InputLabel htmlFor="dependencies">Task to complete first</InputLabel>
+              <Select
+                multiple
+                value={this.state.dependencies}
+                onChange={this.handleUpdateDependencies}
+                input={<Input id="dependencies" />}
+              >
+              {this.props.tasks.filter(item => (
+                this.props.task 
+                  ? item._id !== this.props.task._id 
+                  : item))
+                .map(dependency => (
+                  <MenuItem key={dependency._id} value={dependency.title}>
+                    {dependency.title}
+                  </MenuItem>
+                ))}
               </Select>
             </FormControl>
 
@@ -174,6 +188,7 @@ FormDialog.propTypes = {
   handleOpen: PropTypes.func,
   taskUpdateRequest: PropTypes.func,
   task: PropTypes.object,
+  tasks: PropTypes.array,
   show: PropTypes.bool,
   timeEstimateProp: PropTypes.number,
   classes: PropTypes.object,
@@ -181,6 +196,7 @@ FormDialog.propTypes = {
 
 const mapStateToProps = state => ({
   preferences: state.preferences,
+  tasks: state.tasks,
 });
 
 const mapDispatchToProps = dispatch => ({
