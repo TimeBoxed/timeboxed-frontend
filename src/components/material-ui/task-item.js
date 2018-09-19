@@ -1,7 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import compose from 'recompose/compose';
-import { connect } from 'react-redux';
 import { withStyles } from '@material-ui/core/styles';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
@@ -9,7 +7,6 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Checkbox from '@material-ui/core/Checkbox';
 import Radio from '@material-ui/core/Radio';
 import MaterialUITaskForm from './task-form';
-import * as taskActions from '../../actions/task';
 
 const styles = theme => ({
   root: {
@@ -17,11 +14,18 @@ const styles = theme => ({
     width: '100%',
     backgroundColor: theme.palette.background.paper,
   },
+  taskItem: {
+    maxWidth: '100%',
+  },
   mainItem: {
     borderBottom: '1px solid #E4E4E4',
   },
   time: {
     textAlign: 'right',
+    minWidth: 50,
+  },
+  title: {
+    overflow: 'scroll',
   },
 });
 
@@ -32,6 +36,7 @@ class TaskItem extends React.Component {
       checked: this.props.task.completed ? [this.props.task._id] : [0],
       showModal: false,
       selected: this.props.selected,
+      dependencies: this.props.task.dependencies ? this.props.task.dependencies : [],
     };
   }
 
@@ -69,11 +74,16 @@ class TaskItem extends React.Component {
 
   handleTaskUpdate = (task) => {
     this.setState({ showModal: false });
-    return this.props.taskUpdateRequest(task);
+    return this.props.updateTask(task);
   }
 
   render() {
     const { task, classes } = this.props;
+
+    const timeShown = task.timeEstimate === 60 || task.timeEstimate === 120 
+      ? <span> {task.timeEstimate / 60} hr</span>
+      : <span> {task.timeEstimate} m</span>;
+    
     return (
       <div className={classes.taskItem}>
         <MaterialUITaskForm 
@@ -82,6 +92,7 @@ class TaskItem extends React.Component {
           onComplete={this.handleTaskUpdate} 
           handleOpen={this.handleOpen}
           timeEstimateProp={this.props.task.timeEstimate}
+          dependencies={this.state.dependencies}
         />
         <ListItem 
           button 
@@ -107,11 +118,13 @@ class TaskItem extends React.Component {
           }
 
           </ListItemIcon>
-          <ListItemText inset primary={task.title} />
+          <ListItemText inset primary={task.title} className={classes.title}/>
           <ListItemText 
-            inset secondary={<span> {task.timeEstimate} min</span>} 
+            inset secondary={timeShown} 
             className={classes.time}
           />
+          {this.props.dragHandle && this.props.dragHandle}
+          
         </ListItem>
       </div>
     );
@@ -122,17 +135,11 @@ TaskItem.propTypes = {
   task: PropTypes.object,
   classes: PropTypes.object,
   onComplete: PropTypes.func,
-  taskUpdateRequest: PropTypes.func,
+  updateTask: PropTypes.func,
   editingTasks: PropTypes.bool,
   onSelect: PropTypes.func,
   selected: PropTypes.bool,
+  dragHandle: PropTypes.element,
 };
 
-const mapDispatchToProps = dispatch => ({
-  taskUpdateRequest: task => dispatch(taskActions.taskUpdateRequest(task)),
-});
-
-export default compose(
-  withStyles(styles, { name: 'TaskItem' }),
-  connect(null, mapDispatchToProps),
-)(TaskItem);
+export default withStyles(styles, { name: 'TaskItem' })(TaskItem);

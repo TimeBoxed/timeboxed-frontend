@@ -3,11 +3,18 @@ import { connect } from 'react-redux';
 import compose from 'recompose/compose';
 import { withStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
+import { 
+  SortableContainer, 
+  SortableElement, 
+  SortableHandle, 
+  arrayMove,
+} from 'react-sortable-hoc';
 import List from '@material-ui/core/List';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import Delete from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
+import Reorder from '@material-ui/icons/Reorder';
 import TaskItem from '../material-ui/task-item';
 import * as profileActions from '../../actions/profile';
 import * as taskActions from '../../actions/task';
@@ -50,6 +57,9 @@ const styles = theme => ({
   listHolder: {
     width: '600px',
     paddingTop: '80px',
+    [theme.breakpoints.down('xs')]: {
+      minWidth: '320px',
+    },
   },
   topButtonsDiv: {
     width: '50%',
@@ -117,6 +127,9 @@ class Dashboard extends React.Component {
       completedTasksShow: false,
       editingTasks: false,
       tasksForDeletion: [],
+      taskOrder: [],
+      completedTasks: [],
+      orderToEdit: [],
     };
   }
 
@@ -128,13 +141,36 @@ class Dashboard extends React.Component {
         })
         .then(() => {
           return this.props.pFetchAllTasks();
+        })
+        .then(() => {
+          this.setState({ 
+            taskOrder: this.props.tasks ? this.props.tasks.sort((a, b) => a.order - b.order) : [], 
+            completedTasks: this.props.completedTasks ? this.props.completedTasks : [],
+          });
         });
     }
   }
 
+  onSortEnd = ({ oldIndex, newIndex }) => {
+    this.setState({
+      taskOrder: arrayMove(this.state.taskOrder, oldIndex, newIndex),
+    });
+    this.props.pTasksBulkUpdate(this.state.taskOrder);
+  };
+
   handleTaskComplete = (task) => {
-    this.props.pCreateTask(task);
-    this.setState({ openForm: false });
+    task.order = this.state.taskOrder.length > 0 
+      ? this.state.taskOrder[this.state.taskOrder.length - 1].order + 1 
+      : 0;
+
+    this.props.pCreateTask(task)
+      .then(() => {
+        return this.setState({ 
+          openForm: false, 
+          taskOrder: this.props.tasks.sort((a, b) => a.order - b.order), 
+          completedTasks: this.props.completedTasks,
+        });
+      });
   };
 
   handleFormOpen = () => {
@@ -146,24 +182,52 @@ class Dashboard extends React.Component {
   };
 
   handleStatusChange = (task, completed) => {
-    this.props.pUpdateTaskStatus(task, completed);
+    let newOrder = 0;
+    if (completed === false) {
+      newOrder = this.state.taskOrder.length > 0 
+        ? this.state.taskOrder[this.state.taskOrder.length - 1].order + 1
+        : newOrder;
+    }
+    this.props.pUpdateTaskStatus(task, completed, newOrder)
+      .then(() => {
+        return this.setState({ 
+          openForm: false, 
+          taskOrder: this.props.tasks.sort((a, b) => a.order - b.order), 
+          completedTasks: this.props.completedTasks,
+        });
+      });
   };
 
-  handleEditing = () => {
-    this.setState(prevState => ({ editingTasks: !prevState.editingTasks }));
+  handleUpdateTask = (task) => {
+    this.props.pTaskUpdateRequest(task)
+      .then(() => {
+        return this.setState({ 
+          openForm: false, 
+          taskOrder: this.props.tasks.sort((a, b) => a.order - b.order), 
+          completedTasks: this.props.completedTasks, 
+        });
+      });
   }
 
+  handleEditing = () => {
+    this.setState(prevState => ({ 
+      editingTasks: !prevState.editingTasks, 
+      taskOrder: this.props.tasks.sort((a, b) => a.order - b.order), 
+      completedTasks: this.props.completedTasks,
+    }));
+  };
+
   handleDelete = () => {
-    
     this.props.pTasksDeleteRequest(this.state.tasksForDeletion)
       .then(() => {
-        this.props.pFetchAllTasks();
-        return this.setState(prevState => ({
+        return this.setState(prevState => ({ 
           editingTasks: !prevState.editingTasks,
           tasksForDeletion: [],
+          taskOrder: this.props.tasks.sort((a, b) => a.order - b.order), 
+          completedTasks: this.props.completedTasks,
         }));
       }); 
-  }
+  };
 
   handleSelect = (task) => {
     const { tasksForDeletion } = this.state;
@@ -180,13 +244,34 @@ class Dashboard extends React.Component {
   }
 
   render() {
-    const { tasks, classes, preferences } = this.props;
+    const { classes, preferences } = this.props;
     const completedTasks = this.state.completedTasksShow ? 'Hide' : 'Show'; 
     const completedTasksClass = this.state.completedTasksShow ? 'show-completed' : 'hide-completed';
 
+    const DragHandle = SortableHandle(() => <Reorder />);
+
+    const SortableItem = SortableElement(({ value }) => (
+      <TaskItem 
+          dragHandle={<DragHandle />}
+          task={value} 
+          onComplete={this.handleStatusChange} 
+          editingTasks={this.state.editingTasks} 
+          onSelect={this.handleSelect}
+          selected={this.state.tasksForDeletion.indexOf(value._id) !== -1}
+      />
+    ));
+    
+    const SortableList = SortableContainer(({ items }) => (
+        <List className={classes.container} component='div'>
+          {items
+            .map((task, index) => (
+                <SortableItem key={task._id} index={index} value={task} />
+            ))}
+        </List>
+    ));
+
     return (
       <div className={classes.dashboardPage}>
-
         <div className={classes.listHolder}>
           
           {!this.state.editingTasks 
@@ -202,7 +287,7 @@ class Dashboard extends React.Component {
             variant="contained" 
             color="primary" 
             className={classes.blueButton} 
-            onClick={this.handleEditing}>Cancel</Button>
+            onClick={this.handleEditing}>Done</Button>
           }
         <div>
           {preferences 
@@ -214,10 +299,16 @@ class Dashboard extends React.Component {
             timeEstimateProp={preferences.taskLengthDefault}
           />}
           </div>
-          <List className={classes.container} component='div'>
-            {tasks.length > 0 
-            && tasks.sort((a, b) => new Date(b.createdOn) - new Date(a.createdOn))
-              .filter(taskToDo => (taskToDo.completed === false))
+          { this.state.editingTasks && this.state.taskOrder.length > 0 
+            ? <SortableList 
+                items={this.state.taskOrder} 
+                onSortEnd={this.onSortEnd} 
+                useDragHandle={true}
+              /> 
+            : undefined }
+          { !this.state.editingTasks && this.state.taskOrder.length > 0 
+            ? <List className={classes.container} component='div'>
+            {this.state.taskOrder.sort((a, b) => a.order - b.order)
               .map(task => (
               <TaskItem 
                 key={task._id} 
@@ -226,18 +317,21 @@ class Dashboard extends React.Component {
                 editingTasks={this.state.editingTasks} 
                 onSelect={this.handleSelect}
                 selected={false}
+                updateTask={this.handleUpdateTask}
               />
               ))}
-          </List>
+            </List>
+            : undefined
+          }
           <div className='show-hide-tasks'>
             <Typography gutterBottom variant='subheading' onClick={this.handleShowHideTasks}>{completedTasks} Completed Tasks</Typography>
           </div>
           <div className={completedTasksClass}>
             <List className={classes.completedContainer} component='div'>
-              {tasks.length > 0 
-              && tasks.sort((a, b) => new Date(b.createdOn) - new Date(a.createdOn))
-                .filter(taskToDo => (taskToDo.completed === true))
-                .map(task => (
+              {this.props.completedTasks && this.state.completedTasks.length > 0 
+                ? this.state.completedTasks
+                  .sort((a, b) => b.order - a.order)
+                  .map(task => (
                 <TaskItem 
                   key={task._id} 
                   task={task} 
@@ -245,8 +339,9 @@ class Dashboard extends React.Component {
                   editingTasks={this.state.editingTasks} 
                   onSelect={this.handleSelect}
                   selected={false}
+                  updateTask={this.handleUpdateTask}
                 />
-                ))}
+                  )) : undefined }
             </List>
           </div>
           <div className={classes.buttonDiv}>
@@ -283,7 +378,10 @@ Dashboard.propTypes = {
   pFetchAllTasks: PropTypes.func,
   pUpdateTaskStatus: PropTypes.func,
   pTasksDeleteRequest: PropTypes.func,
+  pTaskUpdateRequest: PropTypes.func,
+  pTasksBulkUpdate: PropTypes.func,
   tasks: PropTypes.array,
+  completedTasks: PropTypes.array,
   preferences: PropTypes.object,
   classes: PropTypes.object,
 };
@@ -292,6 +390,7 @@ const mapStateToProps = state => ({
   profile: state.profile,
   loggedIn: !!state.token,
   tasks: state.tasks,
+  completedTasks: state.completedTasks,
   preferences: state.preferences,
 });
 
@@ -300,8 +399,12 @@ const mapDispatchToProps = dispatch => ({
   pCreateTask: task => dispatch(taskActions.taskCreateRequest(task)),
   pFetchAllTasks: () => dispatch(taskActions.fetchAllTasks()),
   pFetchUserPreferences: () => dispatch(preferencesActions.preferencesFetchRequest()),
-  pUpdateTaskStatus: (task, completed) => dispatch(taskActions.taskUpdateStatus(task, completed)),
+  pUpdateTaskStatus: (task, completed, newOrder) => (
+    dispatch(taskActions.taskUpdateStatus(task, completed, newOrder))
+  ),
   pTasksDeleteRequest: tasks => dispatch(taskActions.tasksDeleteRequest(tasks)),
+  pTaskUpdateRequest: task => dispatch(taskActions.taskUpdateRequest(task)),
+  pTasksBulkUpdate: tasks => dispatch(taskActions.tasksBulkUpdateRequest(tasks)),
 });
 
 export default compose(

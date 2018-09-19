@@ -6,7 +6,6 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import MenuIcon from '@material-ui/icons/Menu';
-import AccountCircle from '@material-ui/icons/AccountCircle';
 import SideDrawer from './side-drawer';
 import Logo from './logo';
 import * as authActions from '../../actions/auth';
@@ -19,12 +18,9 @@ const styles = {
   flex: {
     flexGrow: 1,
   },
-  menuButton: {
-    float: 'left',
-  },
   placeholder: {
-    height: 48,
-    width: 48,
+    height: 28,
+    width: 24,
   },
 };
 
@@ -44,8 +40,10 @@ class MenuAppBar extends React.Component {
   };
 
   render() {
-    const { classes } = this.props;
+    const { classes, loggedIn } = this.props;
     const { auth } = this.state;
+
+    if (!loggedIn) return null;
 
     return (
       <div className={classes.root}>
@@ -60,7 +58,7 @@ class MenuAppBar extends React.Component {
                 window.location.pathname !== ROUTES.LANDING ? window.location.pathname.replace(/\//, '').toUpperCase() : <Logo />
               }
             </Typography>
-            <AccountCircle />
+            <div className={classes.placeholder}></div>
           </Toolbar>          
         </AppBar>        
       </div>

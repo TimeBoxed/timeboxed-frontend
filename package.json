@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "jest --coverage --forceExit --runInBand",
-    "watch": "webpack-dev-server --config webpack.dev.js",
+    "watch": "webpack-dev-server --host 0.0.0.0 --config webpack.dev.js",
     "pack": "webpack --config webpack.prod.js",
     "heroku-postbuild": "webpack --progress --config webpack.prod.js",
     "start": "node index.js"
@@ -30,7 +30,6 @@
     "babel-preset-stage-0": "^6.24.1",
     "babel-register": "^6.26.0",
     "css-loader": "^1.0.0",
-    "dotenv": "^6.0.0",
     "enzyme": "^3.6.0",
     "enzyme-adapter-react-16": "^1.4.0",
     "eslint": "^5.2.0",
@@ -64,11 +63,13 @@
     "@material-ui/core": "^1.4.3",
     "@material-ui/icons": "^2.0.1",
     "clean-webpack-plugin": "^0.1.19",
+    "dotenv": "^6.0.0",
     "express": "^4.16.3",
     "html-webpack-exclude-empty-assets-plugin": "^0.1.1",
     "jest": "^23.5.0",
     "react-favicon": "0.0.14",
     "react-helmet": "^5.2.0",
+    "react-sortable-hoc": "^0.8.3",
     "recompose": "^0.28.2"
   }
 }

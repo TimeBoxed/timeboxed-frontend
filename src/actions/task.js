@@ -10,6 +10,11 @@ const updateTask = task => ({
   payload: task,
 });
 
+const updateBulkTasks = tasks => ({
+  type: 'TASK_BULK_UPDATE',
+  payload: tasks,
+});
+
 const getTasks = tasks => ({
   type: 'TASKS_GET',
   payload: tasks,
@@ -41,12 +46,12 @@ const fetchAllTasks = () => (store) => {
     });
 };
 
-const taskUpdateStatus = (task, completed) => (store) => {
+const taskUpdateStatus = (task, completed, order) => (store) => {
   const { token } = store.getState();
   return superagent.put(`${API_URL}/tasks/${task}`)
     .set('Authorization', `Bearer ${token}`)
     .set('Content-Type', 'application/json')
-    .send({ completed })
+    .send({ completed, order })
     .then((response) => {
       return store.dispatch(updateTask(response.body));
     });
@@ -60,6 +65,17 @@ const taskUpdateRequest = task => (store) => {
     .send(task)
     .then((response) => {
       return store.dispatch(updateTask(response.body));
+    });
+};
+
+const tasksBulkUpdateRequest = tasks => (store) => {
+  const { token } = store.getState();
+  return superagent.put(`${API_URL}/tasks`)
+    .set('Authorization', `Bearer ${token}`)
+    .set('Content-Type', 'application/json')
+    .send(tasks)
+    .then((response) => {
+      return store.dispatch(updateBulkTasks(response.body));
     });
 };
 
@@ -79,9 +95,11 @@ export {
   getTasks,
   updateTask,
   deleteBulkTasks,
+  updateBulkTasks,
   taskCreateRequest,
   fetchAllTasks,
   taskUpdateStatus,
   taskUpdateRequest,
   tasksDeleteRequest,
+  tasksBulkUpdateRequest,
 };

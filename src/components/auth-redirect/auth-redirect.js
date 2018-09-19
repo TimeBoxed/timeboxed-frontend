@@ -6,19 +6,7 @@ import pathCheck from '../../utils/path-check';
 
 import ROUTES from '../../routes';
 
-// let redirect = false;
-// let destinationRoute = null;
-
 class AuthRedirect extends Component {
-  // componentDidMount() {
-  //   if (this.props.loggedIn) {
-  //     console.log('logged in on auth redirect');
-  //     redirect = true;
-  //     destinationRoute = '/';
-  //     this.props.history.push(ROUTES.DASHBOARD);
-  //   }
-  // }
-
   render() {
     const { location, token } = this.props;
     const { pathname } = location;
@@ -27,7 +15,8 @@ class AuthRedirect extends Component {
     
     return (
       <div>
-        { destinationRoute ? <Redirect to={destinationRoute}/> : undefined }
+        { (destinationRoute && destinationRoute !== pathname)
+          && <Redirect to={destinationRoute}/> }
       </div>
     );
   }
