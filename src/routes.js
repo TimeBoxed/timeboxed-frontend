@@ -3,7 +3,7 @@ const ROUTES = {
   DASHBOARD: '/dashboard',
   PRIVACY: '/privacy',
   PRIVACY_REJECTED: '/privacy-notice-rejected',
-  NOTFOUND: '/not-found',
+  NOT_FOUND: '/not-found',
   PREFERENCES: '/preferences',
 };
 

@@ -9,7 +9,7 @@ Object.keys(ROUTES).forEach((key) => {
 const pathCheck = (path) => {
   const destination = availableRoutes.get(path);
 
-  return destination ? ROUTES[destination] : ROUTES.NOTFOUND;   
+  return destination ? ROUTES[destination] : ROUTES.NOT_FOUND;
 };
 
 export default pathCheck;

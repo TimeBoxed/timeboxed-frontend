@@ -7,9 +7,7 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import MenuIcon from '@material-ui/icons/Menu';
 import SideDrawer from './side-drawer';
-import Logo from './logo';
 import * as authActions from '../../actions/auth';
-import ROUTES from '../../routes';
 
 const styles = {
   root: {
@@ -27,17 +25,8 @@ const styles = {
 class MenuAppBar extends React.Component {
   state = {
     auth: this.props.loggedIn,
-    anchorEl: null,
   };
 
-  handleClose = () => {
-    this.setState({ anchorEl: null });
-  };
-
-  handleLogout = () => {
-    this.setState({ auth: false, anchorEl: null });
-    this.props.logout();
-  };
 
   render() {
     const { classes, loggedIn } = this.props;
@@ -58,7 +47,7 @@ class MenuAppBar extends React.Component {
                 window.location.pathname.replace(/\//, '').toUpperCase()
               }
             </Typography>
-            <div className={classes.placeholder}></div>
+            <div className={classes.placeholder}> </div>
           </Toolbar>          
         </AppBar>        
       </div>
