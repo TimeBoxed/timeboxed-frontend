@@ -26,6 +26,7 @@ const styles = {
 
 class SideDrawer extends React.Component {
   state = {
+    // email: this.props.profile.email,
     auth: this.props.loggedIn,
     left: false,
   };
