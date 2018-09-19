@@ -36,6 +36,7 @@ class TaskItem extends React.Component {
       checked: this.props.task.completed ? [this.props.task._id] : [0],
       showModal: false,
       selected: this.props.selected,
+      dependencies: this.props.task.dependencies ? this.props.task.dependencies : [],
     };
   }
 
@@ -91,6 +92,7 @@ class TaskItem extends React.Component {
           onComplete={this.handleTaskUpdate} 
           handleOpen={this.handleOpen}
           timeEstimateProp={this.props.task.timeEstimate}
+          dependencies={this.state.dependencies}
         />
         <ListItem 
           button 
