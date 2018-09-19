@@ -40,8 +40,10 @@ class MenuAppBar extends React.Component {
   };
 
   render() {
-    const { classes } = this.props;
+    const { classes, loggedIn } = this.props;
     const { auth } = this.state;
+
+    if (!loggedIn) return null;
 
     return (
       <div className={classes.root}>
