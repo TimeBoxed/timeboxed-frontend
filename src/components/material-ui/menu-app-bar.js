@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import { withRouter } from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -27,7 +28,6 @@ class MenuAppBar extends React.Component {
     auth: this.props.loggedIn,
   };
 
-
   render() {
     const { classes, loggedIn } = this.props;
     const { auth } = this.state;
@@ -44,7 +44,7 @@ class MenuAppBar extends React.Component {
             }
             <Typography variant="title" color="inherit" className={classes.flex}>
               {
-                window.location.pathname.replace(/\//, '').toUpperCase()
+                this.props.history.location.pathname.replace(/\//, '').toUpperCase()
               }
             </Typography>
             <div className={classes.placeholder}> </div>
@@ -72,4 +72,4 @@ const mapDispatchToProps = dispatch => ({
   logout: () => dispatch(authActions.logout()),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(MenuAppBar));
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(withRouter(MenuAppBar)));

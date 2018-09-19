@@ -16,7 +16,7 @@ import deepOrange from '@material-ui/core/colors/deepOrange';
 // ===============================
 import ScrollToTop from '../scroll-to-top/scroll-to-top';
 import AuthRedirect from '../auth-redirect/auth-redirect';
-import MenuAppBar from '../material-ui/menu-app-bar';
+import AppPage from '../app-page/app-page';
 import Dashboard from '../dashboard/dashboard';
 import Landing from '../landing/landing';
 import Preferences from '../preferences/preferences';
@@ -52,14 +52,15 @@ export default class App extends Component {
               {/* <meta property="og:url" content="" /> */}
               {/* <meta property="og:image" content="../../assets/site-preview.png" /> */}
             </Helmet>
-            <MenuAppBar/>
             <Route path='*' component={AuthRedirect}/>
             <Route exact path={ROUTES.LANDING} component={Landing}/>
-            <Route exact path={ROUTES.DASHBOARD} component={Dashboard}/>
-            <Route exact path={ROUTES.PRIVACY} component={PrivacyDialog}/>
-            <Route exact path={ROUTES.PRIVACY_REJECTED} component={PrivacyRejectionAlert}/>
             <Route exact path={ROUTES.NOT_FOUND} component={NotFound}/>
-            <Route exact path={ROUTES.PREFERENCES} component={Preferences}/>
+            <AppPage>
+              <Route exact path={ROUTES.DASHBOARD} component={Dashboard}/>
+              <Route exact path={ROUTES.PRIVACY} component={PrivacyDialog}/>
+              <Route exact path={ROUTES.PRIVACY_REJECTED} component={PrivacyRejectionAlert}/>
+              <Route exact path={ROUTES.PREFERENCES} component={Preferences}/>
+            </AppPage>
           </ScrollToTop>
         </BrowserRouter>
       </MuiThemeProvider>

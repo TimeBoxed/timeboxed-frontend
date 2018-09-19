@@ -3,17 +3,14 @@ import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 import ROUTES from '../../routes';
+import './not-found.scss';
 
-class NotFound extends React.Component {
-  render() {
-    return (
-        <div>
-          <p>Not found page</p>
-          <Link to={ROUTES.DASHBOARD} >Get back</Link>
-        </div>
-    );
-  }
-}
+const NotFound = () => (
+    <div className='not-found'>
+      <p>Not found page</p>
+      <Link to={ROUTES.DASHBOARD}>Get back</Link>
+    </div>
+);
 
 NotFound.propTypes = {
   location: PropTypes.object,
