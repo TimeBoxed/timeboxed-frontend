@@ -47,7 +47,7 @@ class MenuAppBar extends React.Component {
 
     return (
       <div className={classes.root}>
-        <AppBar position = { window.location.pathname !== ROUTES.LANDING ? 'fixed' : 'static' }>
+        <AppBar position='fixed'>
           <Toolbar>
             {auth ? (
             <SideDrawer />
@@ -55,7 +55,7 @@ class MenuAppBar extends React.Component {
             }
             <Typography variant="title" color="inherit" className={classes.flex}>
               {
-                window.location.pathname !== ROUTES.LANDING ? window.location.pathname.replace(/\//, '').toUpperCase() : <Logo />
+                window.location.pathname.replace(/\//, '').toUpperCase()
               }
             </Typography>
             <div className={classes.placeholder}></div>
