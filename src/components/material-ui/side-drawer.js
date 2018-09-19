@@ -74,9 +74,7 @@ class SideDrawer extends React.Component {
 
     return (
       <div className = { classes.root }>
-          <Button onClick = {this.toggleDrawer('left', true)}>
-            <MenuIcon />
-          </Button>
+      <MenuIcon onClick = {this.toggleDrawer('left', true)} />
           <Drawer open = { this.state.left } onClose = { this.toggleDrawer('left', false)} >
             <div 
               tabIndex = {0}
