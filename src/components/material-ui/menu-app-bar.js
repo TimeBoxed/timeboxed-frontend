@@ -19,8 +19,8 @@ const styles = {
     flexGrow: 1,
   },
   placeholder: {
-    height: 64,
-    width: 64,
+    height: 28,
+    width: 24,
   },
 };
 
