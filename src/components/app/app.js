@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { BrowserRouter, Route } from 'react-router-dom';
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import Favicon from 'react-favicon';
 
@@ -54,13 +54,15 @@ export default class App extends Component {
             </Helmet>
             <Route path='*' component={AuthRedirect}/>
             <Route exact path={ROUTES.LANDING} component={Landing}/>
-            <Route exact path={ROUTES.NOT_FOUND} component={NotFound}/>
-            <AppPage>
-              <Route exact path={ROUTES.DASHBOARD} component={Dashboard}/>
-              <Route exact path={ROUTES.PRIVACY} component={PrivacyDialog}/>
-              <Route exact path={ROUTES.PRIVACY_REJECTED} component={PrivacyRejectionAlert}/>
-              <Route exact path={ROUTES.PREFERENCES} component={Preferences}/>
-            </AppPage>
+            <Switch>
+              <Route path={ROUTES.NOT_FOUND} component={NotFound}/>
+              <AppPage>
+                <Route path={ROUTES.DASHBOARD} component={Dashboard}/>
+                <Route path={ROUTES.PRIVACY} component={PrivacyDialog}/>
+                <Route path={ROUTES.PRIVACY_REJECTED} component={PrivacyRejectionAlert}/>
+                <Route path={ROUTES.PREFERENCES} component={Preferences}/>
+              </AppPage>
+            </Switch>
           </ScrollToTop>
         </BrowserRouter>
       </MuiThemeProvider>

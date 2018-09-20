@@ -4,8 +4,6 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import pathCheck from '../../utils/path-check';
 
-import ROUTES from '../../routes';
-
 class AuthRedirect extends Component {
   render() {
     const { location, token } = this.props;

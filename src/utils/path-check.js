@@ -10,7 +10,7 @@ const pathCheck = (path, hasToken) => {
   if (!hasToken) return ROUTES.LANDING;
 
   if (hasToken && path === ROUTES.LANDING) return ROUTES.DASHBOARD;
-  
+
   const destination = availableRoutes.get(path);
   return destination ? ROUTES[destination] : ROUTES.NOT_FOUND;
 };
