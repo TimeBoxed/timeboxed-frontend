@@ -10,8 +10,8 @@ class AuthRedirect extends Component {
   render() {
     const { location, token } = this.props;
     const { pathname } = location;
-    
-    const destinationRoute = (!token) ? ROUTES.LANDING : pathCheck(pathname);
+
+    const destinationRoute = pathCheck(pathname, !!token);
     
     return (
       <div>
