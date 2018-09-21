@@ -1,15 +1,14 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import { withRouter } from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import MenuIcon from '@material-ui/icons/Menu';
 import SideDrawer from './side-drawer';
-import Logo from './logo';
 import * as authActions from '../../actions/auth';
-import ROUTES from '../../routes';
 
 const styles = {
   root: {
@@ -27,16 +26,6 @@ const styles = {
 class MenuAppBar extends React.Component {
   state = {
     auth: this.props.loggedIn,
-    anchorEl: null,
-  };
-
-  handleClose = () => {
-    this.setState({ anchorEl: null });
-  };
-
-  handleLogout = () => {
-    this.setState({ auth: false, anchorEl: null });
-    this.props.logout();
   };
 
   render() {
@@ -47,7 +36,7 @@ class MenuAppBar extends React.Component {
 
     return (
       <div className={classes.root}>
-        <AppBar position = { window.location.pathname !== ROUTES.LANDING ? 'fixed' : 'static' }>
+        <AppBar position='fixed'>
           <Toolbar>
             {auth ? (
             <SideDrawer />
@@ -55,10 +44,10 @@ class MenuAppBar extends React.Component {
             }
             <Typography variant="title" color="inherit" className={classes.flex}>
               {
-                window.location.pathname !== ROUTES.LANDING ? window.location.pathname.replace(/\//, '').toUpperCase() : <Logo />
+                this.props.history.location.pathname.replace(/\//, '').toUpperCase()
               }
             </Typography>
-            <div className={classes.placeholder}></div>
+            <div className={classes.placeholder}> </div>
           </Toolbar>          
         </AppBar>        
       </div>
@@ -83,4 +72,4 @@ const mapDispatchToProps = dispatch => ({
   logout: () => dispatch(authActions.logout()),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(MenuAppBar));
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(withRouter(MenuAppBar)));
