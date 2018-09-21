@@ -72,4 +72,4 @@ const mapDispatchToProps = dispatch => ({
   logout: () => dispatch(authActions.logout()),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(withRouter(MenuAppBar)));
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(withRouter(MenuAppBar))); 

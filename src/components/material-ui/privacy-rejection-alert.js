@@ -79,7 +79,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   pDeleteUserProfile: profile => dispatch(profileActions.profileDeleteRequest(profile)),
-  logout: () => dispatch(.logout()),
+  logout: () => dispatch(authActions.logout()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(AlertDialog);
