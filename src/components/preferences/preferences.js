@@ -20,6 +20,7 @@ import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 import * as profileActions from '../../actions/profile';
 import * as preferencesActions from '../../actions/preferences';
+import { deleteAccountRequest } from '../../actions/auth';
 import ROUTES from '../../routes';
 
 import './preferences.scss';
@@ -62,6 +63,7 @@ class Preferences extends React.Component {
       openselectedCalendar: false,
       openagendaReceiveTime: false,
       openprofileReset: false,
+      openaccountDelete: false,
       taskLengthDefault: '',
       agendaReceiveTime: '',
       breatherTime: '',
@@ -128,6 +130,11 @@ class Preferences extends React.Component {
     this.handleClose('profileReset');
     this.props.profileReset();
     this.setState({ fireRedirect: true });
+  };
+
+  handleAccountDelete = () => {
+    this.handleClose('accountDelete');
+    this.props.accountDelete();
   };
 
   renderCalendarSelection = () => {
@@ -348,6 +355,35 @@ class Preferences extends React.Component {
     );
   };
 
+  renderAccountDelete = () => {
+    const { classes } = this.props;
+    return (
+      <ListItem>
+        <Button variant="contained" color="secondary" className={classes.button} onClick={() => this.handleClickOpen('accountDelete')}>
+          Delete Account
+        </Button>
+        <Dialog
+          open={this.state.openaccountDelete}
+          onClose={() => this.handleClose('accountDelete')}
+        >
+          <DialogTitle>ARE YOU SURE?</DialogTitle>
+          <ListItemText>
+            Confirming will delete your account with Timeboxed. All tasks and saved preferences will
+            be lost. This action cannot be undone. Would you like to proceed?
+          </ListItemText>
+          <DialogActions>
+            <Button onClick={this.handleAccountDelete} className={classes.button} style={{ border: '1px solid gray' }}>
+              Yes, delete my account permanently
+            </Button>
+            <Button onClick={() => this.handleClose('accountDelete')} variant="contained" color="secondary" className={classes.button}>
+              Cancel
+            </Button>
+          </DialogActions>
+        </Dialog>
+      </ListItem>
+    );
+  };
+
   render() {
     const { profile, classes } = this.props;
 
@@ -371,6 +407,7 @@ class Preferences extends React.Component {
               </List>
           }
           {this.renderProfileReset()}
+          {this.renderAccountDelete()}
         </div>
         <div>
           { this.state.fireRedirect && <Redirect to={ROUTES.DASHBOARD}/> }
@@ -390,6 +427,7 @@ Preferences.propTypes = {
   classes: PropTypes.object,
   history: PropTypes.object,
   profileReset: PropTypes.func,
+  accountDelete: PropTypes.func,
 };
 
 Preferences.defaultProps = {
@@ -401,6 +439,7 @@ Preferences.defaultProps = {
   classes: {},
   history: {},
   profileReset: noop,
+  accountDelete: noop,
 };
 
 const mapStateToProps = state => ({
@@ -414,6 +453,7 @@ const mapDispatchToProps = dispatch => ({
   pFetchUserPreferences: () => dispatch(preferencesActions.preferencesFetchRequest()),
   pUpdateUserPreferences: prefs => dispatch(preferencesActions.preferencesUpdateRequest(prefs)),
   profileReset: () => dispatch(profileActions.profileResetRequest()),
+  accountDelete: () => dispatch(deleteAccountRequest()),
 });
 
 export default compose(
