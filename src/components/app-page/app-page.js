@@ -1,4 +1,6 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+
 import MenuAppBar from '../material-ui/menu-app-bar';
 
 const AppPage = (props) => {
@@ -10,6 +12,10 @@ const AppPage = (props) => {
       }
     </React.Fragment>
   );
+};
+
+AppPage.propTypes = {
+  children: PropTypes.array,
 };
 
 export default AppPage;
