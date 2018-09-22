@@ -19,4 +19,8 @@ ScrollToTop.propTypes = {
   children: PropTypes.node,
 };
 
+ScrollToTop.defaultProps = {
+  location: {},
+};
+
 export default withRouter(ScrollToTop);

@@ -1,4 +1,5 @@
 import React from 'react';
+import { noop } from 'lodash';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import ListItem from '@material-ui/core/ListItem';
@@ -32,7 +33,7 @@ const styles = theme => ({
 class TaskItem extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { 
+    this.state = {
       checked: this.props.task.completed ? [this.props.task._id] : [0],
       showModal: false,
       selected: this.props.selected,
@@ -44,7 +45,7 @@ class TaskItem extends React.Component {
     if (!this.props.editingTasks) {
       this.setState(prevState => ({ showModal: !prevState.showModal }));
     }
-  }
+  };
 
   handleToggle = value => (event) => {
     event.stopPropagation();
@@ -58,13 +59,11 @@ class TaskItem extends React.Component {
       newChecked.splice(currentIndex, 1);
     }
 
-    this.setState({
-      checked: newChecked,
-    });
+    this.setState({ checked: newChecked });
 
     const completed = currentIndex === -1;
     this.props.onComplete(value, completed);
-  }
+  };
 
   handleChange = (event) => {
     event.stopPropagation();
@@ -75,56 +74,53 @@ class TaskItem extends React.Component {
   handleTaskUpdate = (task) => {
     this.setState({ showModal: false });
     return this.props.updateTask(task);
-  }
+  };
 
   render() {
     const { task, classes } = this.props;
 
-    const timeShown = task.timeEstimate === 60 || task.timeEstimate === 120 
+    const timeShown = task.timeEstimate === 60 || task.timeEstimate === 120
       ? <span> {task.timeEstimate / 60} hr</span>
       : <span> {task.timeEstimate} m</span>;
-    
+
     return (
       <div className={classes.taskItem}>
-        <MaterialUITaskForm 
-          show={this.state.showModal} 
-          task={this.props.task} 
-          onComplete={this.handleTaskUpdate} 
+        <MaterialUITaskForm
+          show={this.state.showModal}
+          task={this.props.task}
+          onComplete={this.handleTaskUpdate}
           handleOpen={this.handleOpen}
           timeEstimateProp={this.props.task.timeEstimate}
           dependencies={this.state.dependencies}
         />
-        <ListItem 
-          button 
+        <ListItem
+          button
           disableRipple
           className={classes.mainItem}
           onClick={this.handleOpen}
         >
-          <ListItemIcon>
-          {
-            this.props.editingTasks 
-              ? <Radio
-              checked={this.state.selected}
-              onClick={this.handleChange}
-              value={task._id}
-              name="radio-button-selection"
-            />
-              : <Checkbox
-              id='task-complete-checkbox'
-              onClick={this.handleToggle(task._id)}
-              checked={this.state.checked.indexOf(task._id) !== -1}
-              tabIndex={-1}
+        <ListItemIcon>
+        {
+          this.props.editingTasks
+            ? <Radio
+                checked={this.state.selected}
+                onClick={this.handleChange}
+                value={task._id}
+                name="radio-button-selection"
+              />
+            : <Checkbox
+                id='task-complete-checkbox'
+                onClick={this.handleToggle(task._id)}
+                checked={this.state.checked.indexOf(task._id) !== -1}
               />
           }
-
           </ListItemIcon>
           <ListItemText inset primary={task.title} className={classes.title}/>
-          <ListItemText 
-            inset secondary={timeShown} 
+          <ListItemText
+            inset secondary={timeShown}
             className={classes.time}
           />
           {this.props.dragHandle && this.props.dragHandle}
-          
         </ListItem>
       </div>
     );
@@ -140,6 +136,16 @@ TaskItem.propTypes = {
   onSelect: PropTypes.func,
   selected: PropTypes.bool,
   dragHandle: PropTypes.element,
+};
+
+TaskItem.defaultProps = {
+  task: {},
+  classes: {},
+  onComplete: noop,
+  updateTask: noop,
+  editingTasks: false,
+  onSelect: noop,
+  selected: false,
 };
 
 export default withStyles(styles, { name: 'TaskItem' })(TaskItem);

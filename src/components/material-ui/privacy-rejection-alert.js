@@ -1,4 +1,5 @@
 import React from 'react';
+import { noop } from 'lodash';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
@@ -39,7 +40,7 @@ class AlertDialog extends React.Component {
 
   render() {
     return (
-      <div>
+      <React.Fragment>
         <Dialog
           open={this.state.open}
           onClose={this.handleClose}
@@ -62,7 +63,7 @@ class AlertDialog extends React.Component {
             </Button>
           </DialogActions>
         </Dialog>
-      </div>
+      </React.Fragment>
     );
   }
 }
@@ -71,6 +72,12 @@ AlertDialog.propTypes = {
   profile: PropTypes.object,
   pDeleteUserProfile: PropTypes.func,
   logout: PropTypes.func,
+};
+
+AlertDialog.defaultProps = {
+  profile: {},
+  pDeleteUserProfile: noop,
+  logout: noop,
 };
 
 const mapStateToProps = state => ({

@@ -1,4 +1,5 @@
 import React from 'react';
+import { noop } from 'lodash';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
@@ -24,7 +25,7 @@ const styles = theme => ({
 class AddFAB extends React.Component {
   handleClick = () => {
     this.props.activate();
-  }
+  };
 
   render() {
     const { classes } = this.props;
@@ -39,6 +40,11 @@ class AddFAB extends React.Component {
 AddFAB.propTypes = {
   classes: PropTypes.object.isRequired,
   activate: PropTypes.func,
+};
+
+AddFAB.defaultProps = {
+  classes: {},
+  activate: noop,
 };
 
 export default withStyles(styles)(AddFAB);

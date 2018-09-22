@@ -1,4 +1,5 @@
 import React from 'react';
+import { noop } from 'lodash';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import compose from 'recompose/compose';
@@ -40,10 +41,6 @@ class FormDialog extends React.Component {
     dependencies: this.props.task ? this.props.task.dependencies : [],
   };
 
-  handleClickOpen = () => {
-    this.setState({ open: true });
-  };
-
   handleDateToggle = () => {
     this.setState(prevState => ({
       dateSelect: !prevState.dateSelect,
@@ -67,7 +64,11 @@ class FormDialog extends React.Component {
 
   handleSave = () => {
     this.handleClose();
-    return this.props.onComplete({ ...this.state, _id: this.props.task._id, dependencies: this.state.dependencies });
+    return this.props.onComplete({
+      ...this.state,
+      _id: this.props.task._id,
+      dependencies: this.state.dependencies,
+    });
   };
 
   handleCreateTask = (event) => {
@@ -84,12 +85,12 @@ class FormDialog extends React.Component {
 
   handleUpdateDependencies = (e) => {
     this.setState({ dependencies: e.target.value });
-  }
+  };
 
   render() {
     const { classes } = this.props;
     return (
-      <div>
+      <React.Fragment>
         <Dialog
           open={this.props.show ? this.props.show : this.state.open}
           onClose={this.handleClose}
@@ -107,7 +108,6 @@ class FormDialog extends React.Component {
               onChange={this.handleChange}
               fullWidth
             />
-
             <FormControl className={classes.formControl}>
               <InputLabel htmlFor="task-time">Task time</InputLabel>
               <Select
@@ -134,36 +134,37 @@ class FormDialog extends React.Component {
                 onChange={this.handleUpdateDependencies}
                 input={<Input id="dependencies" />}
               >
-              {this.props.tasks.filter(item => (
-                this.props.task 
-                  ? item._id !== this.props.task._id 
-                  : item))
-                .map(dependency => (
-                  <MenuItem key={dependency._id} value={dependency.title}>
-                    {dependency.title}
-                  </MenuItem>
-                ))}
+              {
+                this.props.tasks.filter(item => (
+                  this.props.task
+                    ? item._id !== this.props.task._id
+                    : item))
+                  .map(dependency => (
+                    <MenuItem key={dependency._id} value={dependency.title}>
+                      {dependency.title}
+                    </MenuItem>
+                  ))
+              }
               </Select>
             </FormControl>
 
             <FormControlLabel control={
               <Switch
                 onChange={this.handleDateToggle}
-                // value={this.state.dateSelect}
                 checked={this.state.dateSelect}
               />
             } label='Add Due Date'/>
 
-            { this.state.dateSelect 
+            { this.state.dateSelect
               && <TextField
-                autoFocus
-                margin="dense"
-                id="dueDate"
-                value={this.state.dueDate}
-                label="Due Date"
-                type="date"
-                onChange={this.handleChange}
-                fullWidth 
+                  autoFocus
+                  margin="dense"
+                  id="dueDate"
+                  value={this.state.dueDate}
+                  label="Due Date"
+                  type="date"
+                  onChange={this.handleChange}
+                  fullWidth
                 />
             }
           </DialogContent>
@@ -176,7 +177,7 @@ class FormDialog extends React.Component {
             </Button>
           </DialogActions>
         </Dialog>
-      </div>
+      </React.Fragment>
     );
   }
 }
@@ -188,6 +189,18 @@ FormDialog.propTypes = {
   handleOpen: PropTypes.func,
   taskUpdateRequest: PropTypes.func,
   task: PropTypes.object,
+  tasks: PropTypes.array,
+  show: PropTypes.bool,
+  timeEstimateProp: PropTypes.number,
+  classes: PropTypes.object,
+};
+
+FormDialog.defaultProps = {
+  preferences: {},
+  onComplete: noop,
+  handleFormOpen: noop,
+  handleOpen: noop,
+  taskUpdateRequest: noop,
   tasks: PropTypes.array,
   show: PropTypes.bool,
   timeEstimateProp: PropTypes.number,

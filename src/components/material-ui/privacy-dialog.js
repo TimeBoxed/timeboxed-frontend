@@ -1,4 +1,5 @@
 import React from 'react';
+import { noop } from 'lodash';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
@@ -45,7 +46,7 @@ class ScrollDialog extends React.Component {
     this.setState({
       open: false,
     });
-  }
+  };
 
   handleClose = () => {
     this.props.pUpdateUserProfile({ ...this.props.profile });
@@ -54,7 +55,7 @@ class ScrollDialog extends React.Component {
 
   render() {
     return (
-      <div>
+      <React.Fragment>
         <Dialog
           open={this.state.open}
           onClose={this.handleClose}
@@ -115,7 +116,7 @@ class ScrollDialog extends React.Component {
             </Button>
           </DialogActions>
         </Dialog>
-      </div>
+      </React.Fragment>
     );
   }
 }
@@ -123,6 +124,11 @@ class ScrollDialog extends React.Component {
 ScrollDialog.propTypes = {
   profile: PropTypes.object,
   pUpdateUserProfile: PropTypes.func,
+};
+
+ScrollDialog.defaultProps = {
+  profile: {},
+  pUpdateUserProfile: noop,
 };
 
 const mapStateToProps = state => ({
