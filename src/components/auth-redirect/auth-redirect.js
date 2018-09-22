@@ -10,7 +10,7 @@ class AuthRedirect extends Component {
     const { pathname } = location;
 
     const destinationRoute = pathCheck(pathname, !!token);
-    
+
     return (
       <div>
         { (destinationRoute && destinationRoute !== pathname)

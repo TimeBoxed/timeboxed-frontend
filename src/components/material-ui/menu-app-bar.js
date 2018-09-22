@@ -48,8 +48,8 @@ class MenuAppBar extends React.Component {
               }
             </Typography>
             <div className={classes.placeholder}> </div>
-          </Toolbar>          
-        </AppBar>        
+          </Toolbar>
+        </AppBar>
       </div>
     );
   }
@@ -72,4 +72,4 @@ const mapDispatchToProps = dispatch => ({
   logout: () => dispatch(authActions.logout()),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(withRouter(MenuAppBar)));
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(withRouter(MenuAppBar))); // eslint-disable-line max-len

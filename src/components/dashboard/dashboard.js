@@ -305,15 +305,17 @@ class Dashboard extends React.Component {
             timeEstimateProp={preferences.taskLengthDefault}
           />}
           </div>
-          { this.state.editingTasks && this.state.taskOrder.length > 0
-            ? <SortableList
+          {
+            (this.state.editingTasks && this.state.taskOrder.length > 0) &&
+            <SortableList
                 items={this.state.taskOrder}
                 onSortEnd={this.onSortEnd}
                 useDragHandle={true}
               />
-            : undefined }
-          { !this.state.editingTasks && this.state.taskOrder.length > 0
-            ? <List className={classes.container} component='div'>
+             }
+          {
+            (!this.state.editingTasks && this.state.taskOrder.length > 0)
+            && <List className={classes.container} component='div'>
             {this.state.taskOrder.sort((a, b) => a.order - b.order)
               .map(task => (
               <TaskItem
@@ -327,42 +329,44 @@ class Dashboard extends React.Component {
               />
               ))}
             </List>
-            : undefined
           }
           <div className='show-hide-tasks'>
             <Typography gutterBottom variant='subheading' onClick={this.handleShowHideTasks}>{completedTasks} Completed Tasks</Typography>
           </div>
           <div className={completedTasksClass}>
             <List className={classes.completedContainer} component='div'>
-              {this.props.completedTasks && this.state.completedTasks.length > 0
-                ? this.state.completedTasks
+              {
+                (this.props.completedTasks && this.state.completedTasks.length > 0)
+                && this.state.completedTasks
                   .sort((a, b) => b.order - a.order)
                   .map(task => (
-                <TaskItem
-                  key={task._id}
-                  task={task}
-                  onComplete={this.handleStatusChange}
-                  editingTasks={this.state.editingTasks}
-                  onSelect={this.handleSelect}
-                  selected={false}
-                  updateTask={this.handleUpdateTask}
-                />
-                  )) : undefined }
+                    <TaskItem
+                      key={task._id}
+                      task={task}
+                      onComplete={this.handleStatusChange}
+                      editingTasks={this.state.editingTasks}
+                      onSelect={this.handleSelect}
+                      selected={false}
+                      updateTask={this.handleUpdateTask}
+                    />
+                  ))
+              }
             </List>
           </div>
           <div className={classes.buttonDiv}>
-          {this.state.editingTasks
-            ? <Button variant="contained" color="primary" className={classes.deleteButton} onClick={this.handleDelete}>
-              <Delete/>
-              <Typography className={classes.deleteText}>Delete</Typography>
-            </Button>
-            : <div><Button
-                onClick={this.handleEditing}
-                variant="fab"
-                color="primary"
-                aria-label="edit"
-                className={classes.fab}
-              >
+          {
+            this.state.editingTasks
+              ? <Button variant="contained" color="primary" className={classes.deleteButton} onClick={this.handleDelete}>
+                <Delete/>
+                <Typography className={classes.deleteText}>Delete</Typography>
+              </Button>
+              : <div><Button
+                  onClick={this.handleEditing}
+                  variant="fab"
+                  color="primary"
+                  aria-label="edit"
+                  className={classes.fab}
+                >
               <EditIcon />
             </Button>
             <AddFAB activate={this.handleFormOpen}/>
