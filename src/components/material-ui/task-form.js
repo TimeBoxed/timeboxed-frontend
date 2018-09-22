@@ -153,7 +153,7 @@ class FormDialog extends React.Component {
                 onChange={this.handleDateToggle}
                 checked={this.state.dateSelect}
               />
-            } label='Add Due Date'/>
+            } label={this.state.dateSelect ? 'Remove Due Date' : 'Add Due Date'}/>
 
             { this.state.dateSelect
               && <TextField

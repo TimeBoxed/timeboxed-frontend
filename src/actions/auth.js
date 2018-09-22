@@ -6,7 +6,7 @@ const removeToken = () => ({
 });
 
 const logout = () => {
-  location.reload();
+  window.location.reload();
   deleteCookie(TOKEN_COOKIE_KEY);
   return removeToken();
 };
