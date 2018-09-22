@@ -24,7 +24,7 @@ const styles = theme => ({
 class AddFAB extends React.Component {
   handleClick = () => {
     this.props.activate();
-  }
+  };
 
   render() {
     const { classes } = this.props;

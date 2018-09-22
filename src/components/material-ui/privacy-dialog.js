@@ -45,7 +45,7 @@ class ScrollDialog extends React.Component {
     this.setState({
       open: false,
     });
-  }
+  };
 
   handleClose = () => {
     this.props.pUpdateUserProfile({ ...this.props.profile });
@@ -54,7 +54,7 @@ class ScrollDialog extends React.Component {
 
   render() {
     return (
-      <div>
+      <React.Fragment>
         <Dialog
           open={this.state.open}
           onClose={this.handleClose}
@@ -115,7 +115,7 @@ class ScrollDialog extends React.Component {
             </Button>
           </DialogActions>
         </Dialog>
-      </div>
+      </React.Fragment>
     );
   }
 }

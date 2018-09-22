@@ -3,8 +3,8 @@ import TBLogo from '../../assets/logo/logo-white.svg';
 
 const Logo = () => {
   return (
-    <div id = 'header-image'>
-      <TBLogo id = 'tb-logo' />    
+    <div id='header-image'>
+      <TBLogo id='tb-logo' />
     </div>
   );
 };
