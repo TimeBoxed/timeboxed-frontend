@@ -127,7 +127,7 @@ class Preferences extends React.Component {
   handleProfileReset = () => {
     this.handleClose('profileReset');
     this.props.profileReset();
-    this.props.history.push(ROUTES.DASHBOARD);
+    this.setState({ fireRedirect: true });
   };
 
   renderCalendarSelection = () => {
@@ -139,8 +139,6 @@ class Preferences extends React.Component {
           {this.state.selectedCalendar && this.state.selectedCalendar.name}
         </Button>
         <Dialog
-          disableBackdropClick
-          disableEscapeKeyDown
           open={this.state.openselectedCalendar}
           onClose={() => this.handleClose('selectedCalendar')}
         >
@@ -188,8 +186,6 @@ class Preferences extends React.Component {
         <Button style={{ border: '1px solid gray' }} onClick={() => this.handleClickOpen('agendaReceiveTime')}>
           {this.state.agendaReceiveTime && this.state.agendaReceiveTime[0] === '0' ? this.state.agendaReceiveTime.slice(1) : this.state.agendaReceiveTime} AM</Button>
         <Dialog
-          disableBackdropClick
-          disableEscapeKeyDown
           open={this.state.openagendaReceiveTime}
           onClose={() => this.handleClose('agendaReceiveTime')}
         >
@@ -242,8 +238,6 @@ class Preferences extends React.Component {
           {this.state.taskLengthDefault > 60 && 's'}
         </Button>
         <Dialog
-          disableBackdropClick
-          disableEscapeKeyDown
           open={this.state.opentaskLengthDefault}
           onClose={() => this.handleClose('taskLengthDefault')}
         >
@@ -289,8 +283,6 @@ class Preferences extends React.Component {
           {this.state.breatherTime > 45 ? 'hr' : ' minutes'}
         </Button>
         <Dialog
-          disableBackdropClick
-          disableEscapeKeyDown
           open={this.state.openbreatherTime}
           onClose={() => this.handleClose('breatherTime')}
         >
@@ -331,26 +323,24 @@ class Preferences extends React.Component {
     const { classes } = this.props;
     return (
       <ListItem>
-        <Button style={{ border: '1px solid gray' }} onClick={() => this.handleClickOpen('profileReset')}>
+        <Button variant="contained" color="secondary" className={classes.button} onClick={() => this.handleClickOpen('profileReset')}>
           Reset Profile
         </Button>
         <Dialog
-          disableBackdropClick
-          disableEscapeKeyDown
           open={this.state.openprofileReset}
           onClose={() => this.handleClose('profileReset')}
         >
-          <DialogTitle>Are you Sure?</DialogTitle>
+          <DialogTitle>ARE YOU SURE?</DialogTitle>
           <ListItemText>
-            Confirming will remove all saved tasks and reset all saved preferences. This action
+            Confirming will delete all saved tasks and reset all saved preferences. This action
             cannot be undone. Would you like to proceed?
           </ListItemText>
           <DialogActions>
-            <Button onClick={() => this.handleClose('profileReset')} variant="contained" className={classes.blueButton}>
-              Cancel
+            <Button onClick={this.handleProfileReset} className={classes.button} style={{ border: '1px solid gray' }}>
+              Yes, reset my profile
             </Button>
-            <Button onClick={this.handleProfileReset} variant="contained" color="secondary" className={classes.button}>
-              Yes, reset my profile.
+            <Button onClick={() => this.handleClose('profileReset')} variant="contained" color="secondary" className={classes.button}>
+              Cancel
             </Button>
           </DialogActions>
         </Dialog>
@@ -380,8 +370,8 @@ class Preferences extends React.Component {
                 {this.renderBreatherTimeSelection()}
               </List>
           }
-        </div>
           {this.renderProfileReset()}
+        </div>
         <div>
           { this.state.fireRedirect && <Redirect to={ROUTES.DASHBOARD}/> }
         </div>
