@@ -1,4 +1,5 @@
 import superagent from 'superagent';
+import { setPreferences } from './preferences';
 
 const setProfile = profile => ({
   type: 'CLIENT_PROFILE_SET',
@@ -31,6 +32,16 @@ const profileUpdateRequest = profile => (store) => {
     });
 };
 
+const profileResetRequest = () => (store) => {
+  const { token } = store.getState();
+  return superagent.put(`${API_URL}/profile/reset`)
+    .set('Authorization', `Bearer ${token}`)
+    .set('Content-Type', 'application/json')
+    .then((response) => {
+      return store.dispatch(setPreferences(response.body));
+    });
+};
+
 const profileDeleteRequest = profile => (store) => {
   const { token } = store.getState();
   return superagent.delete(`${API_URL}/profile/${profile._id}`)
@@ -42,4 +53,9 @@ const profileDeleteRequest = profile => (store) => {
     });
 };
 
-export { profileUpdateRequest, profileFetchRequest, profileDeleteRequest };
+export {
+  profileUpdateRequest,
+  profileFetchRequest,
+  profileDeleteRequest,
+  profileResetRequest,
+};
