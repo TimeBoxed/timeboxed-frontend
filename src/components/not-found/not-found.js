@@ -7,7 +7,7 @@ import './not-found.scss';
 
 const NotFound = () => (
     <div className='not-found'>
-      <ListItemText>Oops! We can't seem to find the page you're looking for.</ListItemText>
+      <ListItemText>Oops! We can&apos;t seem to find the page you're looking for.</ListItemText>
       <Link to={ROUTES.DASHBOARD}>
         <Button style={{ border: '1px solid gray' }}>Return to Dashboard</Button>
       </Link>

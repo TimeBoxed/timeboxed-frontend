@@ -22,6 +22,7 @@ import * as preferencesActions from '../../actions/preferences';
 import ROUTES from '../../routes';
 
 import './preferences.scss';
+import CircularIndeterminate from '../material-ui/load-spinner';
 
 const styles = theme => ({
   root: {
@@ -58,6 +59,7 @@ class Preferences extends React.Component {
       agendaReceiveTime: '',
       breatherTime: '',
       selectedCalendar: '',
+      loading: true,
     };
   }
 
@@ -68,22 +70,23 @@ class Preferences extends React.Component {
           this.props.pFetchUserPreferences()
             .then((preferences) => {
               const { payload } = preferences;
-              const { 
-                breatherTime, 
-                agendaReceiveTime, 
-                taskLengthDefault, 
-                selectedCalendar, 
+              const {
+                breatherTime,
+                agendaReceiveTime,
+                taskLengthDefault,
+                selectedCalendar,
               } = payload;
-              this.setState({ 
-                breatherTime, 
-                agendaReceiveTime, 
-                taskLengthDefault, 
-                selectedCalendar, 
+              this.setState({
+                breatherTime,
+                agendaReceiveTime,
+                taskLengthDefault,
+                selectedCalendar,
+                loading: false,
               });
             });
         });
     }
-    return undefined;
+    return null;
   }
 
   handleChange = name => (event) => {
@@ -95,7 +98,7 @@ class Preferences extends React.Component {
       return calendar.name === event.target.value;
     });
     this.setState({ [name]: targetCalendar[0] });
-  }
+  };
 
   handleClickOpen = (value) => {
     const toOpen = `open${value}`;
@@ -112,18 +115,21 @@ class Preferences extends React.Component {
       .then(() => {
         return this.setState({ fireRedirect: true });
       });
-  }
-
+  };
 
   render() {
     const { profile, classes } = this.props;
     const taskLengthInHours = this.state.taskLengthDefault / 60;
 
+    if (this.state.loading) {
+      return <CircularIndeterminate/>;
+    }
+
     return (
       <div className={classes.mainContainer}>
       <Button variant="contained" color="secondary" className={classes.button} onClick={this.handleSubmit}>Save Settings</Button>
       <div className='preferences-main'>
-        { profile 
+        { profile
         && <List
           component="div"
         >
