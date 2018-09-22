@@ -51,10 +51,10 @@ class Preferences extends React.Component {
     super(props);
     this.state = {
       fireRedirect: false,
-      opentaskLengthDefault: false,
-      openbreatherTime: false,
-      openselectedCalendar: false,
-      openagendaReceiveTime: false,
+      openTaskLengthDefault: false,
+      openBreatherTime: false,
+      openSelectedCalendar: false,
+      openAgendaReceiveTime: false,
       taskLengthDefault: '',
       agendaReceiveTime: '',
       breatherTime: '',
@@ -141,7 +141,7 @@ class Preferences extends React.Component {
             <Dialog
               disableBackdropClick
               disableEscapeKeyDown
-              open={this.state.openselectedCalendar}
+              open={this.state.openSelectedCalendar}
               onClose={() => this.handleClose('selectedCalendar')}
             >
               <DialogTitle>Update calendar to use</DialogTitle>
@@ -180,7 +180,7 @@ class Preferences extends React.Component {
             <Dialog
               disableBackdropClick
               disableEscapeKeyDown
-              open={this.state.openagendaReceiveTime}
+              open={this.state.openAgendaReceiveTime}
               onClose={() => this.handleClose('agendaReceiveTime')}
             >
               <DialogTitle>Update time to receive agenda</DialogTitle>
@@ -226,7 +226,7 @@ class Preferences extends React.Component {
             <Dialog
               disableBackdropClick
               disableEscapeKeyDown
-              open={this.state.opentaskLengthDefault}
+              open={this.state.openTaskLengthDefault}
               onClose={() => this.handleClose('taskLengthDefault')}
             >
               <DialogTitle>Update default task time</DialogTitle>
@@ -267,7 +267,7 @@ class Preferences extends React.Component {
             <Dialog
               disableBackdropClick
               disableEscapeKeyDown
-              open={this.state.openbreatherTime}
+              open={this.state.openBreatherTime}
               onClose={() => this.handleClose('breatherTime')}
             >
               <DialogTitle>Update breather time</DialogTitle>
@@ -304,8 +304,8 @@ class Preferences extends React.Component {
         }
       </div>
         <div>
-          { this.state.fireRedirect ? <Redirect to={ROUTES.DASHBOARD}/> : undefined }
-        </div>
+          { this.state.fireRedirect && <Redirect to={ROUTES.DASHBOARD}/> }
+      </div>
       </div>
     );
   }
