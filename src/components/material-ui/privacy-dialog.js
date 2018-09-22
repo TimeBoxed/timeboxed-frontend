@@ -1,4 +1,5 @@
 import React from 'react';
+import { noop } from 'lodash';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
@@ -123,6 +124,11 @@ class ScrollDialog extends React.Component {
 ScrollDialog.propTypes = {
   profile: PropTypes.object,
   pUpdateUserProfile: PropTypes.func,
+};
+
+ScrollDialog.defaultProps = {
+  profile: {},
+  pUpdateUserProfile: noop,
 };
 
 const mapStateToProps = state => ({

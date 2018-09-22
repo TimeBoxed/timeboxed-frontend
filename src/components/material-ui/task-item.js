@@ -1,4 +1,5 @@
 import React from 'react';
+import { noop } from 'lodash';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import ListItem from '@material-ui/core/ListItem';
@@ -135,6 +136,16 @@ TaskItem.propTypes = {
   onSelect: PropTypes.func,
   selected: PropTypes.bool,
   dragHandle: PropTypes.element,
+};
+
+TaskItem.defaultProps = {
+  task: {},
+  classes: {},
+  onComplete: noop,
+  updateTask: noop,
+  editingTasks: false,
+  onSelect: noop,
+  selected: false,
 };
 
 export default withStyles(styles, { name: 'TaskItem' })(TaskItem);

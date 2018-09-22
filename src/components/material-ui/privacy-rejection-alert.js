@@ -1,4 +1,5 @@
 import React from 'react';
+import { noop } from 'lodash';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
@@ -71,6 +72,12 @@ AlertDialog.propTypes = {
   profile: PropTypes.object,
   pDeleteUserProfile: PropTypes.func,
   logout: PropTypes.func,
+};
+
+AlertDialog.defaultProps = {
+  profile: {},
+  pDeleteUserProfile: noop,
+  logout: noop,
 };
 
 const mapStateToProps = state => ({

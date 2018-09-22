@@ -25,4 +25,8 @@ CircularIndeterminate.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
+CircularIndeterminate.defaultProps = {
+  classes: {},
+};
+
 export default withStyles(styles)(CircularIndeterminate);

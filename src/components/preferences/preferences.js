@@ -1,4 +1,5 @@
 import React from 'react';
+import { noop } from 'lodash';
 import compose from 'recompose/compose';
 import { connect } from 'react-redux';
 import { withStyles } from '@material-ui/core/styles';
@@ -51,10 +52,10 @@ class Preferences extends React.Component {
     super(props);
     this.state = {
       fireRedirect: false,
-      openTaskLengthDefault: false,
-      openBreatherTime: false,
-      openSelectedCalendar: false,
-      openAgendaReceiveTime: false,
+      opentaskLengthDefault: false,
+      openbreatherTime: false,
+      openselectedCalendar: false,
+      openagendaReceiveTime: false,
       taskLengthDefault: '',
       agendaReceiveTime: '',
       breatherTime: '',
@@ -130,177 +131,183 @@ class Preferences extends React.Component {
       <Button variant="contained" color="secondary" className={classes.button} onClick={this.handleSubmit}>Save Settings</Button>
       <div className='preferences-main'>
         { profile
-        && <List
-          component="div"
-        >
-          {/* Calendar Selection */}
-          <ListItem style={{ borderBottom: '1px solid gray' }}>
-            <ListItemText primary={'Calendar'}/>
-            <Button style={{ border: '1px solid gray' }} onClick={() => this.handleClickOpen('selectedCalendar')}>
-              {this.state.selectedCalendar && this.state.selectedCalendar.name}</Button>
-            <Dialog
-              disableBackdropClick
-              disableEscapeKeyDown
-              open={this.state.openSelectedCalendar}
-              onClose={() => this.handleClose('selectedCalendar')}
+          && <List
+            component="div"
             >
-              <DialogTitle>Update calendar to use</DialogTitle>
-              <DialogContent>
-                <form className={classes.container}>
-                  <FormControl className={classes.formControl}>
-                    <InputLabel htmlFor="selected-calendar-simple">Select Calendar</InputLabel>
-                    <Select
-                      value={this.state.selectedCalendar.name}
-                      onChange={this.handleCalendarSelection('selectedCalendar')}
-                      input={<Input id="selected-calendar-simple" />}
-                    >
-                      {profile.calendars.map(calendar => (
-                        <MenuItem value={calendar.name} key={calendar.id}>{calendar.name}</MenuItem>
-                      ))}
-                    </Select>
-                  </FormControl>
-                </form>
-              </DialogContent>
-              <DialogActions>
-                <Button onClick={() => this.handleClose('selectedCalendar')} color="primary">
-                  Cancel
-                </Button>
-                <Button onClick={() => this.handleClose('selectedCalendar')} color="primary">
-                  Ok
-                </Button>
-              </DialogActions>
-            </Dialog>
-          </ListItem>
+            {/* Calendar Selection */}
+            <ListItem style={{ borderBottom: '1px solid gray' }}>
+              <ListItemText primary={'Calendar'}/>
+              <Button style={{ border: '1px solid gray' }} onClick={() => this.handleClickOpen('selectedCalendar')}>
+                {this.state.selectedCalendar && this.state.selectedCalendar.name}</Button>
+              <Dialog
+                disableBackdropClick
+                disableEscapeKeyDown
+                open={this.state.openselectedCalendar}
+                onClose={() => this.handleClose('selectedCalendar')}
+              >
+                <DialogTitle>Update calendar to use</DialogTitle>
+                <DialogContent>
+                  <form className={classes.container}>
+                    <FormControl className={classes.formControl}>
+                      <InputLabel htmlFor="selected-calendar-simple">Select Calendar</InputLabel>
+                      <Select
+                        value={this.state.selectedCalendar.name}
+                        onChange={this.handleCalendarSelection('selectedCalendar')}
+                        input={<Input id="selected-calendar-simple" />}
+                      >
+                        {
+                          profile.calendars.map(calendar => (
+                          <MenuItem
+                            value={calendar.name}
+                            key={calendar.id}>
+                            {calendar.name}
+                          </MenuItem>
+                          ))
+                        }
+                      </Select>
+                    </FormControl>
+                  </form>
+                </DialogContent>
+                <DialogActions>
+                  <Button onClick={() => this.handleClose('selectedCalendar')} color="primary">
+                    Cancel
+                  </Button>
+                  <Button onClick={() => this.handleClose('selectedCalendar')} color="primary">
+                    Ok
+                  </Button>
+                </DialogActions>
+              </Dialog>
+            </ListItem>
 
-          {/* Receive Agenda Time */}
-          <ListItem style={{ borderBottom: '1px solid gray' }}>
-            <ListItemText primary={'Daily agenda time'}/>
-            <Button style={{ border: '1px solid gray' }} onClick={() => this.handleClickOpen('agendaReceiveTime')}>
-              {this.state.agendaReceiveTime && this.state.agendaReceiveTime[0] === '0' ? this.state.agendaReceiveTime.slice(1) : this.state.agendaReceiveTime} AM</Button>
-            <Dialog
-              disableBackdropClick
-              disableEscapeKeyDown
-              open={this.state.openAgendaReceiveTime}
-              onClose={() => this.handleClose('agendaReceiveTime')}
-            >
-              <DialogTitle>Update time to receive agenda</DialogTitle>
-              <DialogContent>
-                <form className={classes.container}>
-                  <FormControl className={classes.formControl}>
-                    <InputLabel htmlFor="agenda-receive-time-simple">Time</InputLabel>
-                    <Select
-                      value={this.state.agendaReceiveTime}
-                      onChange={this.handleChange('agendaReceiveTime')}
-                      input={<Input id="agenda-receive-time-simple" />}
-                    >
-                      <MenuItem value={'05:00'}>5:00 AM</MenuItem>
-                      <MenuItem value={'05:30'}>5:30 AM</MenuItem>
-                      <MenuItem value={'06:00'}>6:00 AM</MenuItem>
-                      <MenuItem value={'06:30'}>6:30 AM</MenuItem>
-                      <MenuItem value={'07:00'}>7:00 AM</MenuItem>
-                      <MenuItem value={'07:30'}>7:30 AM</MenuItem>
-                      <MenuItem value={'08:00'}>8:00 AM</MenuItem>
-                      <MenuItem value={'08:30'}>8:30 AM</MenuItem>
-                      <MenuItem value={'09:00'}>9:00 AM</MenuItem>
-                    </Select>
-                  </FormControl>
-                </form>
-              </DialogContent>
-              <DialogActions>
-                <Button onClick={() => this.handleClose('agendaReceiveTime')} color="primary">
-                  Cancel
-                </Button>
-                <Button onClick={() => this.handleClose('agendaReceiveTime')} color="primary">
-                  Ok
-                </Button>
-              </DialogActions>
-            </Dialog>
-          </ListItem>
+            {/* Receive Agenda Time */}
+            <ListItem style={{ borderBottom: '1px solid gray' }}>
+              <ListItemText primary={'Daily agenda time'}/>
+              <Button style={{ border: '1px solid gray' }} onClick={() => this.handleClickOpen('agendaReceiveTime')}>
+                {this.state.agendaReceiveTime && this.state.agendaReceiveTime[0] === '0' ? this.state.agendaReceiveTime.slice(1) : this.state.agendaReceiveTime} AM</Button>
+              <Dialog
+                disableBackdropClick
+                disableEscapeKeyDown
+                open={this.state.openagendaReceiveTime}
+                onClose={() => this.handleClose('agendaReceiveTime')}
+              >
+                <DialogTitle>Update time to receive agenda</DialogTitle>
+                <DialogContent>
+                  <form className={classes.container}>
+                    <FormControl className={classes.formControl}>
+                      <InputLabel htmlFor="agenda-receive-time-simple">Time</InputLabel>
+                      <Select
+                        value={this.state.agendaReceiveTime}
+                        onChange={this.handleChange('agendaReceiveTime')}
+                        input={<Input id="agenda-receive-time-simple" />}
+                      >
+                        <MenuItem value={'05:00'}>5:00 AM</MenuItem>
+                        <MenuItem value={'05:30'}>5:30 AM</MenuItem>
+                        <MenuItem value={'06:00'}>6:00 AM</MenuItem>
+                        <MenuItem value={'06:30'}>6:30 AM</MenuItem>
+                        <MenuItem value={'07:00'}>7:00 AM</MenuItem>
+                        <MenuItem value={'07:30'}>7:30 AM</MenuItem>
+                        <MenuItem value={'08:00'}>8:00 AM</MenuItem>
+                        <MenuItem value={'08:30'}>8:30 AM</MenuItem>
+                        <MenuItem value={'09:00'}>9:00 AM</MenuItem>
+                      </Select>
+                    </FormControl>
+                  </form>
+                </DialogContent>
+                <DialogActions>
+                  <Button onClick={() => this.handleClose('agendaReceiveTime')} color="primary">
+                    Cancel
+                  </Button>
+                  <Button onClick={() => this.handleClose('agendaReceiveTime')} color="primary">
+                    Ok
+                  </Button>
+                </DialogActions>
+              </Dialog>
+            </ListItem>
 
 
-          {/* Tast Length Default */}
-          <ListItem style={{ borderBottom: '1px solid gray' }}>
-            <ListItemText primary={'Default task time'}/>
-            <Button style={{ border: '1px solid gray' }} onClick={() => this.handleClickOpen('taskLengthDefault')}>
-              {this.state.taskLengthDefault > 45 ? taskLengthInHours : this.state.taskLengthDefault} {this.state.taskLengthDefault > 45 ? 'hr' : ' minutes'}{this.state.taskLengthDefault > 60 && 's'}</Button>
-            <Dialog
-              disableBackdropClick
-              disableEscapeKeyDown
-              open={this.state.openTaskLengthDefault}
-              onClose={() => this.handleClose('taskLengthDefault')}
-            >
-              <DialogTitle>Update default task time</DialogTitle>
-              <DialogContent>
-                <form className={classes.container}>
-                  <FormControl className={classes.formControl}>
-                    <InputLabel htmlFor="task-time-simple">Task time</InputLabel>
-                    <Select
-                      value={this.state.taskLengthDefault}
-                      onChange={this.handleChange('taskLengthDefault')}
-                      input={<Input id="task-time-simple" />}
-                    >
-                      <MenuItem value={15}>15 minutes</MenuItem>
-                      <MenuItem value={30}>30 minutes</MenuItem>
-                      <MenuItem value={45}>45 minutes</MenuItem>
-                      <MenuItem value={60}>1 hour</MenuItem>
-                      <MenuItem value={120}>2 hours</MenuItem>
-                    </Select>
-                  </FormControl>
-                </form>
-              </DialogContent>
-              <DialogActions>
-                <Button onClick={() => this.handleClose('taskLengthDefault')} color="primary">
-                  Cancel
-                </Button>
-                <Button onClick={() => this.handleClose('taskLengthDefault')} color="primary">
-                  Ok
-                </Button>
-              </DialogActions>
-            </Dialog>
-          </ListItem>
+            {/* Tast Length Default */}
+            <ListItem style={{ borderBottom: '1px solid gray' }}>
+              <ListItemText primary={'Default task time'}/>
+              <Button style={{ border: '1px solid gray' }} onClick={() => this.handleClickOpen('taskLengthDefault')}>
+                {this.state.taskLengthDefault > 45 ? taskLengthInHours : this.state.taskLengthDefault} {this.state.taskLengthDefault > 45 ? 'hr' : ' minutes'}{this.state.taskLengthDefault > 60 && 's'}</Button>
+              <Dialog
+                disableBackdropClick
+                disableEscapeKeyDown
+                open={this.state.opentaskLengthDefault}
+                onClose={() => this.handleClose('taskLengthDefault')}
+              >
+                <DialogTitle>Update default task time</DialogTitle>
+                <DialogContent>
+                  <form className={classes.container}>
+                    <FormControl className={classes.formControl}>
+                      <InputLabel htmlFor="task-time-simple">Task time</InputLabel>
+                      <Select
+                        value={this.state.taskLengthDefault}
+                        onChange={this.handleChange('taskLengthDefault')}
+                        input={<Input id="task-time-simple" />}
+                      >
+                        <MenuItem value={15}>15 minutes</MenuItem>
+                        <MenuItem value={30}>30 minutes</MenuItem>
+                        <MenuItem value={45}>45 minutes</MenuItem>
+                        <MenuItem value={60}>1 hour</MenuItem>
+                        <MenuItem value={120}>2 hours</MenuItem>
+                      </Select>
+                    </FormControl>
+                  </form>
+                </DialogContent>
+                <DialogActions>
+                  <Button onClick={() => this.handleClose('taskLengthDefault')} color="primary">
+                    Cancel
+                  </Button>
+                  <Button onClick={() => this.handleClose('taskLengthDefault')} color="primary">
+                    Ok
+                  </Button>
+                </DialogActions>
+              </Dialog>
+            </ListItem>
 
-           {/* Breather Time */}
-          <ListItem style={{ borderBottom: '1px solid gray' }}>
-            <ListItemText primary={'Breather time'}/>
-            <Button style={{ border: '1px solid gray' }} onClick={() => this.handleClickOpen('breatherTime')}>
-              {this.state.breatherTime} {this.state.breatherTime > 45 ? 'hr' : ' minutes'}</Button>
-            <Dialog
-              disableBackdropClick
-              disableEscapeKeyDown
-              open={this.state.openBreatherTime}
-              onClose={() => this.handleClose('breatherTime')}
-            >
-              <DialogTitle>Update breather time</DialogTitle>
-              <DialogContent>
-                <form className={classes.container}>
-                  <FormControl className={classes.formControl}>
-                    <InputLabel htmlFor="breather-time-simple">Breather time</InputLabel>
-                    <Select
-                      value={this.state.breatherTime}
-                      onChange={this.handleChange('breatherTime')}
-                      input={<Input id="breather-time-simple" />}
-                    >
-                      <MenuItem value={0}>0 minutes</MenuItem>
-                      <MenuItem value={5}>5 minutes</MenuItem>
-                      <MenuItem value={10}>10 minutes</MenuItem>
-                      <MenuItem value={15}>15 minutes</MenuItem>
-                      <MenuItem value={20}>20 minutes</MenuItem>
-                      <MenuItem value={30}>30 minutes</MenuItem>
-                    </Select>
-                  </FormControl>
-                </form>
-              </DialogContent>
-              <DialogActions>
-                <Button onClick={() => this.handleClose('breatherTime')} color="primary">
-                  Cancel
-                </Button>
-                <Button onClick={() => this.handleClose('breatherTime')} color="primary">
-                  Ok
-                </Button>
-              </DialogActions>
-            </Dialog>
-          </ListItem>
-        </List>
+             {/* Breather Time */}
+            <ListItem style={{ borderBottom: '1px solid gray' }}>
+              <ListItemText primary={'Breather time'}/>
+              <Button style={{ border: '1px solid gray' }} onClick={() => this.handleClickOpen('breatherTime')}>
+                {this.state.breatherTime} {this.state.breatherTime > 45 ? 'hr' : ' minutes'}</Button>
+              <Dialog
+                disableBackdropClick
+                disableEscapeKeyDown
+                open={this.state.openbreatherTime}
+                onClose={() => this.handleClose('breatherTime')}
+              >
+                <DialogTitle>Update breather time</DialogTitle>
+                <DialogContent>
+                  <form className={classes.container}>
+                    <FormControl className={classes.formControl}>
+                      <InputLabel htmlFor="breather-time-simple">Breather time</InputLabel>
+                      <Select
+                        value={this.state.breatherTime}
+                        onChange={this.handleChange('breatherTime')}
+                        input={<Input id="breather-time-simple" />}
+                      >
+                        <MenuItem value={0}>0 minutes</MenuItem>
+                        <MenuItem value={5}>5 minutes</MenuItem>
+                        <MenuItem value={10}>10 minutes</MenuItem>
+                        <MenuItem value={15}>15 minutes</MenuItem>
+                        <MenuItem value={20}>20 minutes</MenuItem>
+                        <MenuItem value={30}>30 minutes</MenuItem>
+                      </Select>
+                    </FormControl>
+                  </form>
+                </DialogContent>
+                <DialogActions>
+                  <Button onClick={() => this.handleClose('breatherTime')} color="primary">
+                    Cancel
+                  </Button>
+                  <Button onClick={() => this.handleClose('breatherTime')} color="primary">
+                    Ok
+                  </Button>
+                </DialogActions>
+              </Dialog>
+            </ListItem>
+          </List>
         }
       </div>
         <div>
@@ -320,6 +327,16 @@ Preferences.propTypes = {
   pUpdateUserPreferences: PropTypes.func,
   classes: PropTypes.object,
   history: PropTypes.object,
+};
+
+Preferences.defaultProps = {
+  loggedIn: false,
+  pFetchUserProfile: noop,
+  preferences: {},
+  pFetchUserPreferences: noop,
+  pUpdateUserPreferences: noop,
+  classes: {},
+  history: {},
 };
 
 const mapStateToProps = state => ({

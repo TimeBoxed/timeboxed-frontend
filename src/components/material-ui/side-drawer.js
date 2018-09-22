@@ -1,4 +1,5 @@
 import React from 'react';
+import { noop } from 'lodash';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
@@ -88,6 +89,12 @@ SideDrawer.propTypes = {
   classes: PropTypes.object.isRequired,
   loggedIn: PropTypes.bool,
   logout: PropTypes.func,
+};
+
+SideDrawer.defaultProps = {
+  classes: {},
+  loggedIn: false,
+  logout: noop,
 };
 
 const mapStateToProps = state => ({

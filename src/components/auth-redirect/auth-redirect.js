@@ -9,7 +9,7 @@ class AuthRedirect extends Component {
     const { location, token } = this.props;
     const { pathname } = location;
 
-    const destinationRoute = pathCheck(pathname, !!token);
+    const destinationRoute = pathCheck(pathname, token);
 
     return (
       <div>
@@ -23,6 +23,11 @@ class AuthRedirect extends Component {
 AuthRedirect.propTypes = {
   token: PropTypes.bool,
   location: PropTypes.object,
+};
+
+AuthRedirect.defaultProps = {
+  token: false,
+  location: {},
 };
 
 const mapStateToProps = state => ({

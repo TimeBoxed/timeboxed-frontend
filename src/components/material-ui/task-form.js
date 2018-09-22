@@ -1,4 +1,5 @@
 import React from 'react';
+import { noop } from 'lodash';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import compose from 'recompose/compose';
@@ -156,14 +157,14 @@ class FormDialog extends React.Component {
 
             { this.state.dateSelect
               && <TextField
-                autoFocus
-                margin="dense"
-                id="dueDate"
-                value={this.state.dueDate}
-                label="Due Date"
-                type="date"
-                onChange={this.handleChange}
-                fullWidth
+                  autoFocus
+                  margin="dense"
+                  id="dueDate"
+                  value={this.state.dueDate}
+                  label="Due Date"
+                  type="date"
+                  onChange={this.handleChange}
+                  fullWidth
                 />
             }
           </DialogContent>
@@ -188,6 +189,18 @@ FormDialog.propTypes = {
   handleOpen: PropTypes.func,
   taskUpdateRequest: PropTypes.func,
   task: PropTypes.object,
+  tasks: PropTypes.array,
+  show: PropTypes.bool,
+  timeEstimateProp: PropTypes.number,
+  classes: PropTypes.object,
+};
+
+FormDialog.defaultProps = {
+  preferences: {},
+  onComplete: noop,
+  handleFormOpen: noop,
+  handleOpen: noop,
+  taskUpdateRequest: noop,
   tasks: PropTypes.array,
   show: PropTypes.bool,
   timeEstimateProp: PropTypes.number,

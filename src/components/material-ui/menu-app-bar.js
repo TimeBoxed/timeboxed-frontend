@@ -1,4 +1,5 @@
 import React from 'react';
+import { noop } from 'lodash';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
@@ -30,7 +31,6 @@ class MenuAppBar extends React.Component {
 
   render() {
     const { classes, loggedIn } = this.props;
-    const { auth } = this.state;
 
     if (!loggedIn) return null;
 
@@ -38,10 +38,7 @@ class MenuAppBar extends React.Component {
       <div className={classes.root}>
         <AppBar position='fixed'>
           <Toolbar>
-            {auth ? (
-            <SideDrawer />
-            ) : <MenuIcon />
-            }
+            {this.state.auth ? <SideDrawer/> : <MenuIcon/>}
             <Typography variant="title" color="inherit" className={classes.flex}>
               {
                 this.props.history.location.pathname.replace(/\//, '').toUpperCase()
@@ -60,7 +57,13 @@ MenuAppBar.propTypes = {
   loggedIn: PropTypes.bool,
   logout: PropTypes.func,
   history: PropTypes.object,
-  location: PropTypes.object,
+};
+
+MenuAppBar.defaultProps = {
+  classes: {},
+  loggedIn: false,
+  logout: noop,
+  history: {},
 };
 
 const mapStateToProps = state => ({
