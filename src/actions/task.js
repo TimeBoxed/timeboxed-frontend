@@ -90,12 +90,7 @@ const tasksDeleteRequest = tasks => (store) => {
     });
 };
 
-export { 
-  setTask,
-  getTasks,
-  updateTask,
-  deleteBulkTasks,
-  updateBulkTasks,
+export {
   taskCreateRequest,
   fetchAllTasks,
   taskUpdateStatus,

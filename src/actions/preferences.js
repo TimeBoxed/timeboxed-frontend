@@ -28,4 +28,4 @@ const preferencesUpdateRequest = preferences => (store) => {
     });
 };
 
-export { preferencesUpdateRequest, preferencesFetchRequest };
+export { setPreferences, preferencesUpdateRequest, preferencesFetchRequest };

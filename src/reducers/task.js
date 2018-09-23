@@ -18,12 +18,12 @@ export default (state = [], { type, payload }) => {
           return [payload, ...state];
         }
         return newState;
-      } 
+      }
       return state.filter(task => task._id !== payload._id);
     case 'TASK_BULK_UPDATE':
       return payload.filter(task => task.completed === false);
     case 'TOKEN_REMOVE':
-      return [];  
+      return [];
     default:
       return state;
   }

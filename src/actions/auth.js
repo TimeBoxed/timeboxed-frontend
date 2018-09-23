@@ -1,3 +1,4 @@
+import superagent from 'superagent';
 import { deleteCookie } from '../utils/cookie';
 import { TOKEN_COOKIE_KEY } from '../constants';
 
@@ -6,9 +7,18 @@ const removeToken = () => ({
 });
 
 const logout = () => {
-  location.reload();
+  window.location.reload();
   deleteCookie(TOKEN_COOKIE_KEY);
   return removeToken();
 };
 
-export { removeToken, logout };
+const deleteAccountRequest = () => (store) => {
+  const { token } = store.getState();
+  return superagent.del(`${API_URL}/account`)
+    .set('Authorization', `Bearer ${token}`)
+    .then(() => {
+      return logout();
+    });
+};
+
+export { logout, deleteAccountRequest };
