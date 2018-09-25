@@ -56,8 +56,8 @@ class MenuAppBar extends React.Component {
       <div className={classes.root}>
         <AppBar position='fixed'>
           <Toolbar>
-          <div className={classes.menuIconHolder}>
-            {this.state.auth ? <SideDrawer/> : <MenuIcon/>}
+            <div className={classes.menuIconHolder}>
+              {this.state.auth ? <SideDrawer/> : <MenuIcon/>}
             </div>
             <Typography variant="title" color="inherit" className={classes.flex}>
               {
