@@ -285,55 +285,77 @@ class Dashboard extends React.Component {
     return (
       <React.Fragment>
         <MenuAppBar editing={this.state.editingTasks} onComplete={this.handleEditing}/>
-      <div className={classes.dashboardPage}>
-        <div className={classes.listHolder}>
-          {
-            !this.state.editingTasks
-              ? <div className={classes.topButtonsDiv}>
-                  <Button
+        <div className={classes.dashboardPage}>
+          <div className={classes.listHolder}>
+            {
+              !this.state.editingTasks
+                ? <div className={classes.topButtonsDiv}>
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      className={classes.blueButton}
+                      onClick={this.handleEditing}>
+                      Edit
+                    </Button>
+                    <Button variant="contained" color="secondary" className={classes.button} onClick={this.handleFormOpen}>
+                      Add
+                    </Button>
+                    </div>
+                : <Button
                     variant="contained"
                     color="primary"
                     className={classes.blueButton}
                     onClick={this.handleEditing}>
-                    Edit
+                    Done
                   </Button>
-                   <Button variant="contained" color="secondary" className={classes.button} onClick={this.handleFormOpen}>
-                    Add
-                  </Button>
-                  </div>
-              : <Button
-                  variant="contained"
-                  color="primary"
-                  className={classes.blueButton}
-                  onClick={this.handleEditing}>
-                  Done
-                </Button>
-          }
-        <div>
-          {
-            preferences
-            && <MaterialUITaskForm
-                  show={this.state.openForm}
-                  onComplete={this.handleTaskComplete}
-                  handleFormOpen={this.handleFormOpen}
-                  task={null}
-                  timeEstimateProp={preferences.taskLengthDefault}
-                />
-          }
-          </div>
-          {
-            (this.state.editingTasks && this.state.taskOrder.length > 0)
-            && <SortableList
-                  items={this.state.taskOrder}
-                  onSortEnd={this.onSortEnd}
-                  useDragHandle={true}
-                />
-             }
-          {
-            (!this.state.editingTasks && this.state.taskOrder.length > 0)
-            && <List className={classes.container} component='div'>
+            }
+          <div>
+            {
+              preferences
+              && <MaterialUITaskForm
+                    show={this.state.openForm}
+                    onComplete={this.handleTaskComplete}
+                    handleFormOpen={this.handleFormOpen}
+                    task={null}
+                    timeEstimateProp={preferences.taskLengthDefault}
+                  />
+            }
+            </div>
+            {
+              (this.state.editingTasks && this.state.taskOrder.length > 0)
+              && <SortableList
+                    items={this.state.taskOrder}
+                    onSortEnd={this.onSortEnd}
+                    useDragHandle={true}
+                  />
+              }
+            {
+              (!this.state.editingTasks && this.state.taskOrder.length > 0)
+              && <List className={classes.container} component='div'>
+                  {
+                    this.state.taskOrder.sort((a, b) => a.order - b.order)
+                      .map(task => (
+                        <TaskItem
+                          key={task._id}
+                          task={task}
+                          onComplete={this.handleStatusChange}
+                          editingTasks={this.state.editingTasks}
+                          onSelect={this.handleSelect}
+                          selected={false}
+                          updateTask={this.handleUpdateTask}
+                        />))
+                  }
+              </List>
+            }
+            <div className='show-hide-tasks'>
+              <Typography gutterBottom variant='subheading' onClick={this.handleShowHideTasks}>{completedTasks} Completed Tasks</Typography>
+            </div>
+            <div className={completedTasksClass}>
+              <List className={classes.completedContainer} component='div'>
                 {
-                  this.state.taskOrder.sort((a, b) => a.order - b.order)
+                  (this.state.completedTasks.length > 0)
+                  && this.state.completedTasks
+                    .sort((a, b) => b.order - a.order)
                     .map(task => (
                       <TaskItem
                         key={task._id}
@@ -345,53 +367,31 @@ class Dashboard extends React.Component {
                         updateTask={this.handleUpdateTask}
                       />))
                 }
-            </List>
-          }
-          <div className='show-hide-tasks'>
-            <Typography gutterBottom variant='subheading' onClick={this.handleShowHideTasks}>{completedTasks} Completed Tasks</Typography>
-          </div>
-          <div className={completedTasksClass}>
-            <List className={classes.completedContainer} component='div'>
-              {
-                (this.state.completedTasks.length > 0)
-                && this.state.completedTasks
-                  .sort((a, b) => b.order - a.order)
-                  .map(task => (
-                    <TaskItem
-                      key={task._id}
-                      task={task}
-                      onComplete={this.handleStatusChange}
-                      editingTasks={this.state.editingTasks}
-                      onSelect={this.handleSelect}
-                      selected={false}
-                      updateTask={this.handleUpdateTask}
-                    />))
-              }
-            </List>
-          </div>
-          <div className={classes.buttonDiv}>
-          {
-            this.state.editingTasks
-              ? <Button variant="contained" color="primary" className={classes.deleteButton} onClick={this.handleDelete}>
-                  <Delete/>
-                  <Typography className={classes.deleteText}>Delete</Typography>
-                </Button>
-              : <div>
-                  <Button
-                    onClick={this.handleEditing}
-                    variant="fab"
-                    color="primary"
-                    aria-label="edit"
-                    className={classes.fab}
-                  >
-                  <EditIcon />
+              </List>
+            </div>
+            <div className={classes.buttonDiv}>
+            {
+              this.state.editingTasks
+                ? <Button variant="contained" color="primary" className={classes.deleteButton} onClick={this.handleDelete}>
+                    <Delete/>
+                    <Typography className={classes.deleteText}>Delete</Typography>
                   </Button>
-                  <AddFAB activate={this.handleFormOpen}/>
-                </div>
-          }
+                : <div>
+                    <Button
+                      onClick={this.handleEditing}
+                      variant="fab"
+                      color="primary"
+                      aria-label="edit"
+                      className={classes.fab}
+                    >
+                    <EditIcon />
+                    </Button>
+                    <AddFAB activate={this.handleFormOpen}/>
+                  </div>
+            }
+            </div>
           </div>
         </div>
-      </div>
       </React.Fragment>
     );
   }
