@@ -20,6 +20,8 @@ const styles = theme => ({
   },
   mainItem: {
     borderBottom: '1px solid #E4E4E4',
+    paddingTop: 2,
+    paddingBottom: 2,
   },
   time: {
     textAlign: 'right',

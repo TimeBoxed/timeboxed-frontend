@@ -21,6 +21,7 @@ import LoadSpinner from '../material-ui/load-spinner';
 import * as profileActions from '../../actions/profile';
 import * as taskActions from '../../actions/task';
 import MaterialUITaskForm from '../material-ui/task-form';
+import MenuAppBar from '../material-ui/menu-app-bar';
 
 // -------------------------------------------------------------------------------------------------
 // MATERIAL UI COMPONENTS
@@ -56,10 +57,11 @@ const styles = theme => ({
     justifyContent: 'center',
   },
   listHolder: {
-    width: '600px',
-    paddingTop: '80px',
+    width: 600,
+    paddingTop: 80,
     [theme.breakpoints.down('xs')]: {
-      minWidth: '320px',
+      minWidth: 320,
+      paddingTop: 50,
     },
   },
   topButtonsDiv: {
@@ -78,6 +80,9 @@ const styles = theme => ({
   blueButton: {
     width: 100,
     backgroundColor: '#0B5999',
+    [theme.breakpoints.down('xs')]: {
+      display: 'none',
+    },
   },
   deleteButton: {
     width: '35%',
@@ -278,6 +283,8 @@ class Dashboard extends React.Component {
     }
 
     return (
+      <React.Fragment>
+        <MenuAppBar editing={this.state.editingTasks} onComplete={this.handleEditing}/>
       <div className={classes.dashboardPage}>
         <div className={classes.listHolder}>
           {
@@ -385,6 +392,7 @@ class Dashboard extends React.Component {
           </div>
         </div>
       </div>
+      </React.Fragment>
     );
   }
 }

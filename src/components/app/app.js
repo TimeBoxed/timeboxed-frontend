@@ -56,8 +56,8 @@ export default class App extends Component {
             <Route exact path={ROUTES.LANDING} component={Landing}/>
             <Switch>
               <Route path={ROUTES.NOT_FOUND} component={NotFound}/>
+              <Route path={ROUTES.DASHBOARD} component={Dashboard}/>
               <AppPage>
-                <Route path={ROUTES.DASHBOARD} component={Dashboard}/>
                 <Route path={ROUTES.PRIVACY} component={PrivacyDialog}/>
                 <Route path={ROUTES.PRIVACY_REJECTED} component={PrivacyRejectionAlert}/>
                 <Route path={ROUTES.PREFERENCES} component={Preferences}/>
