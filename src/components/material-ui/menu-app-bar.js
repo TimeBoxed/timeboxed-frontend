@@ -6,12 +6,13 @@ import { withRouter } from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
+import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import MenuIcon from '@material-ui/icons/Menu';
 import SideDrawer from './side-drawer';
 import * as authActions from '../../actions/auth';
 
-const styles = {
+const styles = theme => ({
   root: {
     flexGrow: 1,
   },
@@ -20,14 +21,39 @@ const styles = {
   },
   placeholder: {
     height: 28,
-    width: 24,
+    width: 64,
   },
-};
+  secondPlaceholder: {
+    display: 'block',
+    height: 28,
+    width: 64,
+    [theme.breakpoints.down('xs')]: {
+      display: 'none',
+    },
+  },
+  menuIconHolder: {
+    width: 64,
+  },
+  doneButton: {
+    display: 'none',
+    width: 64,
+    padding: 0,
+    color: '#FFFFFF',
+    border: '1px solid #FFFFFF',
+    [theme.breakpoints.down('xs')]: {
+      display: 'block',
+    },
+  },
+});
 
 class MenuAppBar extends React.Component {
   state = {
     auth: this.props.loggedIn,
   };
+
+  handlePressDone = () => {
+    return this.props.onComplete();
+  }
 
   render() {
     const { classes, loggedIn } = this.props;
@@ -38,13 +64,27 @@ class MenuAppBar extends React.Component {
       <div className={classes.root}>
         <AppBar position='fixed'>
           <Toolbar>
-            {this.state.auth ? <SideDrawer/> : <MenuIcon/>}
+            <div className={classes.menuIconHolder}>
+              {this.state.auth ? <SideDrawer/> : <MenuIcon/>}
+            </div>
             <Typography variant="title" color="inherit" className={classes.flex}>
               {
                 this.props.history.location.pathname.replace(/\//, '').toUpperCase()
               }
             </Typography>
-            <div className={classes.placeholder}> </div>
+            {
+              this.props.editing
+                ? <React.Fragment>
+                    <Button
+                      className={classes.doneButton}
+                      onClick={this.handlePressDone}
+                    >
+                      Done
+                    </Button>
+                    <div className={classes.secondPlaceholder}></div>
+                  </React.Fragment>
+                : <div className={classes.placeholder}></div>
+            }
           </Toolbar>
         </AppBar>
       </div>
@@ -57,6 +97,8 @@ MenuAppBar.propTypes = {
   loggedIn: PropTypes.bool,
   logout: PropTypes.func,
   history: PropTypes.object,
+  onComplete: PropTypes.func,
+  editing: PropTypes.bool,
 };
 
 MenuAppBar.defaultProps = {
@@ -64,6 +106,7 @@ MenuAppBar.defaultProps = {
   loggedIn: false,
   logout: noop,
   history: {},
+  onComplete: noop,
 };
 
 const mapStateToProps = state => ({
