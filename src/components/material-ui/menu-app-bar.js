@@ -23,6 +23,14 @@ const styles = theme => ({
     height: 28,
     width: 64,
   },
+  secondPlaceholder: {
+    display: 'block',
+    height: 28,
+    width: 64,
+    [theme.breakpoints.down('xs')]: {
+      display: 'none',
+    },
+  },
   menuIconHolder: {
     width: 64,
   },
@@ -66,13 +74,16 @@ class MenuAppBar extends React.Component {
             </Typography>
             {
               this.props.editing
-                ? <Button
-                    className={classes.doneButton}
-                    onClick={this.handlePressDone}
-                  >
-                    Done
-                  </Button>
-                : <div className={classes.placeholder}> </div>
+                ? <React.Fragment>
+                    <Button
+                      className={classes.doneButton}
+                      onClick={this.handlePressDone}
+                    >
+                      Done
+                    </Button>
+                    <div className={classes.secondPlaceholder}></div>
+                  </React.Fragment>
+                : <div className={classes.placeholder}></div>
             }
           </Toolbar>
         </AppBar>
