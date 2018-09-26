@@ -140,23 +140,48 @@ class Dashboard extends React.Component {
     };
   }
 
+  handleMountTaskFetch = () => {
+    this.props.pFetchAllTasks()
+      .then(() => {
+        return this.setState({
+          taskOrder: this.props.tasks ? this.props.tasks.sort((a, b) => a.order - b.order) : [],
+          completedTasks: this.props.completedTasks || [],
+          loading: false,
+        });
+      });
+  }
+
+  handleMountPreferencesFetch = () => {
+    this.props.pFetchUserPreferences()
+      .then(() => {
+        return this.handleMountTaskFetch();
+      });
+  }
+
+  handleMountProfileFetch = () => {
+    this.props.pFetchUserProfile()
+      .then(() => {
+        return this.handleMountPreferencesFetch();
+      });
+  }
+
   componentDidMount() {
     if (this.props.loggedIn) {
-      this.props.pFetchUserProfile()
-        .then(() => {
-          return this.props.pFetchUserPreferences();
-        })
-        .then(() => {
-          return this.props.pFetchAllTasks();
-        })
-        .then(() => {
-          this.setState({
-            taskOrder: this.props.tasks ? this.props.tasks.sort((a, b) => a.order - b.order) : [],
-            completedTasks: this.props.completedTasks || [],
-            loading: false,
-          });
-        });
+      if (!this.props.profile) {
+        return this.handleMountProfileFetch();
+      }
+      if (!this.props.preferences) {
+        return this.handleMountPreferencesFetch();
+      }
+      if (!this.props.tasks) {
+        return this.handleMountTaskFetch();
+      }
     }
+    return this.setState({
+      taskOrder: this.props.tasks ? this.props.tasks.sort((a, b) => a.order - b.order) : [],
+      completedTasks: this.props.completedTasks || [],
+      loading: false,
+    });
   }
 
   onSortEnd = ({ oldIndex, newIndex }) => {
@@ -167,6 +192,7 @@ class Dashboard extends React.Component {
   };
 
   handleTaskComplete = (task) => {
+    this.setState({ openForm: false });
     task.order = this.state.taskOrder.length > 0
       ? this.state.taskOrder[this.state.taskOrder.length - 1].order + 1
       : 0;
@@ -174,7 +200,6 @@ class Dashboard extends React.Component {
     this.props.pCreateTask(task)
       .then(() => {
         return this.setState({
-          openForm: false,
           taskOrder: this.props.tasks.sort((a, b) => a.order - b.order),
           completedTasks: this.props.completedTasks,
         });
@@ -190,6 +215,7 @@ class Dashboard extends React.Component {
   };
 
   handleStatusChange = (task, completed) => {
+    this.setState({ openForm: false });
     let newOrder = 0;
     if (completed === false) {
       newOrder = this.state.taskOrder.length > 0
@@ -199,7 +225,6 @@ class Dashboard extends React.Component {
     this.props.pUpdateTaskStatus(task, completed, newOrder)
       .then(() => {
         return this.setState({
-          openForm: false,
           taskOrder: this.props.tasks.sort((a, b) => a.order - b.order),
           completedTasks: this.props.completedTasks,
         });
@@ -207,10 +232,10 @@ class Dashboard extends React.Component {
   };
 
   handleUpdateTask = (task) => {
+    this.setState({ openForm: false });
     this.props.pTaskUpdateRequest(task)
       .then(() => {
         return this.setState({
-          openForm: false,
           taskOrder: this.props.tasks.sort((a, b) => a.order - b.order),
           completedTasks: this.props.completedTasks,
         });
