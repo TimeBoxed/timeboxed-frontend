@@ -21,6 +21,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import * as profileActions from '../../actions/profile';
 import * as preferencesActions from '../../actions/preferences';
 import { deleteAccountRequest } from '../../actions/auth';
+import { openSnackbar, closeSnackbar } from '../../actions/ui';
 import ROUTES from '../../routes';
 
 import './preferences.scss';
@@ -122,6 +123,8 @@ class Preferences extends React.Component {
   handleSubmit = () => {
     this.props.pUpdateUserPreferences(this.state)
       .then(() => {
+        this.props.renderSnackbar('success', 'Preferences updated');
+        setTimeout(() => this.props.hideSnackbar(), 3000);
         return this.setState({ fireRedirect: true });
       });
   };
@@ -428,6 +431,8 @@ Preferences.propTypes = {
   history: PropTypes.object,
   profileReset: PropTypes.func,
   accountDelete: PropTypes.func,
+  renderSnackbar: PropTypes.func,
+  hideSnackbar: PropTypes.func,
 };
 
 Preferences.defaultProps = {
@@ -440,6 +445,8 @@ Preferences.defaultProps = {
   history: {},
   profileReset: noop,
   accountDelete: noop,
+  renderSnackbar: noop,
+  hideSnackbar: noop,
 };
 
 const mapStateToProps = state => ({
@@ -454,6 +461,8 @@ const mapDispatchToProps = dispatch => ({
   pUpdateUserPreferences: prefs => dispatch(preferencesActions.preferencesUpdateRequest(prefs)),
   profileReset: () => dispatch(profileActions.profileResetRequest()),
   accountDelete: () => dispatch(deleteAccountRequest()),
+  renderSnackbar: (type, message) => dispatch(openSnackbar(type, message)),
+  hideSnackbar: () => dispatch(closeSnackbar()),
 });
 
 export default compose(

@@ -9,6 +9,7 @@ import Favicon from 'react-favicon';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import teal from '@material-ui/core/colors/teal';
 import deepOrange from '@material-ui/core/colors/deepOrange';
+import Snackbar from '../material-ui/snackbar';
 
 
 // ===============================
@@ -63,6 +64,7 @@ export default class App extends Component {
                 <Route path={ROUTES.PREFERENCES} component={Preferences}/>
               </AppPage>
             </Switch>
+            <Snackbar/>
           </ScrollToTop>
         </BrowserRouter>
       </MuiThemeProvider>
