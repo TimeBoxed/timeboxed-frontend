@@ -22,6 +22,7 @@ import * as profileActions from '../../actions/profile';
 import * as taskActions from '../../actions/task';
 import MaterialUITaskForm from '../material-ui/task-form';
 import MenuAppBar from '../material-ui/menu-app-bar';
+import { triggerSnackbar } from '../../actions/ui';
 
 // -------------------------------------------------------------------------------------------------
 // MATERIAL UI COMPONENTS
@@ -149,21 +150,21 @@ class Dashboard extends React.Component {
           loading: false,
         });
       });
-  }
+  };
 
   handleMountPreferencesFetch = () => {
     this.props.pFetchUserPreferences()
       .then(() => {
         return this.handleMountTaskFetch();
       });
-  }
+  };
 
   handleMountProfileFetch = () => {
     this.props.pFetchUserProfile()
       .then(() => {
         return this.handleMountPreferencesFetch();
       });
-  }
+  };
 
   componentDidMount() {
     if (this.props.loggedIn) {
@@ -224,10 +225,14 @@ class Dashboard extends React.Component {
     }
     this.props.pUpdateTaskStatus(task, completed, newOrder)
       .then(() => {
+        this.props.triggerSnackbar('success', completed ? 'Task completed' : 'Task reopened');
         return this.setState({
           taskOrder: this.props.tasks.sort((a, b) => a.order - b.order),
           completedTasks: this.props.completedTasks,
         });
+      })
+      .catch(() => {
+        this.props.triggerSnackbar('error');
       });
   };
 
@@ -235,10 +240,14 @@ class Dashboard extends React.Component {
     this.setState({ openForm: false });
     this.props.pTaskUpdateRequest(task)
       .then(() => {
+        this.props.triggerSnackbar('success', 'Task updated');
         return this.setState({
           taskOrder: this.props.tasks.sort((a, b) => a.order - b.order),
           completedTasks: this.props.completedTasks,
         });
+      })
+      .catch(() => {
+        this.props.triggerSnackbar('error');
       });
   };
 
@@ -437,6 +446,7 @@ Dashboard.propTypes = {
   completedTasks: PropTypes.array,
   preferences: PropTypes.object,
   classes: PropTypes.object,
+  triggerSnackbar: PropTypes.func,
 };
 
 Dashboard.defaultProps = {
@@ -451,6 +461,7 @@ Dashboard.defaultProps = {
   pTaskUpdateRequest: noop,
   pTasksBulkUpdate: noop,
   classes: {},
+  triggerSnackbar: noop,
 };
 
 const mapStateToProps = state => ({
@@ -472,6 +483,7 @@ const mapDispatchToProps = dispatch => ({
   pTasksDeleteRequest: tasks => dispatch(taskActions.tasksDeleteRequest(tasks)),
   pTaskUpdateRequest: task => dispatch(taskActions.taskUpdateRequest(task)),
   pTasksBulkUpdate: tasks => dispatch(taskActions.tasksBulkUpdateRequest(tasks)),
+  triggerSnackbar: (type, message) => dispatch(triggerSnackbar(type, message)),
 });
 
 export default compose(

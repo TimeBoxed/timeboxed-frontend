@@ -11,4 +11,11 @@ const closeSnackbar = () => ({
   type: 'SNACKBAR_CLOSE',
 });
 
-export { openSnackbar, closeSnackbar };
+const ERROR_MESSAGE = 'Something went wrong. Please try your request again.';
+
+const triggerSnackbar = (type, message = ERROR_MESSAGE) => (store) => {
+  store.dispatch(openSnackbar(type, message));
+  setTimeout(() => store.dispatch(closeSnackbar()), 2000);
+};
+
+export { triggerSnackbar }; // eslint-disable-line

@@ -1,9 +1,20 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-// import Button from '@material-ui/core/Button';
+import { withStyles } from '@material-ui/core/styles';
 import Snackbar from '@material-ui/core/Snackbar';
 import Slide from '@material-ui/core/Slide';
+import CheckCircleIcon from '@material-ui/icons/CheckCircle';
+import ErrorIcon from '@material-ui/icons/Error';
+
+const styles = {
+  error: {
+    backgroundColor: 'red',
+  },
+  success: {
+    backgroundColor: 'green',
+  },
+};
 
 const TransitionUp = (props) => {
   return <Slide {...props} direction="up" />;
@@ -16,15 +27,29 @@ class DirectionSnackbar extends React.Component {
   };
 
   render() {
+    const {
+      classes,
+      type,
+      message,
+      open,
+    } = this.props;
+
+    const messageJSX = (
+      <div className={classes[type]}>
+        { type === 'error' ? <ErrorIcon/> : <CheckCircleIcon/> }
+        <span id="message-id">{message}</span>
+      </div>
+    );
+
     return (
       <div>
         <Snackbar
-          open={this.props.open}
+          open={open}
           TransitionComponent={this.state.Transition}
           ContentProps={{
             'aria-describedby': 'message-id',
           }}
-          message={<span id="message-id">{this.props.message}</span>}
+          message={messageJSX}
         />
       </div>
     );
@@ -32,20 +57,22 @@ class DirectionSnackbar extends React.Component {
 }
 
 DirectionSnackbar.propTypes = {
+  type: PropTypes.string,
   open: PropTypes.bool,
   message: PropTypes.string,
+  classes: PropTypes.object,
 };
 
 DirectionSnackbar.defaultProps = {
   open: false,
   message: '',
+  classes: {},
 };
 
 const mapStateToProps = state => ({
   open: state.ui.snackbar.open,
   message: state.ui.snackbar.message,
+  type: state.ui.snackbar.sbType,
 });
 
-// Something went wrong. Please try your request again
-
-export default connect(mapStateToProps)(DirectionSnackbar);
+export default connect(mapStateToProps)(withStyles(styles)(DirectionSnackbar));
