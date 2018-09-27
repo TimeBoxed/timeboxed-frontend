@@ -22,6 +22,7 @@ import * as profileActions from '../../actions/profile';
 import * as taskActions from '../../actions/task';
 import MaterialUITaskForm from '../material-ui/task-form';
 import MenuAppBar from '../material-ui/menu-app-bar';
+import SideTaskForm from '../material-ui/side-task-form';
 
 // -------------------------------------------------------------------------------------------------
 // MATERIAL UI COMPONENTS
@@ -54,14 +55,34 @@ const styles = theme => ({
   dashboardPage: {
     height: '100%',
     display: 'flex',
-    justifyContent: 'center',
+    justifyContent: 'start',
+    [theme.breakpoints.down('xs')]: {
+      justifyContent: 'center',
+    },
   },
   listHolder: {
-    width: 600,
+    width: '100%',
     paddingTop: 80,
+    display: 'flex',
+    justifyContent: 'space-evenly',
     [theme.breakpoints.down('xs')]: {
       minWidth: 320,
       paddingTop: 50,
+    },
+  },
+  dashboardLeft: {
+    width: '60%',
+    margin: '0 0 0 15px',
+    borderRight: '1px solid #E4E4E4',
+    [theme.breakpoints.down('xs')]: {
+      width: '100%',
+    },
+  },
+  dashboardRight: {
+    width: '40%',
+    margin: '0 15px',
+    [theme.breakpoints.down('xs')]: {
+      display: 'none',
     },
   },
   topButtonsDiv: {
@@ -69,7 +90,6 @@ const styles = theme => ({
     margin: '0 auto',
     display: 'flex',
     justifyContent: 'space-between',
-
     [theme.breakpoints.down('xs')]: {
       display: 'none',
     },
@@ -110,7 +130,7 @@ const styles = theme => ({
     marginTop: 90,
   },
   fab: {
-    display: 'none',
+    // display: 'none',
     [theme.breakpoints.down('xs')]: {
       display: 'block',
       position: 'fixed',
@@ -137,6 +157,7 @@ class Dashboard extends React.Component {
       completedTasks: [],
       orderToEdit: [],
       loading: true,
+      selectedTask: {},
     };
   }
 
@@ -231,6 +252,10 @@ class Dashboard extends React.Component {
       });
   };
 
+  handleTaskDetail = (task) => {
+    this.setState({ selectedTask: task });
+  }
+
   handleUpdateTask = (task) => {
     this.setState({ openForm: false });
     this.props.pTaskUpdateRequest(task)
@@ -312,53 +337,77 @@ class Dashboard extends React.Component {
         <MenuAppBar editing={this.state.editingTasks} onComplete={this.handleEditing}/>
         <div className={classes.dashboardPage}>
           <div className={classes.listHolder}>
-            {
-              !this.state.editingTasks
-                ? <div className={classes.topButtonsDiv}>
-                    <Button
+            <div className={classes.dashboardLeft}>
+              {
+                !this.state.editingTasks
+                  ? <div className={classes.topButtonsDiv}>
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        className={classes.blueButton}
+                        onClick={this.handleEditing}>
+                        Edit
+                      </Button>
+                      <Button variant="contained" color="secondary" className={classes.button} onClick={this.handleFormOpen}>
+                        Add
+                      </Button>
+                      </div>
+                  : <Button
                       variant="contained"
                       color="primary"
                       className={classes.blueButton}
                       onClick={this.handleEditing}>
-                      Edit
+                      Done
                     </Button>
-                    <Button variant="contained" color="secondary" className={classes.button} onClick={this.handleFormOpen}>
-                      Add
-                    </Button>
-                    </div>
-                : <Button
-                    variant="contained"
-                    color="primary"
-                    className={classes.blueButton}
-                    onClick={this.handleEditing}>
-                    Done
-                  </Button>
-            }
-          <div>
-            {
-              preferences
-              && <MaterialUITaskForm
-                    show={this.state.openForm}
-                    onComplete={this.handleTaskComplete}
-                    handleFormOpen={this.handleFormOpen}
-                    task={null}
-                    timeEstimateProp={preferences.taskLengthDefault}
-                  />
-            }
-            </div>
-            {
-              (this.state.editingTasks && this.state.taskOrder.length > 0)
-              && <SortableList
-                    items={this.state.taskOrder}
-                    onSortEnd={this.onSortEnd}
-                    useDragHandle={true}
-                  />
               }
-            {
-              (!this.state.editingTasks && this.state.taskOrder.length > 0)
-              && <List className={classes.container} component='div'>
+            <div>
+              {
+                preferences
+                && <MaterialUITaskForm
+                      show={this.state.openForm}
+                      onComplete={this.handleTaskComplete}
+                      handleFormOpen={this.handleFormOpen}
+                      task={null}
+                      timeEstimateProp={preferences.taskLengthDefault}
+                    />
+              }
+              </div>
+              {
+                (this.state.editingTasks && this.state.taskOrder.length > 0)
+                && <SortableList
+                      items={this.state.taskOrder}
+                      onSortEnd={this.onSortEnd}
+                      useDragHandle={true}
+                    />
+                }
+              {
+                (!this.state.editingTasks && this.state.taskOrder.length > 0)
+                && <List className={classes.container} component='div'>
+                    {
+                      this.state.taskOrder.sort((a, b) => a.order - b.order)
+                        .map(task => (
+                          <TaskItem
+                            key={task._id}
+                            task={task}
+                            onComplete={this.handleStatusChange}
+                            editingTasks={this.state.editingTasks}
+                            onSelect={this.handleSelect}
+                            onClickShowDetail={this.handleTaskDetail}
+                            selected={false}
+                            updateTask={this.handleUpdateTask}
+                          />))
+                    }
+                </List>
+              }
+              <div className='show-hide-tasks'>
+                <Typography gutterBottom variant='subheading' onClick={this.handleShowHideTasks}>{completedTasks} Completed Tasks</Typography>
+              </div>
+              <div className={completedTasksClass}>
+                <List className={classes.completedContainer} component='div'>
                   {
-                    this.state.taskOrder.sort((a, b) => a.order - b.order)
+                    (this.state.completedTasks.length > 0)
+                    && this.state.completedTasks
+                      .sort((a, b) => b.order - a.order)
                       .map(task => (
                         <TaskItem
                           key={task._id}
@@ -370,50 +419,43 @@ class Dashboard extends React.Component {
                           updateTask={this.handleUpdateTask}
                         />))
                   }
-              </List>
-            }
-            <div className='show-hide-tasks'>
-              <Typography gutterBottom variant='subheading' onClick={this.handleShowHideTasks}>{completedTasks} Completed Tasks</Typography>
-            </div>
-            <div className={completedTasksClass}>
-              <List className={classes.completedContainer} component='div'>
-                {
-                  (this.state.completedTasks.length > 0)
-                  && this.state.completedTasks
-                    .sort((a, b) => b.order - a.order)
-                    .map(task => (
-                      <TaskItem
-                        key={task._id}
-                        task={task}
-                        onComplete={this.handleStatusChange}
-                        editingTasks={this.state.editingTasks}
-                        onSelect={this.handleSelect}
-                        selected={false}
-                        updateTask={this.handleUpdateTask}
-                      />))
-                }
-              </List>
-            </div>
-            <div className={classes.buttonDiv}>
-            {
-              this.state.editingTasks
-                ? <Button variant="contained" color="primary" className={classes.deleteButton} onClick={this.handleDelete}>
-                    <Delete/>
-                    <Typography className={classes.deleteText}>Delete</Typography>
-                  </Button>
-                : <div>
-                    <Button
-                      onClick={this.handleEditing}
-                      variant="fab"
-                      color="primary"
-                      aria-label="edit"
-                      className={classes.fab}
-                    >
-                    <EditIcon />
+                </List>
+              </div>
+              <div className={classes.buttonDiv}>
+              {
+                this.state.editingTasks
+                  ? <Button variant="contained" color="primary" className={classes.deleteButton} onClick={this.handleDelete}>
+                      <Delete/>
+                      <Typography className={classes.deleteText}>Delete</Typography>
                     </Button>
-                    <AddFAB activate={this.handleFormOpen}/>
-                  </div>
-            }
+                  : <div>
+                      <Button
+                        onClick={this.handleEditing}
+                        variant="fab"
+                        color="primary"
+                        aria-label="edit"
+                        className={classes.fab}
+                      >
+                      <EditIcon />
+                      </Button>
+                      <AddFAB activate={this.handleFormOpen}/>
+                    </div>
+              }
+              </div>
+              </div>
+              <div className={classes.dashboardRight}>
+                {
+                  this.state.selectedTask && this.state.selectedTask.title
+                    ? <SideTaskForm
+                        show={true}
+                        // handleFormOpen={this.handleFormOpen}
+                        task={this.state.selectedTask}
+                        onComplete={this.handleTaskUpdate}
+                        timeEstimateProp={this.state.selectedTask.timeEstimate}
+                        dependencies={this.state.selectedTask.dependencies}
+                      />
+                    : <Typography>Click on a task to view details</Typography>
+                }
             </div>
           </div>
         </div>

@@ -7,7 +7,7 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import Checkbox from '@material-ui/core/Checkbox';
 import Radio from '@material-ui/core/Radio';
-import MaterialUITaskForm from './task-form';
+// import MaterialUITaskForm from './task-form';
 
 const styles = theme => ({
   root: {
@@ -16,7 +16,7 @@ const styles = theme => ({
     backgroundColor: theme.palette.background.paper,
   },
   taskItem: {
-    maxWidth: '100%',
+    maxWidth: 600,
   },
   mainItem: {
     borderBottom: '1px solid #E4E4E4',
@@ -28,7 +28,12 @@ const styles = theme => ({
     minWidth: 50,
   },
   title: {
-    overflow: 'scroll',
+    maxWidth: 600,
+    wordWrap: 'break-word',
+    overflow: 'hidden',
+    maxHeight: '3.0em',
+    lineHeight: '1.8em',
+    textOverflow: 'ellipsis',
   },
 });
 
@@ -45,7 +50,7 @@ class TaskItem extends React.Component {
 
   handleOpen = () => {
     if (!this.props.editingTasks) {
-      this.setState(prevState => ({ showModal: !prevState.showModal }));
+      this.props.onClickShowDetail(this.props.task);
     }
   };
 
@@ -87,14 +92,14 @@ class TaskItem extends React.Component {
 
     return (
       <div className={classes.taskItem}>
-        <MaterialUITaskForm
+        {/* <MaterialUITaskForm
           show={this.state.showModal}
           task={this.props.task}
           onComplete={this.handleTaskUpdate}
           handleOpen={this.handleOpen}
           timeEstimateProp={this.props.task.timeEstimate}
           dependencies={this.state.dependencies}
-        />
+        /> */}
         <ListItem
           button
           disableRipple
@@ -138,6 +143,7 @@ TaskItem.propTypes = {
   onSelect: PropTypes.func,
   selected: PropTypes.bool,
   dragHandle: PropTypes.element,
+  onClickShowDetail: PropTypes.func,
 };
 
 TaskItem.defaultProps = {
