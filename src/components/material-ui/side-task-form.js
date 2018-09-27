@@ -27,7 +27,12 @@ const handleDateSet = () => {
 
 const styles = () => ({
   formControl: {
+    width: '50%',
+  },
+  timeAndDate: {
     width: '100%',
+    display: 'flex',
+    alignContent: 'center',
   },
 });
 
@@ -122,6 +127,7 @@ class SideTaskForm extends React.Component {
           onChange={this.handleChange}
           fullWidth
         />
+        <div className={classes.timeAndDate}>
         <FormControl className={classes.formControl}>
           <InputLabel htmlFor="task-time">Task time</InputLabel>
           <Select
@@ -139,6 +145,18 @@ class SideTaskForm extends React.Component {
             <MenuItem value={240}>4 hours</MenuItem>
           </Select>
         </FormControl>
+        <TextField
+          className={classes.formControl}
+          autoFocus
+          margin="dense"
+          id="dueDate"
+          value={this.state.dueDate}
+          label="Due Date"
+          type="date"
+          onChange={this.handleChange}
+          fullWidth
+        />
+        </div>
 
         <FormControl className={classes.formControl}>
           <InputLabel htmlFor="dependencies">Task to complete first</InputLabel>

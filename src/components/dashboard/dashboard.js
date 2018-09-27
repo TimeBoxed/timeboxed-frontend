@@ -20,9 +20,10 @@ import TaskItem from '../material-ui/task-item';
 import LoadSpinner from '../material-ui/load-spinner';
 import * as profileActions from '../../actions/profile';
 import * as taskActions from '../../actions/task';
-import MaterialUITaskForm from '../material-ui/task-form';
+// import MaterialUITaskForm from '../material-ui/task-form';
 import MenuAppBar from '../material-ui/menu-app-bar';
 import SideTaskForm from '../material-ui/side-task-form';
+import NewTaskForm from '../material-ui/new-task-form';
 
 // -------------------------------------------------------------------------------------------------
 // MATERIAL UI COMPONENTS
@@ -338,7 +339,7 @@ class Dashboard extends React.Component {
         <div className={classes.dashboardPage}>
           <div className={classes.listHolder}>
             <div className={classes.dashboardLeft}>
-              {
+              {/* {
                 !this.state.editingTasks
                   ? <div className={classes.topButtonsDiv}>
                       <Button
@@ -359,8 +360,8 @@ class Dashboard extends React.Component {
                       onClick={this.handleEditing}>
                       Done
                     </Button>
-              }
-            <div>
+              } */}
+            {/* <div>
               {
                 preferences
                 && <MaterialUITaskForm
@@ -371,7 +372,7 @@ class Dashboard extends React.Component {
                       timeEstimateProp={preferences.taskLengthDefault}
                     />
               }
-              </div>
+            </div> */}
               {
                 (this.state.editingTasks && this.state.taskOrder.length > 0)
                 && <SortableList
@@ -379,7 +380,13 @@ class Dashboard extends React.Component {
                       onSortEnd={this.onSortEnd}
                       useDragHandle={true}
                     />
-                }
+              }
+              <NewTaskForm
+                show={true}
+                onComplete={this.handleTaskComplete}
+                timeEstimateProp={preferences.taskLengthDefault}
+                dependencies={null}
+              />
               {
                 (!this.state.editingTasks && this.state.taskOrder.length > 0)
                 && <List className={classes.container} component='div'>
