@@ -16,7 +16,7 @@ const styles = theme => ({
     backgroundColor: theme.palette.background.paper,
   },
   taskItem: {
-    maxWidth: 600,
+    maxWidth: '100%',
   },
   mainItem: {
     borderBottom: '1px solid #E4E4E4',
