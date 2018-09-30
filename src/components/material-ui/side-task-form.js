@@ -4,35 +4,31 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import compose from 'recompose/compose';
 import { withStyles } from '@material-ui/core/styles';
-import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
 import Input from '@material-ui/core/Input';
 import InputLabel from '@material-ui/core/InputLabel';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
-import Switch from '@material-ui/core/Switch';
 import FormControl from '@material-ui/core/FormControl';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import DialogTitle from '@material-ui/core/DialogTitle';
+import Button from '@material-ui/core/Button';
 import * as taskActions from '../../actions/task';
-
-const handleDateSet = () => {
-  const result = new Date();
-  result.setDate(result.getDate() + 1);
-  return result.toISOString().substring(0, 10);
-};
 
 const styles = () => ({
   formControl: {
     width: '50%',
   },
+  notesField: {
+    width: '100%',
+    display: 'flex',
+    justifyContent: 'center',
+  },
   timeAndDate: {
     width: '100%',
     display: 'flex',
     alignContent: 'center',
+  },
+  button: {
+    textAlign: 'center',
   },
 });
 
@@ -40,9 +36,9 @@ class SideTaskForm extends React.Component {
   state = {
     open: this.props.show,
     title: this.props.task ? this.props.task.title : '',
+    notes: this.props.task.notes,
     timeEstimate: this.props.task.timeEstimate || this.props.preferences.taskLengthDefault,
-    dateSelect: this.props.task.dueDate,
-    dueDate: this.props.task.dueDate,
+    dueDate: this.props.task.dueDate || '',
     dependencies: this.props.task.dependencies || [],
   };
 
@@ -61,27 +57,43 @@ class SideTaskForm extends React.Component {
       open: this.props.show,
       title: this.props.task ? this.props.task.title : '',
       timeEstimate: this.props.task.timeEstimate,
-      dateSelect: this.props.task.dueDate,
-      dueDate: this.props.task.dueDate,
+      dueDate: this.props.task.dueDate ? this.props.task.dueDate.slice(0, 10) : '',
+      notes: this.props.task.notes,
       dependencies: this.props.task.dependencies || [],
     });
   }
 
-  handleDateToggle = () => {
-    this.setState(prevState => ({
-      dateSelect: !prevState.dateSelect,
-      dueDate: !prevState.dueDate ? handleDateSet() : '',
-    }));
-  };
-
   handleChange = (e) => {
     const { id, value } = e.target;
     this.setState({ [id]: value });
+    if (id === 'dueDate') {
+      const taskToUpdate = this.props.task;
+      taskToUpdate[id] = value;
+      return this.props.taskUpdateRequest(taskToUpdate);
+    }
+    return undefined;
+  };
+
+  handleUpdateTitle = (event) => {
+    event.preventDefault();
+    const taskToUpdate = this.props.task;
+    taskToUpdate.title = this.state.title;
+    return this.props.taskUpdateRequest(taskToUpdate);
+  };
+
+  handleUpdateNotes = (event) => {
+    event.preventDefault();
+    const taskToUpdate = this.props.task;
+    taskToUpdate.notes = this.state.notes;
+    return this.props.taskUpdateRequest(taskToUpdate);
   };
 
   handleChangeTimeEstimate = (e) => {
     const { value } = e.target;
     this.setState({ timeEstimate: value });
+    const taskToUpdate = this.props.task;
+    taskToUpdate.timeEstimate = value;
+    return this.props.taskUpdateRequest(taskToUpdate);
   };
 
   handleClose = () => {
@@ -117,19 +129,21 @@ class SideTaskForm extends React.Component {
     const { classes } = this.props;
     return (
       <React.Fragment>
-        <TextField
-          autoFocus
-          margin="dense"
-          id="title"
-          label="Summary"
-          type="text"
-          value={this.state.title}
-          onChange={this.handleChange}
-          fullWidth
-        />
+        <form onSubmit={this.handleUpdateTitle} >
+          <TextField
+            autoFocus
+            margin="dense"
+            id="title"
+            label="Task title"
+            type="text"
+            value={this.state.title}
+            onChange={this.handleChange}
+            fullWidth
+          />
+        </form>
         <div className={classes.timeAndDate}>
         <FormControl className={classes.formControl}>
-          <InputLabel htmlFor="task-time">Task time</InputLabel>
+          <InputLabel htmlFor="task-time">Task time estimate</InputLabel>
           <Select
             value={this.state.timeEstimate}
             onChange={this.handleChangeTimeEstimate}
@@ -145,21 +159,43 @@ class SideTaskForm extends React.Component {
             <MenuItem value={240}>4 hours</MenuItem>
           </Select>
         </FormControl>
-        <TextField
-          className={classes.formControl}
-          autoFocus
-          margin="dense"
-          id="dueDate"
-          value={this.state.dueDate}
-          label="Due Date"
-          type="date"
-          onChange={this.handleChange}
-          fullWidth
-        />
+
+          <TextField
+            input={<Input id="dueDate" />}
+            className={classes.formControl}
+            id="dueDate"
+            value={this.state.dueDate || 'yyyy/mm/dd'}
+            label="Due date"
+            type="date"
+            onChange={this.handleChange}
+          />
         </div>
+        <FormControl className={classes.notesField}>
+          <TextField
+            id="notes"
+            label="Task notes"
+            multiline
+            rows="4"
+            rowsMax="12"
+            value={this.state.notes}
+            onChange={this.handleChange}
+            margin="normal"
+            variant="filled"
+          />
+          {/* <Button onClick={this.handleUpdateNotes} className={classes.button}>Save notes</Button> */}
+          <div className={classes.button}>
+            <Button
+              variant="contained"
+              color="primary"
+              className={classes.button}
+              onClick={this.handleEditing}>
+              Save notes
+            </Button>
+          </div>
+        </FormControl>
 
         <FormControl className={classes.formControl}>
-          <InputLabel htmlFor="dependencies">Task to complete first</InputLabel>
+          <InputLabel htmlFor="dependencies">Dependency Tasks</InputLabel>
           <Select
             multiple
             value={this.state.dependencies}
@@ -179,26 +215,6 @@ class SideTaskForm extends React.Component {
           }
           </Select>
         </FormControl>
-
-        <FormControlLabel control={
-          <Switch
-            onChange={this.handleDateToggle}
-            checked={this.state.dateSelect}
-          />
-        } label={this.state.dateSelect ? 'Remove Due Date' : 'Add Due Date'}/>
-
-        { this.state.dateSelect
-          && <TextField
-              autoFocus
-              margin="dense"
-              id="dueDate"
-              value={this.state.dueDate}
-              label="Due Date"
-              type="date"
-              onChange={this.handleChange}
-              fullWidth
-            />
-        }
       </React.Fragment>
     );
   }

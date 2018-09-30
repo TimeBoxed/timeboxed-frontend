@@ -4,19 +4,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import compose from 'recompose/compose';
 import { withStyles } from '@material-ui/core/styles';
-import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import Input from '@material-ui/core/Input';
-import InputLabel from '@material-ui/core/InputLabel';
-import Select from '@material-ui/core/Select';
-import MenuItem from '@material-ui/core/MenuItem';
-import Switch from '@material-ui/core/Switch';
-import FormControl from '@material-ui/core/FormControl';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import DialogTitle from '@material-ui/core/DialogTitle';
 import * as taskActions from '../../actions/task';
 
 const handleDateSet = () => {
@@ -39,32 +27,11 @@ const styles = () => ({
 class NewTaskForm extends React.Component {
   state = {
     title: '',
-    timeEstimate: '',
+    timeEstimate: this.props.preferences.timeEstimate,
     dateSelect: false,
     dueDate: '',
     dependencies: [],
   };
-
-  // componentDidMount() {
-  //   this.handleUpdateProps();
-  // }
-
-  // componentDidUpdate(prevProps) {
-  //   if (prevProps.task !== this.props.task) {
-  //     this.handleUpdateProps();
-  //   }
-  // }
-
-  // handleUpdateProps = () => {
-  //   this.setState({
-  //     open: this.props.show,
-  //     title: this.props.task ? this.props.task.title : '',
-  //     timeEstimate: this.props.timeEstimate,
-  //     dateSelect: this.props.task.dueDate,
-  //     dueDate: this.props.task.dueDate,
-  //     dependencies: this.props.task.dependencies || [],
-  //   });
-  // }
 
   handleDateToggle = () => {
     this.setState(prevState => ({
@@ -90,7 +57,6 @@ class NewTaskForm extends React.Component {
   handleSave = (event) => {
     event.preventDefault();
     this.handleClose();
-    console.log('submitted');
     return this.props.onComplete({
       ...this.state,
     });
@@ -128,7 +94,6 @@ class NewTaskForm extends React.Component {
             onChange={this.handleChange}
             fullWidth
           />
-          {/* <button onClick={this.handleSave}></button> */}
         </form>
       </React.Fragment>
     );
