@@ -106,14 +106,13 @@ const styles = theme => ({
     },
   },
   deleteButton: {
-    width: '35%',
+    width: '40%',
     height: 80,
     backgroundColor: '#0B5999',
     display: 'block',
     position: 'fixed',
-    bottom: '1%',
-    left: '33%',
-    margin: '0px auto',
+    bottom: '1rem',
+    left: '10%',
     [theme.breakpoints.down('xs')]: {
       display: 'block',
       position: 'fixed',
@@ -131,7 +130,10 @@ const styles = theme => ({
     marginTop: 90,
   },
   fab: {
-    // display: 'none',
+    display: 'block',
+    position: 'fixed',
+    bottom: '1rem',
+    left: '27.5%',
     [theme.breakpoints.down('xs')]: {
       display: 'block',
       position: 'fixed',

@@ -38,7 +38,12 @@ const styles = () => ({
   },
   dependencies: {
     fontSize: 16,
-    marginTop: 20,
+    margin: '20px 0',
+    backgroundColor: '#E6E6E6',
+
+  },
+  dependencyListItem: {
+    height: '1.8em',
   },
 });
 
@@ -235,7 +240,7 @@ class SideTaskForm extends React.Component {
                 key={dependency._id}
                 button
                 disableRipple
-                className={classes.mainItem}
+                className={classes.dependencyListItem}
               >
               <ListItemIcon>
                 <Checkbox
@@ -245,7 +250,7 @@ class SideTaskForm extends React.Component {
                   value={dependency._id}
                 />
               </ListItemIcon>
-              <ListItemText inset primary={dependency.title} className={classes.title}/>
+              <ListItemText primary={dependency.title} className={classes.title}/>
               </ListItem>
             ))
         }

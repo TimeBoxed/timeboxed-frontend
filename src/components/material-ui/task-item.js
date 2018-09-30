@@ -7,6 +7,7 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import Checkbox from '@material-ui/core/Checkbox';
 import Radio from '@material-ui/core/Radio';
+import { Typography } from '@material-ui/core';
 // import MaterialUITaskForm from './task-form';
 
 const styles = theme => ({
@@ -27,6 +28,9 @@ const styles = theme => ({
     textAlign: 'right',
     minWidth: 50,
   },
+  titleAndDueDate: {
+    paddingLeft: 16,
+  },
   title: {
     maxWidth: 600,
     wordWrap: 'break-word',
@@ -34,6 +38,11 @@ const styles = theme => ({
     maxHeight: '3.0em',
     lineHeight: '1.8em',
     textOverflow: 'ellipsis',
+    textAlign: 'left',
+  },
+  dueDate: {
+    padding: 0,
+    color: '#F51616',
   },
 });
 
@@ -90,6 +99,8 @@ class TaskItem extends React.Component {
       ? <span> {task.timeEstimate / 60} hr</span>
       : <span> {task.timeEstimate} m</span>;
 
+    const displayDueDate = task.dueDate && task.dueDate.slice(5, 10);
+
     return (
       <div className={classes.taskItem}>
         {/* <MaterialUITaskForm
@@ -122,7 +133,15 @@ class TaskItem extends React.Component {
               />
           }
           </ListItemIcon>
-          <ListItemText inset primary={task.title} className={classes.title}/>
+          <div className={classes.titleAndDueDate}>
+            <ListItemText primary={task.title} className={classes.title}/>
+            {
+              task.dueDate
+                && <ListItemText className={classes.dueDate}>
+                  <Typography className={classes.dueDate}>Due {displayDueDate}</Typography>
+                </ListItemText>
+            }
+          </div>
           <ListItemText
             inset secondary={timeShown}
             className={classes.time}
