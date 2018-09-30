@@ -249,6 +249,7 @@ class Dashboard extends React.Component {
         return this.setState({
           taskOrder: this.props.tasks.sort((a, b) => a.order - b.order),
           completedTasks: this.props.completedTasks,
+          selectedTask: completed ? {} : this.props.tasks[this.props.tasks.length - 1],
         });
       });
   };
@@ -284,6 +285,10 @@ class Dashboard extends React.Component {
           tasksForDeletion: [],
           taskOrder: this.props.tasks.sort((a, b) => a.order - b.order),
           completedTasks: this.props.completedTasks,
+          selectedTask:
+            this.props.tasks.includes(prevState.selectedTask._id) > -1
+              ? prevState.selectedTask
+              : {},
         }));
       });
   };

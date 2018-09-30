@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import compose from 'recompose/compose';
 import { withStyles } from '@material-ui/core/styles';
+import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
 import Input from '@material-ui/core/Input';
 import InputLabel from '@material-ui/core/InputLabel';
@@ -11,6 +12,11 @@ import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Button from '@material-ui/core/Button';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import Checkbox from '@material-ui/core/Checkbox';
 import * as taskActions from '../../actions/task';
 
 const styles = () => ({
@@ -30,6 +36,10 @@ const styles = () => ({
   button: {
     textAlign: 'center',
   },
+  dependencies: {
+    fontSize: 16,
+    marginTop: 20,
+  },
 });
 
 class SideTaskForm extends React.Component {
@@ -39,7 +49,7 @@ class SideTaskForm extends React.Component {
     notes: this.props.task.notes,
     timeEstimate: this.props.task.timeEstimate || this.props.preferences.taskLengthDefault,
     dueDate: this.props.task.dueDate || '',
-    dependencies: this.props.task.dependencies || [],
+    dependencies: this.props.task.dependencies,
   };
 
   componentDidMount() {
@@ -59,7 +69,7 @@ class SideTaskForm extends React.Component {
       timeEstimate: this.props.task.timeEstimate,
       dueDate: this.props.task.dueDate ? this.props.task.dueDate.slice(0, 10) : '',
       notes: this.props.task.notes,
-      dependencies: this.props.task.dependencies || [],
+      dependencies: this.props.task.dependencies,
     });
   }
 
@@ -73,6 +83,27 @@ class SideTaskForm extends React.Component {
     }
     return undefined;
   };
+
+  handleSelectDependency = (e) => {
+    const { value } = e.target;
+    const newDependencies = this.state.dependencies;
+    if (newDependencies.indexOf(value) > -1) {
+      const dependenciesToUpdate = newDependencies.filter(item => item !== value);
+      const taskToUpdate = this.props.task;
+      taskToUpdate.dependencies = dependenciesToUpdate;
+      return this.props.taskUpdateRequest(taskToUpdate)
+        .then(() => {
+          return this.setState({ dependencies: this.props.task.dependencies });
+        });
+    }
+    newDependencies.push(value);
+    const taskToUpdate = this.props.task;
+    taskToUpdate.dependencies = newDependencies;
+    return this.props.taskUpdateRequest(taskToUpdate)
+      .then(() => {
+        return this.setState({ dependencies: this.props.task.dependencies });
+      });
+  }
 
   handleUpdateTitle = (event) => {
     event.preventDefault();
@@ -182,39 +213,43 @@ class SideTaskForm extends React.Component {
             margin="normal"
             variant="filled"
           />
-          {/* <Button onClick={this.handleUpdateNotes} className={classes.button}>Save notes</Button> */}
           <div className={classes.button}>
             <Button
               variant="contained"
               color="primary"
               className={classes.button}
-              onClick={this.handleEditing}>
+              onClick={this.handleUpdateNotes}>
               Save notes
             </Button>
           </div>
         </FormControl>
-
-        <FormControl className={classes.formControl}>
-          <InputLabel htmlFor="dependencies">Dependency Tasks</InputLabel>
-          <Select
-            multiple
-            value={this.state.dependencies}
-            onChange={this.handleUpdateDependencies}
-            input={<Input id="dependencies" />}
-          >
-          {
-            this.props.tasks.filter(item => (
-              this.props.task
-                ? item._id !== this.props.task._id
-                : item))
-              .map(dependency => (
-                <MenuItem key={dependency._id} value={dependency.title}>
-                  {dependency.title}
-                </MenuItem>
-              ))
-          }
-          </Select>
-        </FormControl>
+        <List>
+        <Typography className={classes.dependencies}>Task Dependencies</Typography>
+        {
+          this.props.tasks.filter(item => (
+            this.props.task
+              ? item._id !== this.props.task._id
+              : item))
+            .map(dependency => (
+              <ListItem
+                key={dependency._id}
+                button
+                disableRipple
+                className={classes.mainItem}
+              >
+              <ListItemIcon>
+                <Checkbox
+                  id='task-complete-checkbox'
+                  checked={this.state.dependencies.indexOf(dependency._id) > -1}
+                  onClick={this.handleSelectDependency}
+                  value={dependency._id}
+                />
+              </ListItemIcon>
+              <ListItemText inset primary={dependency.title} className={classes.title}/>
+              </ListItem>
+            ))
+        }
+        </List>
       </React.Fragment>
     );
   }
