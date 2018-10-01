@@ -167,13 +167,13 @@ class SideTaskForm extends React.Component {
       <React.Fragment>
         <form onSubmit={this.handleUpdateTitle} >
           <TextField
-            autoFocus
             margin="dense"
             id="title"
             label="Task title"
             type="text"
             value={this.state.title}
             onChange={this.handleChange}
+            onBlur={this.handleUpdateTitle}
             fullWidth
           />
         </form>
@@ -215,6 +215,7 @@ class SideTaskForm extends React.Component {
             rowsMax="12"
             value={this.state.notes}
             onChange={this.handleChange}
+            onBlur={this.handleUpdateNotes}
             margin="normal"
             variant="filled"
           />
