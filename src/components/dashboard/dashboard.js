@@ -245,6 +245,8 @@ class Dashboard extends React.Component {
         return this.setState({
           taskOrder: this.props.tasks.sort((a, b) => a.order - b.order),
           completedTasks: this.props.completedTasks,
+          selectedTask: this.props.tasks[this.props.tasks.length - 1],
+          drawerOpen: true,
         });
       });
   };
@@ -468,19 +470,31 @@ class Dashboard extends React.Component {
                 }
               </div>
               {
-              this.state.selectedTask && this.state.selectedTask.title
-                && <Drawer anchor="right" className={classes.mobileDetailView} open={this.state.drawerOpen} onClose={this.handleCloseDrawer} >
-                  <div className={classes.drawerDiv}>
-                    <ArrowBack className={classes.drawerArrow} onClick={this.handleCloseDrawer}/>
-                    <SideTaskForm
-                      show={true}
-                      task={this.state.selectedTask}
-                      onComplete={this.handleTaskUpdate}
-                      timeEstimateProp={this.state.selectedTask.timeEstimate}
-                      dependencies={this.state.selectedTask.dependencies}
-                    />
-                  </div>
-                </Drawer>
+                (
+                  this.state.selectedTask
+                  && this.state.selectedTask.title
+                  && window.innerWidth < 600
+                )
+                  && <Drawer
+                      anchor="right"
+                      className={classes.mobileDetailView}
+                      open={this.state.drawerOpen}
+                      onClose={this.handleCloseDrawer}
+                      >
+                        <div className={classes.drawerDiv}>
+                          <ArrowBack
+                            className={classes.drawerArrow}
+                            onClick={this.handleCloseDrawer}
+                          />
+                          <SideTaskForm
+                            show={true}
+                            task={this.state.selectedTask}
+                            onComplete={this.handleTaskUpdate}
+                            timeEstimateProp={this.state.selectedTask.timeEstimate}
+                            dependencies={this.state.selectedTask.dependencies}
+                          />
+                        </div>
+                  </Drawer>
               }
           </div>
         </div>

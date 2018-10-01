@@ -8,7 +8,6 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Checkbox from '@material-ui/core/Checkbox';
 import Radio from '@material-ui/core/Radio';
 import { Typography } from '@material-ui/core';
-// import MaterialUITaskForm from './task-form';
 
 const styles = theme => ({
   root: {
@@ -23,13 +22,22 @@ const styles = theme => ({
     borderBottom: '1px solid #E4E4E4',
     paddingTop: 2,
     paddingBottom: 2,
+    paddingLeft: 16,
+    [theme.breakpoints.down('xs')]: {
+      paddingLeft: 0,
+    },
   },
   time: {
     textAlign: 'right',
     minWidth: 50,
+    padding: 0,
+    paddingRight: 16,
   },
   titleAndDueDate: {
     paddingLeft: 16,
+    [theme.breakpoints.down('xs')]: {
+      paddingLeft: 0,
+    },
   },
   title: {
     maxWidth: 600,
@@ -103,17 +111,10 @@ class TaskItem extends React.Component {
 
     return (
       <div className={classes.taskItem}>
-        {/* <MaterialUITaskForm
-          show={this.state.showModal}
-          task={this.props.task}
-          onComplete={this.handleTaskUpdate}
-          handleOpen={this.handleOpen}
-          timeEstimateProp={this.props.task.timeEstimate}
-          dependencies={this.state.dependencies}
-        /> */}
         <ListItem
           button
           disableRipple
+          disableGutters
           className={classes.mainItem}
           onClick={this.handleOpen}
         >
