@@ -13,15 +13,18 @@ import {
 import List from '@material-ui/core/List';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
+import Drawer from '@material-ui/core/Drawer';
 import Delete from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 import Reorder from '@material-ui/icons/Reorder';
+import ArrowBack from '@material-ui/icons/ArrowBack';
 import TaskItem from '../material-ui/task-item';
 import LoadSpinner from '../material-ui/load-spinner';
 import * as profileActions from '../../actions/profile';
 import * as taskActions from '../../actions/task';
-import MaterialUITaskForm from '../material-ui/task-form';
 import MenuAppBar from '../material-ui/menu-app-bar';
+import SideTaskForm from '../material-ui/side-task-form';
+import NewTaskForm from '../material-ui/new-task-form';
 import { triggerSnackbar } from '../../actions/ui';
 
 // -------------------------------------------------------------------------------------------------
@@ -55,14 +58,34 @@ const styles = theme => ({
   dashboardPage: {
     height: '100%',
     display: 'flex',
-    justifyContent: 'center',
+    justifyContent: 'start',
+    [theme.breakpoints.down('xs')]: {
+      justifyContent: 'center',
+    },
   },
   listHolder: {
-    width: 600,
+    width: '100%',
     paddingTop: 80,
+    display: 'flex',
+    justifyContent: 'space-evenly',
     [theme.breakpoints.down('xs')]: {
       minWidth: 320,
       paddingTop: 50,
+    },
+  },
+  dashboardLeft: {
+    width: '60%',
+    margin: '0 0 0 15px',
+    borderRight: '1px solid #E4E4E4',
+    [theme.breakpoints.down('xs')]: {
+      width: '100%',
+    },
+  },
+  dashboardRight: {
+    width: '40%',
+    margin: '0 15px',
+    [theme.breakpoints.down('xs')]: {
+      display: 'none',
     },
   },
   topButtonsDiv: {
@@ -70,7 +93,6 @@ const styles = theme => ({
     margin: '0 auto',
     display: 'flex',
     justifyContent: 'space-between',
-
     [theme.breakpoints.down('xs')]: {
       display: 'none',
     },
@@ -86,14 +108,13 @@ const styles = theme => ({
     },
   },
   deleteButton: {
-    width: '35%',
+    width: '40%',
     height: 80,
     backgroundColor: '#0B5999',
     display: 'block',
     position: 'fixed',
-    bottom: '1%',
-    left: '33%',
-    margin: '0px auto',
+    bottom: '1rem',
+    left: '10%',
     [theme.breakpoints.down('xs')]: {
       display: 'block',
       position: 'fixed',
@@ -111,7 +132,10 @@ const styles = theme => ({
     marginTop: 90,
   },
   fab: {
-    display: 'none',
+    display: 'block',
+    position: 'fixed',
+    bottom: '1rem',
+    left: '27.5%',
     [theme.breakpoints.down('xs')]: {
       display: 'block',
       position: 'fixed',
@@ -123,6 +147,28 @@ const styles = theme => ({
   },
   extendedIcon: {
     marginRight: theme.spacing.unit,
+  },
+  editText: {
+    height: 37,
+    paddingTop: 20,
+    color: '#9e9e9e',
+    fontSize: 16,
+  },
+  mobileDetailView: {
+    display: 'none',
+    [theme.breakpoints.down('xs')]: {
+      display: 'block',
+      padding: 10,
+    },
+  },
+  drawerDiv: {
+    padding: 10,
+  },
+  drawerArrow: {
+    float: 'left',
+    margin: 5,
+    width: 50,
+    border: '1px solid #e6e6e6',
   },
 });
 
@@ -138,6 +184,8 @@ class Dashboard extends React.Component {
       completedTasks: [],
       orderToEdit: [],
       loading: true,
+      selectedTask: {},
+      drawerOpen: false,
     };
   }
 
@@ -203,6 +251,8 @@ class Dashboard extends React.Component {
         return this.setState({
           taskOrder: this.props.tasks.sort((a, b) => a.order - b.order),
           completedTasks: this.props.completedTasks,
+          selectedTask: this.props.tasks[this.props.tasks.length - 1],
+          drawerOpen: true,
         });
       });
   };
@@ -210,6 +260,10 @@ class Dashboard extends React.Component {
   handleFormOpen = () => {
     this.setState(prevState => ({ openForm: !prevState.openForm }));
   };
+
+  handleCloseDrawer = () => {
+    this.setState({ selectedTask: {}, drawerOpen: false });
+  }
 
   handleShowHideTasks = () => {
     this.setState(prevState => ({ completedTasksShow: !prevState.completedTasksShow }));
@@ -229,12 +283,17 @@ class Dashboard extends React.Component {
         return this.setState({
           taskOrder: this.props.tasks.sort((a, b) => a.order - b.order),
           completedTasks: this.props.completedTasks,
+          selectedTask: completed ? {} : this.props.tasks[this.props.tasks.length - 1],
         });
       })
       .catch(() => {
         this.props.triggerSnackbar('error');
       });
   };
+
+  handleTaskDetail = (task) => {
+    this.setState({ selectedTask: task, drawerOpen: true });
+  }
 
   handleUpdateTask = (task) => {
     this.setState({ openForm: false });
@@ -267,6 +326,10 @@ class Dashboard extends React.Component {
           tasksForDeletion: [],
           taskOrder: this.props.tasks.sort((a, b) => a.order - b.order),
           completedTasks: this.props.completedTasks,
+          selectedTask:
+            this.props.tasks.includes(prevState.selectedTask._id) > -1
+              ? prevState.selectedTask
+              : {},
         }));
       });
   };
@@ -281,7 +344,6 @@ class Dashboard extends React.Component {
     } else {
       newTasksForDeletion.splice(taskIndex, 1);
     }
-
     this.setState({ tasksForDeletion: newTasksForDeletion });
   };
 
@@ -294,12 +356,12 @@ class Dashboard extends React.Component {
 
     const SortableItem = SortableElement(({ value }) => (
       <TaskItem
-          dragHandle={<DragHandle />}
-          task={value}
-          onComplete={this.handleStatusChange}
-          editingTasks={this.state.editingTasks}
-          onSelect={this.handleSelect}
-          selected={this.state.tasksForDeletion.indexOf(value._id) !== -1}
+        dragHandle={<DragHandle />}
+        task={value}
+        onComplete={this.handleStatusChange}
+        editingTasks={this.state.editingTasks}
+        onSelect={this.handleSelect}
+        selected={this.state.tasksForDeletion.indexOf(value._id) !== -1}
       />
     ));
 
@@ -307,7 +369,7 @@ class Dashboard extends React.Component {
         <List className={classes.container} component='div'>
           {items
             .map((task, index) => (
-                <SortableItem key={task._id} index={index} value={task} />
+              <SortableItem key={task._id} index={index} value={task} />
             ))}
         </List>
     ));
@@ -321,109 +383,133 @@ class Dashboard extends React.Component {
         <MenuAppBar editing={this.state.editingTasks} onComplete={this.handleEditing}/>
         <div className={classes.dashboardPage}>
           <div className={classes.listHolder}>
-            {
-              !this.state.editingTasks
-                ? <div className={classes.topButtonsDiv}>
-                    <Button
-                      variant="contained"
-                      color="primary"
-                      className={classes.blueButton}
-                      onClick={this.handleEditing}>
-                      Edit
-                    </Button>
-                    <Button variant="contained" color="secondary" className={classes.button} onClick={this.handleFormOpen}>
-                      Add
-                    </Button>
-                    </div>
-                : <Button
-                    variant="contained"
-                    color="primary"
-                    className={classes.blueButton}
-                    onClick={this.handleEditing}>
-                    Done
-                  </Button>
-            }
-          <div>
-            {
-              preferences
-              && <MaterialUITaskForm
-                    show={this.state.openForm}
+            <div className={classes.dashboardLeft}>
+              {
+                (this.state.editingTasks && this.state.taskOrder.length > 0)
+                  && <div>
+                    <Typography className={classes.editText}>
+                      Select tasks to delete or drag to reorder
+                    </Typography>
+                    <SortableList
+                      items={this.state.taskOrder}
+                      onSortEnd={this.onSortEnd}
+                      useDragHandle={true}
+                    />
+                  </div>
+              }
+              {
+                !this.state.editingTasks
+                  && <NewTaskForm
+                    show={true}
                     onComplete={this.handleTaskComplete}
-                    handleFormOpen={this.handleFormOpen}
-                    task={null}
                     timeEstimateProp={preferences.taskLengthDefault}
-                  />
-            }
-            </div>
-            {
-              (this.state.editingTasks && this.state.taskOrder.length > 0)
-              && <SortableList
-                    items={this.state.taskOrder}
-                    onSortEnd={this.onSortEnd}
-                    useDragHandle={true}
+                    dependencies={null}
                   />
               }
-            {
-              (!this.state.editingTasks && this.state.taskOrder.length > 0)
-              && <List className={classes.container} component='div'>
+              {
+                (!this.state.editingTasks && this.state.taskOrder.length > 0)
+                  && <List className={classes.container} component='div'>
+                    {
+                      this.state.taskOrder.sort((a, b) => a.order - b.order)
+                        .map(task => (
+                          <TaskItem
+                            key={task._id}
+                            task={task}
+                            onComplete={this.handleStatusChange}
+                            editingTasks={this.state.editingTasks}
+                            onSelect={this.handleSelect}
+                            onClickShowDetail={this.handleTaskDetail}
+                            selected={false}
+                            updateTask={this.handleUpdateTask}
+                          />))
+                    }
+                    </List>
+              }
+              <div className='show-hide-tasks'>
+                <Typography gutterBottom variant='subheading' onClick={this.handleShowHideTasks}>
+                  {completedTasks} Completed Tasks
+                </Typography>
+              </div>
+              <div className={completedTasksClass}>
+                <List className={classes.completedContainer} component='div'>
                   {
-                    this.state.taskOrder.sort((a, b) => a.order - b.order)
-                      .map(task => (
-                        <TaskItem
-                          key={task._id}
-                          task={task}
-                          onComplete={this.handleStatusChange}
-                          editingTasks={this.state.editingTasks}
-                          onSelect={this.handleSelect}
-                          selected={false}
-                          updateTask={this.handleUpdateTask}
-                        />))
+                    (this.state.completedTasks.length > 0)
+                      && this.state.completedTasks
+                        .sort((a, b) => b.order - a.order)
+                        .map(task => (
+                          <TaskItem
+                            key={task._id}
+                            task={task}
+                            onComplete={this.handleStatusChange}
+                            editingTasks={this.state.editingTasks}
+                            onSelect={this.handleSelect}
+                            selected={false}
+                            updateTask={this.handleUpdateTask}
+                          />))
                   }
-              </List>
-            }
-            <div className='show-hide-tasks'>
-              <Typography gutterBottom variant='subheading' onClick={this.handleShowHideTasks}>{completedTasks} Completed Tasks</Typography>
-            </div>
-            <div className={completedTasksClass}>
-              <List className={classes.completedContainer} component='div'>
-                {
-                  (this.state.completedTasks.length > 0)
-                  && this.state.completedTasks
-                    .sort((a, b) => b.order - a.order)
-                    .map(task => (
-                      <TaskItem
-                        key={task._id}
-                        task={task}
-                        onComplete={this.handleStatusChange}
-                        editingTasks={this.state.editingTasks}
-                        onSelect={this.handleSelect}
-                        selected={false}
-                        updateTask={this.handleUpdateTask}
-                      />))
-                }
-              </List>
-            </div>
-            <div className={classes.buttonDiv}>
-            {
-              this.state.editingTasks
-                ? <Button variant="contained" color="primary" className={classes.deleteButton} onClick={this.handleDelete}>
-                    <Delete/>
-                    <Typography className={classes.deleteText}>Delete</Typography>
-                  </Button>
-                : <div>
-                    <Button
-                      onClick={this.handleEditing}
-                      variant="fab"
-                      color="primary"
-                      aria-label="edit"
-                      className={classes.fab}
-                    >
-                    <EditIcon />
+                </List>
+              </div>
+              <div className={classes.buttonDiv}>
+              {
+                this.state.editingTasks
+                  ? <Button variant="contained" color="primary" className={classes.deleteButton} onClick={this.handleDelete}>
+                      <Delete/>
+                      <Typography className={classes.deleteText}>Done</Typography>
                     </Button>
-                    <AddFAB activate={this.handleFormOpen}/>
-                  </div>
-            }
-            </div>
+                  : <div>
+                      <Button
+                        onClick={this.handleEditing}
+                        variant="fab"
+                        color="primary"
+                        aria-label="edit"
+                        className={classes.fab}
+                      >
+                        <EditIcon />
+                      </Button>
+                    </div>
+              }
+              </div>
+              </div>
+              <div className={classes.dashboardRight}>
+                {
+                  this.state.selectedTask && this.state.selectedTask.title
+                    ? <SideTaskForm
+                      show={true}
+                      task={this.state.selectedTask}
+                      onComplete={this.handleTaskUpdate}
+                      timeEstimateProp={this.state.selectedTask.timeEstimate}
+                      dependencies={this.state.selectedTask.dependencies}
+                    />
+                    : <Typography>Click on a task to view details</Typography>
+                }
+              </div>
+              {
+                (
+                  this.state.selectedTask
+                  && this.state.selectedTask.title
+                  && window.innerWidth < 600
+                )
+                  && <Drawer
+                      anchor="right"
+                      className={classes.mobileDetailView}
+                      open={this.state.drawerOpen}
+                      onClose={this.handleCloseDrawer}
+                      >
+                        <div className={classes.drawerDiv}>
+                          <ArrowBack
+                            className={classes.drawerArrow}
+                            onClick={this.handleCloseDrawer}
+                          />
+                          <SideTaskForm
+                            show={true}
+                            task={this.state.selectedTask}
+                            onComplete={this.handleTaskUpdate}
+                            timeEstimateProp={this.state.selectedTask.timeEstimate}
+                            dependencies={this.state.selectedTask.dependencies}
+                          />
+                        </div>
+                  </Drawer>
+              }
           </div>
         </div>
       </React.Fragment>
