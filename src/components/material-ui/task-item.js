@@ -103,7 +103,7 @@ class TaskItem extends React.Component {
   render() {
     const { task, classes } = this.props;
 
-    const timeShown = task.timeEstimate === 60 || task.timeEstimate === 120
+    const timeShown = task.timeEstimate === 60 || task.timeEstimate === 120 || task.timeEstimate === 180 || task.timeEstimate === 240 
       ? <span> {task.timeEstimate / 60} hr</span>
       : <span> {task.timeEstimate} m</span>;
 
