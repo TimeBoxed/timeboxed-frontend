@@ -11,7 +11,6 @@ import InputLabel from '@material-ui/core/InputLabel';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
-import Button from '@material-ui/core/Button';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
@@ -43,7 +42,24 @@ const styles = () => ({
 
   },
   dependencyListItem: {
+    wordWrap: 'break-word',
     height: '1.8em',
+    lineHeight: '1.8em',
+    overflow: 'hidden',
+  },
+  title: {
+    wordWrap: 'break-word',
+    overflow: 'hidden',
+    maxHeight: '1.5em',
+    lineHeight: '1.8em',
+    textAlign: 'left',
+  },
+  timeEstimate: {
+    textAlign: 'right',
+    minWidth: 50,
+    padding: 0,
+    color: '#B5B5B5',
+    fontWeight: 100,
   },
 });
 
@@ -163,6 +179,7 @@ class SideTaskForm extends React.Component {
 
   render() {
     const { classes } = this.props;
+
     return (
       <React.Fragment>
         <form onSubmit={this.handleUpdateTitle} >
@@ -219,7 +236,7 @@ class SideTaskForm extends React.Component {
             margin="normal"
             variant="filled"
           />
-          <div className={classes.button}>
+          {/* <div className={classes.button}>
             <Button
               variant="contained"
               color="primary"
@@ -227,7 +244,7 @@ class SideTaskForm extends React.Component {
               onClick={this.handleUpdateNotes}>
               Save notes
             </Button>
-          </div>
+          </div> */}
         </FormControl>
         <List>
         <Typography className={classes.dependencies}>Task Dependencies</Typography>
@@ -252,6 +269,11 @@ class SideTaskForm extends React.Component {
                 />
               </ListItemIcon>
               <ListItemText primary={dependency.title} className={classes.title}/>
+              <ListItemText className={classes.timeEstimate}>
+                <Typography className={classes.timeEstimate}>
+                  {dependency.timeEstimate > 90 ? `${dependency.timeEstimate / 60} hr` : `${dependency.timeEstimate} m`}
+                </Typography>
+              </ListItemText>
               </ListItem>
             ))
         }
