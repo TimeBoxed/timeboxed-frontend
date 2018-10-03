@@ -27,11 +27,6 @@ import SideTaskForm from '../material-ui/side-task-form';
 import NewTaskForm from '../material-ui/new-task-form';
 import { triggerSnackbar } from '../../actions/ui';
 
-// -------------------------------------------------------------------------------------------------
-// MATERIAL UI COMPONENTS
-// -------------------------------------------------------------------------------------------------
-import AddFAB from '../material-ui/floating-action-button';
-
 import './dashboard.scss';
 import * as preferencesActions from '../../actions/preferences';
 
