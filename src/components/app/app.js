@@ -20,6 +20,7 @@ import AuthRedirect from '../auth-redirect/auth-redirect';
 import AppPage from '../app-page/app-page';
 import Dashboard from '../dashboard/dashboard';
 import Landing from '../landing/landing';
+import Signup from '../signup/signup';
 import Preferences from '../preferences/preferences';
 import PrivacyDialog from '../material-ui/privacy-dialog';
 import PrivacyRejectionAlert from '../material-ui/privacy-rejection-alert';
@@ -55,6 +56,7 @@ export default class App extends Component {
             </Helmet>
             <Route path='*' component={AuthRedirect}/>
             <Route exact path={ROUTES.LANDING} component={Landing}/>
+            <Route exact path={ROUTES.SIGNUP} component={Signup}/>
             <Switch>
               <Route path={ROUTES.NOT_FOUND} component={NotFound}/>
               <Route path={ROUTES.DASHBOARD} component={Dashboard}/>

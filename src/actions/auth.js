@@ -1,15 +1,16 @@
 import superagent from 'superagent';
 import { deleteCookie } from '../utils/cookie';
 import { TOKEN_COOKIE_KEY } from '../constants';
+import ROUTES from '../routes';
 
 const removeToken = () => ({
   type: 'TOKEN_REMOVE',
 });
 
 const logout = () => {
-  window.location.reload();
   deleteCookie(TOKEN_COOKIE_KEY);
-  return removeToken();
+  removeToken();
+  window.location.assign(ROUTES.LANDING);
 };
 
 const deleteAccountRequest = () => (store) => {

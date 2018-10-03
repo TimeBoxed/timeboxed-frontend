@@ -7,7 +7,10 @@ Object.keys(ROUTES).forEach((key) => {
 });
 
 const pathCheck = (path, hasToken) => {
-  if (!hasToken) return ROUTES.LANDING;
+  if (!hasToken) {
+    if (path === ROUTES.SIGNUP) return path;
+    return ROUTES.LANDING;
+  }
 
   if (hasToken && path === ROUTES.LANDING) return ROUTES.DASHBOARD;
 

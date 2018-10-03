@@ -32,6 +32,7 @@ body {
 //   width: 80%;
 // }
 
+#sign-up-button,
 #sign-in-button {
   background-color: white;
   font-family: $Roboto-Medium;
@@ -54,6 +55,7 @@ body {
 
 }
 
+#sign-up-button:hover,
 #sign-in-button:hover {
   background-color: rgb(233, 233, 233);
   color: $color-three;
