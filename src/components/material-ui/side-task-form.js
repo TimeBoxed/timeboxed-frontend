@@ -43,7 +43,10 @@ const styles = () => ({
 
   },
   dependencyListItem: {
+    wordWrap: 'break-word',
     height: '1.8em',
+    lineHeight: '1.8em',
+    overflow: 'hidden',
   },
 });
 
@@ -219,7 +222,7 @@ class SideTaskForm extends React.Component {
             margin="normal"
             variant="filled"
           />
-          <div className={classes.button}>
+          {/* <div className={classes.button}>
             <Button
               variant="contained"
               color="primary"
@@ -227,7 +230,7 @@ class SideTaskForm extends React.Component {
               onClick={this.handleUpdateNotes}>
               Save notes
             </Button>
-          </div>
+          </div> */}
         </FormControl>
         <List>
         <Typography className={classes.dependencies}>Task Dependencies</Typography>

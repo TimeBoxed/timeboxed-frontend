@@ -20,9 +20,7 @@ const styles = theme => ({
   },
   mainItem: {
     borderBottom: '1px solid #E4E4E4',
-    paddingTop: 2,
-    paddingBottom: 2,
-    paddingLeft: 16,
+    padding: '2px 16px',
     [theme.breakpoints.down('xs')]: {
       paddingLeft: 0,
     },

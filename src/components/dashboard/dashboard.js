@@ -326,10 +326,7 @@ class Dashboard extends React.Component {
           tasksForDeletion: [],
           taskOrder: this.props.tasks.sort((a, b) => a.order - b.order),
           completedTasks: this.props.completedTasks,
-          selectedTask:
-            this.props.tasks.includes(prevState.selectedTask._id) > -1
-              ? prevState.selectedTask
-              : {},
+          selectedTask: {},
         }));
       });
   };
@@ -349,7 +346,8 @@ class Dashboard extends React.Component {
 
   render() {
     const { classes, preferences } = this.props;
-    const completedTasks = this.state.completedTasksShow ? 'Hide' : 'Show';
+    let completedTasks = ' Completed Tasks';
+    completedTasks = this.state.completedTasksShow ? `Hide${completedTasks}` : `Show${completedTasks}`;
     const completedTasksClass = this.state.completedTasksShow ? 'show-completed' : 'hide-completed';
 
     const DragHandle = SortableHandle(() => <Reorder />);
@@ -426,8 +424,11 @@ class Dashboard extends React.Component {
                     </List>
               }
               <div className='show-hide-tasks'>
-                <Typography gutterBottom variant='subheading' onClick={this.handleShowHideTasks}>
-                  {completedTasks} Completed Tasks
+                <Typography
+                  gutterBottom variant='subheading'
+                  onClick={this.handleShowHideTasks}
+                >
+                  {this.state.completedTasks.length > 0 && completedTasks}
                 </Typography>
               </div>
               <div className={completedTasksClass}>
