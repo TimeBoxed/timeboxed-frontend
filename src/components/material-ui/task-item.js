@@ -25,6 +25,14 @@ const styles = theme => ({
       paddingLeft: 0,
     },
   },
+  mainItemSelectedTask: {
+    borderBottom: '1px solid #E4E4E4',
+    padding: '2px 16px',
+    backgroundColor: '#EDEDED',
+    [theme.breakpoints.down('xs')]: {
+      paddingLeft: 0,
+    },
+  },
   time: {
     textAlign: 'right',
     minWidth: 50,
@@ -99,9 +107,15 @@ class TaskItem extends React.Component {
   };
 
   render() {
-    const { task, classes } = this.props;
+    const { task, selectedTask, classes } = this.props;
+    const mainItemClass = selectedTask._id === task._id
+      ? classes.mainItemSelectedTask
+      : classes.mainItem;
 
-    const timeShown = task.timeEstimate === 60 || task.timeEstimate === 120 || task.timeEstimate === 180 || task.timeEstimate === 240 
+    const timeShown = task.timeEstimate === 60
+      || task.timeEstimate === 120
+      || task.timeEstimate === 180
+      || task.timeEstimate === 240
       ? <span> {task.timeEstimate / 60} hr</span>
       : <span> {task.timeEstimate} m</span>;
 
@@ -113,7 +127,7 @@ class TaskItem extends React.Component {
           button
           disableRipple
           disableGutters
-          className={classes.mainItem}
+          className={mainItemClass}
           onClick={this.handleOpen}
         >
         <ListItemIcon>
@@ -162,6 +176,7 @@ TaskItem.propTypes = {
   selected: PropTypes.bool,
   dragHandle: PropTypes.element,
   onClickShowDetail: PropTypes.func,
+  selectedTask: PropTypes.object,
 };
 
 TaskItem.defaultProps = {
@@ -172,6 +187,7 @@ TaskItem.defaultProps = {
   editingTasks: false,
   onSelect: noop,
   selected: false,
+  selectedTask: {},
 };
 
 export default withStyles(styles, { name: 'TaskItem' })(TaskItem);
