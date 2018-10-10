@@ -73,7 +73,9 @@ class MenuAppBar extends React.Component {
               }
             </Typography>
             { this.props.history.location.pathname === '/agenda'
-              && <Refresh onClick={this.props.refreshAgenda}/>
+              && <div className={classes.menuIconHolder}>
+                <Refresh onClick={this.props.refreshAgenda}/>
+              </div>
             }
             {
               this.props.history.location.pathname !== '/agenda' && this.props.editing
