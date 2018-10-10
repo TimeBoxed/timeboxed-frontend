@@ -9,6 +9,7 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import MenuIcon from '@material-ui/icons/Menu';
+import Refresh from '@material-ui/icons/Refresh';
 import SideDrawer from './side-drawer';
 import * as authActions from '../../actions/auth';
 
@@ -57,7 +58,6 @@ class MenuAppBar extends React.Component {
 
   render() {
     const { classes, loggedIn } = this.props;
-
     if (!loggedIn) return null;
 
     return (
@@ -72,8 +72,11 @@ class MenuAppBar extends React.Component {
                 this.props.history.location.pathname.replace(/\//, '').toUpperCase()
               }
             </Typography>
+            { this.props.history.location.pathname === '/agenda'
+              && <Refresh onClick={this.props.refreshAgenda}/>
+            }
             {
-              this.props.editing
+              this.props.history.location.pathname !== '/agenda' && this.props.editing
                 ? <React.Fragment>
                     <Button
                       className={classes.doneButton}
@@ -83,7 +86,12 @@ class MenuAppBar extends React.Component {
                     </Button>
                     <div className={classes.secondPlaceholder}></div>
                   </React.Fragment>
-                : <div className={classes.placeholder}></div>
+                : undefined
+            }
+            {
+              this.props.history.location.pathname !== '/agenda' && !this.props.editing
+                ? <div className={classes.placeholder}></div>
+                : undefined
             }
           </Toolbar>
         </AppBar>
@@ -99,6 +107,7 @@ MenuAppBar.propTypes = {
   history: PropTypes.object,
   onComplete: PropTypes.func,
   editing: PropTypes.bool,
+  refreshAgenda: PropTypes.func,
 };
 
 MenuAppBar.defaultProps = {
@@ -107,6 +116,7 @@ MenuAppBar.defaultProps = {
   logout: noop,
   history: {},
   onComplete: noop,
+  refreshAgenda: noop,
 };
 
 const mapStateToProps = state => ({

@@ -6,7 +6,6 @@ import { withStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 import List from '@material-ui/core/List';
 import Typography from '@material-ui/core/Typography';
-import Refresh from '@material-ui/icons/Refresh';
 import AgendaItem from '../material-ui/agenda-item';
 import LoadSpinner from '../material-ui/load-spinner';
 import * as profileActions from '../../actions/profile';
@@ -81,15 +80,13 @@ class Agenda extends React.Component {
   handleMountTaskFetch = () => {
     this.props.pFetchAllTasks()
       .then(() => {
-        console.log(this.props.tasks);
-        const withDueDates = this.props.tasks.filter(task => task.dueDate !== null);
-        const noDueDate = this.props.tasks.filter(task => task.dueDate === null);
-        const newOrder = withDueDates
-          .sort((a, b) => a.dueDate - b.dueDate)
-          .concat(noDueDate.sort((a, b) => a.order - b.order));
-        console.log(withDueDates, noDueDate, newOrder);
+        const withDueDate = this.props.tasks.filter(task => task.dueDate)
+          .sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate));
+        const noDueDate = this.props.tasks.filter(task => !task.dueDate)
+          .sort((a, b) => a.order - b.order);
+        const allTogether = withDueDate.concat(noDueDate);
         return this.setState({
-          taskOrder: newOrder,
+          taskOrder: allTogether,
           completedTasks: this.props.completedTasks || [],
           loading: false,
         });
@@ -118,15 +115,26 @@ class Agenda extends React.Component {
       if (!this.props.preferences) {
         return this.handleMountPreferencesFetch();
       }
-      if (!this.props.tasks) {
-        return this.handleMountTaskFetch();
-      }
+      return this.handleMountTaskFetch();
     }
-    return this.setState({
-      taskOrder: this.props.tasks ? this.props.tasks.sort((a, b) => a.order - b.order) : [],
-      completedTasks: this.props.completedTasks || [],
-      loading: false,
-    });
+    return undefined;
+  }
+
+  handleRefreshAgenda = () => {
+    this.setState({ loading: true });
+    this.props.pFetchAllTasks()
+      .then(() => {
+        const withDueDates = this.props.tasks.filter(task => task.dueDate !== null);
+        const noDueDate = this.props.tasks.filter(task => task.dueDate === null);
+        const newOrder = withDueDates
+          .sort((a, b) => a.dueDate - b.dueDate)
+          .concat(noDueDate.sort((a, b) => a.order - b.order));
+        return this.setState({
+          taskOrder: newOrder,
+          completedTasks: this.props.completedTasks || [],
+          loading: false,
+        });
+      });
   }
 
   handleShowHideTasks = () => {
@@ -134,7 +142,6 @@ class Agenda extends React.Component {
   };
 
   handleStatusChange = (task, completed) => {
-    this.setState({ openForm: false });
     let newOrder = 0;
     if (completed === false) {
       newOrder = this.state.taskOrder.length > 0
@@ -144,10 +151,15 @@ class Agenda extends React.Component {
     this.props.pUpdateTaskStatus(task, completed, newOrder)
       .then(() => {
         this.props.triggerSnackbar('success', completed ? 'Task completed' : 'Task reopened');
+        const withDueDate = this.props.tasks.filter(taskToFilter => taskToFilter.dueDate)
+          .sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate));
+        const noDueDate = this.props.tasks.filter(taskToFilter => !taskToFilter.dueDate)
+          .sort((a, b) => a.order - b.order);
+        const allTogether = withDueDate.concat(noDueDate);
         return this.setState({
-          taskOrder: this.props.tasks.sort((a, b) => a.order - b.order),
+          taskOrder: allTogether,
           completedTasks: this.props.completedTasks,
-          selectedTask: completed ? {} : this.props.tasks[this.props.tasks.length - 1],
+          loading: false,
         });
       })
       .catch(() => {
@@ -168,7 +180,11 @@ class Agenda extends React.Component {
 
     return (
       <React.Fragment>
-        <MenuAppBar editing={this.state.editingTasks} onComplete={this.handleEditing}/>
+        <MenuAppBar
+          refreshAgenda={this.handleRefreshAgenda}
+          editing={this.state.editingTasks}
+          onComplete={this.handleEditing}
+        />
         <div className={classes.agendaPage}>
           <div className={classes.listHolder}>
             <div className={classes.agendaView}>
@@ -176,7 +192,7 @@ class Agenda extends React.Component {
                 (!this.state.editingTasks && this.state.taskOrder.length > 0)
                   && <List className={classes.container} component='div'>
                     {
-                      this.state.taskOrder.sort((a, b) => a.order - b.order)
+                      this.state.taskOrder
                         .map(task => (
                           <AgendaItem
                             key={task._id}

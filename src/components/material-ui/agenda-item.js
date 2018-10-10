@@ -24,14 +24,6 @@ const styles = theme => ({
       paddingLeft: 0,
     },
   },
-  mainItemSelectedTask: {
-    borderBottom: '1px solid #E4E4E4',
-    padding: '2px 16px',
-    backgroundColor: '#EDEDED',
-    [theme.breakpoints.down('xs')]: {
-      paddingLeft: 0,
-    },
-  },
   time: {
     textAlign: 'right',
     minWidth: 50,
@@ -101,7 +93,6 @@ class AgendaItem extends React.Component {
 
   render() {
     const { task, classes } = this.props;
-
     const timeShown = task.timeEstimate === 60
       || task.timeEstimate === 120
       || task.timeEstimate === 180
