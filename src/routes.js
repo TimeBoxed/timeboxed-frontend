@@ -6,6 +6,7 @@ const ROUTES = {
   PRIVACY_REJECTED: '/privacy-notice-rejected',
   NOT_FOUND: '/not-found',
   PREFERENCES: '/preferences',
+  AGENDA: '/agenda',
 };
 
 export default ROUTES;

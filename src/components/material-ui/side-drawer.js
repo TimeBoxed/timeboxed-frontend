@@ -56,6 +56,11 @@ class SideDrawer extends React.Component {
             Dashboard
           </MenuItem>
         </Link>
+        <Link to={ROUTES.AGENDA}>
+          <MenuItem onClick={this.handleClose} className={classes.drawerItems}>
+            Agenda
+          </MenuItem>
+        </Link>
         <Link to={ROUTES.PREFERENCES}>
           <MenuItem onClick={this.handleClose} className={classes.drawerItems}>
             Preferences
