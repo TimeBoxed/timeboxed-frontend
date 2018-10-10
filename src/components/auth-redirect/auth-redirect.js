@@ -21,17 +21,17 @@ class AuthRedirect extends Component {
 }
 
 AuthRedirect.propTypes = {
-  token: PropTypes.bool,
+  token: PropTypes.string,
   location: PropTypes.object,
 };
 
 AuthRedirect.defaultProps = {
-  token: false,
+  token: null,
   location: {},
 };
 
 const mapStateToProps = state => ({
-  token: !!state.token,
+  token: state.token,
 });
 
 export default connect(mapStateToProps)(AuthRedirect);
