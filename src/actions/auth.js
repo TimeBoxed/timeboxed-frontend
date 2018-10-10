@@ -7,9 +7,9 @@ const removeToken = () => ({
   type: 'TOKEN_REMOVE',
 });
 
-const logout = () => {
+const logout = () => (store) => {
   deleteCookie(TOKEN_COOKIE_KEY);
-  removeToken();
+  store.dispatch(removeToken());
   window.location.assign(ROUTES.LANDING);
 };
 
