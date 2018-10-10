@@ -444,7 +444,7 @@ class Dashboard extends React.Component {
                 this.state.editingTasks
                   ? <Button variant="contained" color="primary" className={classes.deleteButton} onClick={this.handleDelete}>
                       <Delete/>
-                      <Typography className={classes.deleteText}>Done</Typography>
+                      <Typography className={classes.deleteText}>Delete</Typography>
                     </Button>
                   : <div>
                       <Button
