@@ -19,6 +19,7 @@ import ScrollToTop from '../scroll-to-top/scroll-to-top';
 import AuthRedirect from '../auth-redirect/auth-redirect';
 import AppPage from '../app-page/app-page';
 import Dashboard from '../dashboard/dashboard';
+import Agenda from '../agenda/agenda';
 import Landing from '../landing/landing';
 import Signup from '../signup/signup';
 import Preferences from '../preferences/preferences';
@@ -60,6 +61,7 @@ export default class App extends Component {
             <Switch>
               <Route path={ROUTES.NOT_FOUND} component={NotFound}/>
               <Route path={ROUTES.DASHBOARD} component={Dashboard}/>
+              <Route path={ROUTES.AGENDA} component={Agenda}/>
               <AppPage>
                 <Route path={ROUTES.PRIVACY} component={PrivacyDialog}/>
                 <Route path={ROUTES.PRIVACY_REJECTED} component={PrivacyRejectionAlert}/>

@@ -171,7 +171,6 @@ class Dashboard extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      openForm: false,
       completedTasksShow: false,
       editingTasks: false,
       tasksForDeletion: [],
@@ -236,7 +235,6 @@ class Dashboard extends React.Component {
   };
 
   handleTaskComplete = (task) => {
-    this.setState({ openForm: false });
     task.order = this.state.taskOrder.length > 0
       ? this.state.taskOrder[this.state.taskOrder.length - 1].order + 1
       : 0;
@@ -252,10 +250,6 @@ class Dashboard extends React.Component {
       });
   };
 
-  handleFormOpen = () => {
-    this.setState(prevState => ({ openForm: !prevState.openForm }));
-  };
-
   handleCloseDrawer = () => {
     this.setState({ selectedTask: {}, drawerOpen: false });
   }
@@ -265,7 +259,6 @@ class Dashboard extends React.Component {
   };
 
   handleStatusChange = (task, completed) => {
-    this.setState({ openForm: false });
     let newOrder = 0;
     if (completed === false) {
       newOrder = this.state.taskOrder.length > 0
@@ -291,7 +284,6 @@ class Dashboard extends React.Component {
   }
 
   handleUpdateTask = (task) => {
-    this.setState({ openForm: false });
     this.props.pTaskUpdateRequest(task)
       .then(() => {
         this.props.triggerSnackbar('success', 'Task updated');
@@ -307,6 +299,7 @@ class Dashboard extends React.Component {
 
   handleEditing = () => {
     this.setState(prevState => ({
+      selectedTask: {},
       editingTasks: !prevState.editingTasks,
       taskOrder: this.props.tasks.sort((a, b) => a.order - b.order),
       completedTasks: this.props.completedTasks,
@@ -414,6 +407,7 @@ class Dashboard extends React.Component {
                             onClickShowDetail={this.handleTaskDetail}
                             selected={false}
                             updateTask={this.handleUpdateTask}
+                            selectedTask={this.state.selectedTask}
                           />))
                     }
                     </List>

@@ -6,7 +6,6 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import Checkbox from '@material-ui/core/Checkbox';
-import Radio from '@material-ui/core/Radio';
 import { Typography } from '@material-ui/core';
 
 const styles = theme => ({
@@ -15,20 +14,12 @@ const styles = theme => ({
     width: '100%',
     backgroundColor: theme.palette.background.paper,
   },
-  taskItem: {
+  agendaItem: {
     maxWidth: '100%',
   },
   mainItem: {
     borderBottom: '1px solid #E4E4E4',
     padding: '2px 16px',
-    [theme.breakpoints.down('xs')]: {
-      paddingLeft: 0,
-    },
-  },
-  mainItemSelectedTask: {
-    borderBottom: '1px solid #E4E4E4',
-    padding: '2px 16px',
-    backgroundColor: '#EDEDED',
     [theme.breakpoints.down('xs')]: {
       paddingLeft: 0,
     },
@@ -60,7 +51,7 @@ const styles = theme => ({
   },
 });
 
-class TaskItem extends React.Component {
+class AgendaItem extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -70,12 +61,6 @@ class TaskItem extends React.Component {
       dependencies: this.props.task.dependencies ? this.props.task.dependencies : [],
     };
   }
-
-  handleOpen = () => {
-    if (!this.props.editingTasks) {
-      this.props.onClickShowDetail(this.props.task);
-    }
-  };
 
   handleToggle = value => (event) => {
     event.stopPropagation();
@@ -107,11 +92,7 @@ class TaskItem extends React.Component {
   };
 
   render() {
-    const { task, selectedTask, classes } = this.props;
-    const mainItemClass = selectedTask._id === task._id
-      ? classes.mainItemSelectedTask
-      : classes.mainItem;
-
+    const { task, classes } = this.props;
     const timeShown = task.timeEstimate === 60
       || task.timeEstimate === 120
       || task.timeEstimate === 180
@@ -122,29 +103,19 @@ class TaskItem extends React.Component {
     const displayDueDate = task.dueDate && task.dueDate.slice(5, 10);
 
     return (
-      <div className={classes.taskItem}>
+      <div className={classes.agendaItem}>
         <ListItem
           button
           disableRipple
           disableGutters
-          className={mainItemClass}
-          onClick={this.handleOpen}
+          className={classes.mainItem}
         >
         <ListItemIcon>
-        {
-          this.props.editingTasks
-            ? <Radio
-                checked={this.state.selected}
-                onClick={this.handleChange}
-                value={task._id}
-                name="radio-button-selection"
-              />
-            : <Checkbox
+          <Checkbox
                 id='task-complete-checkbox'
                 onClick={this.handleToggle(task._id)}
                 checked={this.state.checked.indexOf(task._id) !== -1}
-              />
-          }
+          />
           </ListItemIcon>
           <div className={classes.titleAndDueDate}>
             <ListItemText primary={task.title} className={classes.title}/>
@@ -166,7 +137,7 @@ class TaskItem extends React.Component {
   }
 }
 
-TaskItem.propTypes = {
+AgendaItem.propTypes = {
   task: PropTypes.object,
   classes: PropTypes.object,
   onComplete: PropTypes.func,
@@ -179,7 +150,7 @@ TaskItem.propTypes = {
   selectedTask: PropTypes.object,
 };
 
-TaskItem.defaultProps = {
+AgendaItem.defaultProps = {
   task: {},
   classes: {},
   onComplete: noop,
@@ -190,4 +161,4 @@ TaskItem.defaultProps = {
   selectedTask: {},
 };
 
-export default withStyles(styles, { name: 'TaskItem' })(TaskItem);
+export default withStyles(styles, { name: 'AgendaItem' })(AgendaItem);
