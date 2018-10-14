@@ -1,18 +1,40 @@
-# timeboxed-frontend
+# TimeBoxed-Frontend
 
-Front end for Timeboxed
+Client-side repo for TimeBoxed
+
+## Technical Implementations
+
+* Google OAuth2.0 for user registration
+* Material UI
+* React and Redux Store
 
 ## Getting Started
 
-In order to run locally, clone repo, and enter ```npm i``` in your terminal at the project's root level to install dependencies. Create a ```.env``` file that will be gitignored. This file will need to look like the following:
+clone repo
 
-``` env
+    https://github.com/TimeBoxed/timeboxed-frontend.git
 
-API_URL=http://localhost:3000
-NODE_ENV=development
+ensure that Node.js is installed
 
-```
+    node --version
 
-To start, enter the following command in your terminal: ```npm run watch```, and the application should open on [http://localhost:8080](http://localhost:8080).
+if installed the response should look like "v8.6.0"
 
-You will also need to start the backend server and database for full functionality. See instructions here: [https://github.com/TimeBoxed/timeboxed-backend](https://github.com/TimeBoxed/timeboxed-backend)
+install all dependencies
+
+    npm i
+
+At your project's root level add a .env file containg the following:
+
+    API_URL=http://localhost:3000
+    NODE_ENV=development
+
+## Running Application
+
+    npm run watch
+
+The application should open on [http://localhost:8080](http://localhost:8080). If not, redirect url to [http://localhost:8080](http://localhost:8080).
+
+You will also need to start the backend server and database for full functionality.
+
+See instructions here: [TimeBoxed-Backend](https://github.com/TimeBoxed/timeboxed-backend)
