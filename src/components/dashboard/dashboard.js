@@ -82,6 +82,7 @@ const styles = theme => ({
     [theme.breakpoints.down('xs')]: {
       display: 'none',
     },
+    overflowX: 'hidden',
   },
   topButtonsDiv: {
     width: '50%',
