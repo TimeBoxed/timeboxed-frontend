@@ -20,7 +20,7 @@ import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 import * as profileActions from '../../actions/profile';
 import * as preferencesActions from '../../actions/preferences';
-import { deleteAccountRequest } from '../../actions/auth';
+import { logout, deleteAccountRequest } from '../../actions/auth';
 import { triggerSnackbar } from '../../actions/ui';
 import ROUTES from '../../routes';
 
@@ -146,6 +146,7 @@ class Preferences extends React.Component {
   handleAccountDelete = () => {
     this.handleClose('accountDelete');
     this.props.accountDelete();
+    this.props.logout();
   };
 
   renderCalendarSelection = () => {
@@ -439,6 +440,7 @@ Preferences.propTypes = {
   history: PropTypes.object,
   profileReset: PropTypes.func,
   accountDelete: PropTypes.func,
+  logout: PropTypes.func,
   triggerSnackbar: PropTypes.func,
 };
 
@@ -452,6 +454,7 @@ Preferences.defaultProps = {
   history: {},
   profileReset: noop,
   accountDelete: noop,
+  logout: noop,
   triggerSnackbar: noop,
 };
 
@@ -467,6 +470,7 @@ const mapDispatchToProps = dispatch => ({
   pUpdateUserPreferences: prefs => dispatch(preferencesActions.preferencesUpdateRequest(prefs)),
   profileReset: () => dispatch(profileActions.profileResetRequest()),
   accountDelete: () => dispatch(deleteAccountRequest()),
+  logout: () => dispatch(logout()),
   triggerSnackbar: (type, message) => dispatch(triggerSnackbar(type, message)),
 });
 
