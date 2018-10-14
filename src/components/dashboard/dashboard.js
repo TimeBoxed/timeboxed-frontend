@@ -433,6 +433,7 @@ class Dashboard extends React.Component {
                             onComplete={this.handleStatusChange}
                             editingTasks={this.state.editingTasks}
                             onSelect={this.handleSelect}
+                            onClickShowDetail={this.handleTaskDetail}
                             selected={false}
                             updateTask={this.handleUpdateTask}
                           />))
