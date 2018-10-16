@@ -46,8 +46,9 @@ const styles = theme => ({
     },
   },
   title: {
-    maxWidth: 600,
     wordWrap: 'break-word',
+    overflowWrap: 'break-word',
+    hyphens: 'auto',
     overflow: 'hidden',
     maxHeight: '3.0em',
     lineHeight: '1.8em',
