@@ -147,6 +147,7 @@ class Preferences extends React.Component {
     this.handleClose('accountDelete');
     this.props.accountDelete();
     this.props.logout();
+    this.props.triggerSnackbar('success', 'Account deleted');
   };
 
   renderCalendarSelection = () => {
@@ -341,7 +342,7 @@ class Preferences extends React.Component {
   renderProfileReset = () => {
     const { classes } = this.props;
     return (
-      <ListItem>
+      <ListItem className='inlineButtons'>
         <Button variant="contained" color="secondary" className={classes.button} onClick={() => this.handleClickOpen('profileReset')}>
           Reset Profile
         </Button>
@@ -370,7 +371,7 @@ class Preferences extends React.Component {
   renderAccountDelete = () => {
     const { classes } = this.props;
     return (
-      <ListItem>
+      <ListItem className='inlineButtons'>
         <Button variant="contained" color="secondary" className={classes.button} onClick={() => this.handleClickOpen('accountDelete')}>
           Delete Account
         </Button>
@@ -405,7 +406,7 @@ class Preferences extends React.Component {
 
     return (
       <div className={classes.mainContainer}>
-        <Button variant="contained" color="secondary" className={classes.button} onClick={this.handleSubmit}>
+        <Button variant="contained" color="secondary" className={classes.button } onClick={this.handleSubmit}>
           Save Settings
         </Button>
         <div className='preferences-main'>
