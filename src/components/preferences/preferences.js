@@ -147,6 +147,7 @@ class Preferences extends React.Component {
     this.handleClose('accountDelete');
     this.props.accountDelete();
     this.props.logout();
+    this.props.triggerSnackbar('success', 'Account deleted');
   };
 
   renderCalendarSelection = () => {
