@@ -49,6 +49,8 @@ const styles = () => ({
   },
   title: {
     wordWrap: 'break-word',
+    overflowWrap: 'break-word',
+    hyphens: 'auto',
     overflow: 'hidden',
     maxHeight: '1.5em',
     lineHeight: '1.8em',
